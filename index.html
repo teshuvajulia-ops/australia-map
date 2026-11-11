@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>אוסטרליה לתייר הישראלי</title>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+/* פריסה: כותרת עם בורר עיר, מפה מלאה, ורשימת אירועים בצד (בנייד: מתחת למפה) */
+:root{
+  --ink:#10262e;
+  --muted:#5b6f77;
+  --line:#d9e2e5;
+  --bg:#f3f7f8;
+  --card:#ffffff;
+  --accent:#0b7a75;
+  --accent-ink:#ffffff;
+  --sun:#f2b134;
+  --danger:#b3261e;
+  --font:'Heebo',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:var(--font);color:var(--ink);background:var(--bg);display:flex;flex-direction:column;font-size:16px}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));background:var(--card);border-bottom:1px solid var(--line)}
+h1{margin:0;font-size:1.15rem;font-weight:800;letter-spacing:-.01em}
+h1 small{display:block;font-weight:500;color:var(--muted);font-size:.8rem}
+.toggle{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px}
+.toggle button{border:0;background:transparent;padding:8px 20px;border-radius:999px;font-weight:700;color:var(--muted)}
+.toggle button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+
+.main{flex:1;min-height:0;display:flex}
+aside{width:360px;max-width:42vw;display:flex;flex-direction:column;background:var(--card);border-inline-end:1px solid var(--line);min-height:0}
+.asidehead{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);font-weight:700}
+.asidehead span{color:var(--muted);font-weight:500;font-size:.9rem}
+#list{list-style:none;margin:0;padding:0;overflow-y:auto;flex:1}
+#list li{border-bottom:1px solid var(--line);display:flex;align-items:stretch}
+.item{flex:1;min-width:0;display:flex;gap:12px;align-items:flex-start;text-align:start;background:transparent;border:0;padding:12px 16px}
+.item:hover{background:var(--bg)}
+.item .em{font-size:1.7rem;line-height:1.1}
+.item .tx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.item .tx b{font-weight:700}
+.item .tx small{color:var(--muted);font-size:.85rem;overflow-wrap:anywhere}
+.empty{padding:24px 16px;color:var(--muted)}
+.rowtools{display:flex;flex-direction:column;justify-content:center;gap:4px;padding:4px 8px}
+.rowtools button{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:4px 10px;font-size:.8rem}
+.rowtools .del{color:var(--danger)}
+
+#map{flex:1;min-width:0;direction:ltr;background:#dfe9ec}
+.pin-wrap{width:40px;height:48px;cursor:pointer}
+.mapboxgl-popup-content{border-radius:12px;padding:14px 16px;font-family:var(--font)}
+.pin{width:40px;height:40px;background:#fff;border:3px solid var(--accent);border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:grid;place-items:center;box-shadow:0 3px 8px rgba(16,38,46,.35)}
+.pin span{transform:rotate(45deg);font-size:19px;line-height:1}
+.pop{direction:rtl;text-align:start;font-family:var(--font)}
+.pop h3{margin:0 0 4px;font-size:1.05rem}
+.pop .meta{color:var(--muted);font-size:.85rem;margin:0 0 6px}
+.pop p{margin:0 0 8px;font-size:.92rem;overflow-wrap:anywhere}
+.pop .links{display:flex;gap:8px;flex-wrap:wrap}
+.pop a{display:inline-block;padding:6px 12px;border-radius:8px;background:var(--accent);color:#fff !important;text-decoration:none;font-weight:700;font-size:.85rem}
+.pop a.alt{background:var(--bg);color:var(--ink) !important;border:1px solid var(--line)}
+
+/* ניהול */
+.fab{position:fixed;inset-block-end:max(16px,env(safe-area-inset-bottom,0px));inset-inline-start:16px;z-index:1000;background:var(--sun);color:var(--ink);border:0;border-radius:999px;padding:12px 20px;font-weight:800;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.publishbar{position:fixed;inset-inline:0;inset-block-end:0;z-index:999;background:var(--ink);color:#fff;padding:10px 16px max(10px,env(safe-area-inset-bottom,0px));display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;font-size:.9rem}
+.publishbar button{background:var(--sun);color:var(--ink);border:0;border-radius:8px;padding:8px 14px;font-weight:800}
+.overlay{position:fixed;inset:0;z-index:2000;background:rgba(16,38,46,.55);display:flex;align-items:center;justify-content:center;padding:16px}
+.overlay[hidden]{display:none}
+.sheet{background:var(--card);border-radius:16px;width:100%;max-width:520px;max-height:100%;overflow-y:auto;padding:20px}
+.sheet h2{margin:0 0 12px;font-size:1.2rem}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+.field label{font-weight:700;font-size:.9rem}
+.field input,.field select,.field textarea{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;width:100%}
+.field textarea{min-height:80px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.emojis{display:flex;flex-wrap:wrap;gap:6px}
+.emojis button{font-size:1.4rem;border:2px solid var(--line);background:#fff;border-radius:10px;padding:4px 8px}
+.emojis button[aria-pressed="true"]{border-color:var(--accent);background:#e4f3f2}
+.actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 18px;font-weight:700}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.msg{min-height:1.3em;font-size:.9rem;color:var(--muted)}
+.msg.err{color:var(--danger)}
+
+@media (max-width:720px){
+  .main{flex-direction:column-reverse}
+  aside{width:100%;max-width:none;height:40%;border-inline-end:0;border-top:1px solid var(--line)}
+  .two{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto !important}}
+</style>
+</head>
+<body>
+<header>
+  <h1>אוסטרליה לתייר הישראלי<small>מה קורה עכשיו במלבורן ובסידני</small></h1>
+  <div class="toggle" role="group" aria-label="בחירת עיר">
+    <button type="button" data-city="melbourne" aria-pressed="true">מלבורן</button>
+    <button type="button" data-city="sydney" aria-pressed="false">סידני</button>
+  </div>
+</header>
+
+<div class="main">
+  <aside>
+    <div class="asidehead"><div id="cityname">מלבורן</div><span id="count"></span></div>
+    <ul id="list"></ul>
+  </aside>
+  <div id="map" role="application" aria-label="מפת אירועים"></div>
+</div>
+
+<!-- ניהול: נפתח רק בכתובת שמסתיימת ב-#admin -->
+<button type="button" class="fab" id="addBtn" hidden>＋ אירוע חדש</button>
+<div class="publishbar" id="pubbar" hidden>
+  <span>יש שינויים שעוד לא פורסמו באתר.</span>
+  <button type="button" id="dlBtn">הורדת events.json</button>
+</div>
+<div class="overlay" id="overlay" hidden>
+  <form class="sheet" id="form" autocomplete="off">
+    <h2 id="formTitle">אירוע חדש</h2>
+    <div class="two">
+      <div class="field"><label for="f-city">עיר</label>
+        <select id="f-city"><option value="melbourne">מלבורן</option><option value="sydney">סידני</option></select></div>
+      <div class="field"><label for="f-date">תאריך</label><input id="f-date" type="date"></div>
+    </div>
+    <div class="field"><label for="f-title">שם האירוע</label><input id="f-title" type="text" required></div>
+    <div class="two">
+      <div class="field"><label for="f-time">שעה (לא חובה)</label><input id="f-time" type="text" placeholder="19:30"></div>
+      <div class="field"><label for="f-emoji">אימוג'י לסמן</label><input id="f-emoji" type="text" maxlength="12" value="🎭"></div>
+    </div>
+    <div class="field"><div class="emojis" id="emojis" role="group" aria-label="אימוג'י מוצעים"></div></div>
+    <div class="field"><label for="f-address">כתובת</label><input id="f-address" type="text" placeholder="Federation Square, Flinders St, Melbourne" required></div>
+    <div class="field"><label for="f-desc">תיאור</label><textarea id="f-desc"></textarea></div>
+    <div class="field"><label for="f-url">קישור (לא חובה)</label><input id="f-url" type="url" placeholder="https://"></div>
+    <div class="msg" id="formMsg" role="status"></div>
+    <div class="actions">
+      <button type="button" class="btn" id="cancelBtn">ביטול</button>
+      <button type="submit" class="btn primary" id="saveBtn">מצא על המפה ושמור</button>
+    </div>
+  </form>
+</div>
+
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.js"></script>
+<script>
+(function(){
+'use strict';
+
+var CITIES = {
+  melbourne: {name:'מלבורן', center:[-37.8136,144.9631], zoom:12, q:'Melbourne, Victoria, Australia'},
+  sydney:    {name:'סידני',  center:[-33.8688,151.2093], zoom:12, q:'Sydney, New South Wales, Australia'}
+};
+
+/* דוגמאות בלבד. מוצגות רק אם הקובץ events.json לא נמצא. */
+var SAMPLE = [
+  {id:'s1',city:'melbourne',title:'דוגמה: שוק ערב',date:'2026-12-04',time:'18:00',address:'Queen Victoria Market, Melbourne',desc:'אירוע לדוגמה. מחליפים באירועים אמיתיים בעזרת מצב הניהול.',url:'',emoji:'🍴',lat:-37.8076,lng:144.9568},
+  {id:'s2',city:'melbourne',title:'דוגמה: הופעה בכיכר',date:'2026-12-06',time:'20:00',address:'Federation Square, Melbourne',desc:'אירוע לדוגמה.',url:'',emoji:'🎵',lat:-37.8179,lng:144.9691},
+  {id:'s3',city:'sydney',title:'דוגמה: ערב באופרה',date:'2026-12-10',time:'19:30',address:'Sydney Opera House, Bennelong Point',desc:'אירוע לדוגמה.',url:'',emoji:'🎭',lat:-33.8568,lng:151.2153},
+  {id:'s4',city:'sydney',title:'דוגמה: יוגה בחוף',date:'2026-12-12',time:'07:00',address:'Bondi Beach, Sydney',desc:'אירוע לדוגמה.',url:'',emoji:'🏖️',lat:-33.8915,lng:151.2767}
+];
+var QUICK = ['🎭','🎵','🍷','🍴','☕','🎨','🎪','🎉','⚽','🏖️','🛍️','🌿','📸','🎬','🍺','🧘'];
+
+var admin = location.hash === '#admin';
+var events = [], city = 'melbourne', dirty = false, editingId = null;
+var markers = {};
+
+function $(s){return document.querySelector(s);}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function safeUrl(u){return /^https?:\/\//i.test(u||'') ? u : '';}
+function fmtDate(d){
+  if(!d) return '';
+  var dt = new Date(d+'T12:00:00');
+  if(isNaN(dt)) return d;
+  return dt.toLocaleDateString('he-IL',{weekday:'long',day:'numeric',month:'long'});
+}
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function lsDel(k){try{localStorage.removeItem(k);}catch(e){}}
+
+/* מפה */
+/* המפתח הציבורי של Mapbox (מתחיל ב-pk.). מדביקים כאן במקום הטקסט. */
+var MAPBOX_TOKEN = 'PASTE_YOUR_PUBLIC_TOKEN_HERE';
+mapboxgl.accessToken = MAPBOX_TOKEN;
+var map = new mapboxgl.Map({
+  container:'map',
+  style:'mapbox://styles/mapbox/streets-v12',
+  center:[CITIES[city].center[1], CITIES[city].center[0]],
+  zoom:CITIES[city].zoom
+});
+map.addControl(new mapboxgl.NavigationControl({showCompass:false}));
+if(MAPBOX_TOKEN.indexOf('PASTE')===0){
+  var note = document.createElement('div');
+  note.style.cssText = 'position:absolute;z-index:5;inset:12px 12px auto 12px;background:#fff3cd;color:#10262e;padding:10px 14px;border-radius:10px;direction:rtl;font-weight:700';
+  note.textContent = 'חסר מפתח Mapbox. פתחי את index.html והדביקי את המפתח במקום PASTE_YOUR_PUBLIC_TOKEN_HERE.';
+  $('#map').appendChild(note);
+}
+function popupHtml(e){
+  var when = [fmtDate(e.date), e.time].filter(Boolean).join(' · ');
+  var h = '<div class="pop"><h3>'+esc(e.title)+'</h3>';
+  if(when) h += '<p class="meta">'+esc(when)+'</p>';
+  h += '<p class="meta">'+esc(e.address)+'</p>';
+  if(e.desc) h += '<p>'+esc(e.desc)+'</p>';
+  h += '<div class="links">';
+  var u = safeUrl(e.url);
+  if(u) h += '<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">לפרטים</a>';
+  h += '<a class="alt" href="https://www.google.com/maps/search/?api=1&query='+e.lat+','+e.lng+'" target="_blank" rel="noopener noreferrer">ניווט</a>';
+  return h + '</div></div>';
+}
+
+function cityEvents(){
+  return events.filter(function(e){return e.city===city;}).sort(function(a,b){return (a.date||'').localeCompare(b.date||'');});
+}
+
+function render(){
+  Object.keys(markers).forEach(function(k){ markers[k].remove(); });
+  markers = {};
+  var list = cityEvents();
+  var ul = $('#list'); ul.innerHTML = '';
+  $('#cityname').textContent = CITIES[city].name;
+  $('#count').textContent = list.length + ' אירועים';
+  if(!list.length){
+    var li0 = document.createElement('li'); li0.className='empty'; li0.textContent='עדיין אין אירועים בעיר הזו.';
+    ul.appendChild(li0);
+  }
+  list.forEach(function(e){
+    var el = document.createElement('div');
+    el.className = 'pin-wrap'; el.title = e.title;
+    el.innerHTML = '<div class="pin"><span>'+esc(e.emoji||'📍')+'</span></div>';
+    var popup = new mapboxgl.Popup({offset:[0,-48],maxWidth:'270px'}).setHTML(popupHtml(e));
+    var m = new mapboxgl.Marker({element:el,anchor:'bottom'}).setLngLat([e.lng,e.lat]).setPopup(popup).addTo(map);
+    markers[e.id] = m;
+    var li = document.createElement('li');
+    var b = document.createElement('button'); b.type='button'; b.className='item';
+    var when = [fmtDate(e.date), e.time].filter(Boolean).join(' · ');
+    b.innerHTML = '<span class="em">'+esc(e.emoji||'📍')+'</span><span class="tx"><b>'+esc(e.title)+'</b><small>'+esc(when)+'</small><small>'+esc(e.address)+'</small></span>';
+    b.addEventListener('click',function(){
+      map.flyTo({center:[e.lng,e.lat],zoom:Math.max(map.getZoom(),14),duration:700});
+      if(!m.getPopup().isOpen()) m.togglePopup();
+    });
+    li.appendChild(b);
+    if(admin){
+      var t = document.createElement('div'); t.className='rowtools';
+      var be = document.createElement('button'); be.type='button'; be.textContent='עריכה';
+      be.addEventListener('click',function(){ openForm(e); });
+      var bd = document.createElement('button'); bd.type='button'; bd.className='del'; bd.textContent='מחיקה';
+      bd.addEventListener('click',function(){
+        if(bd.dataset.sure!=='1'){ bd.dataset.sure='1'; bd.textContent='בטוחה?'; return; }
+        events = events.filter(function(x){return x.id!==e.id;});
+        markDirty(); render();
+      });
+      t.appendChild(be); t.appendChild(bd); li.appendChild(t);
+    }
+    ul.appendChild(li);
+  });
+}
+
+function fitCity(){
+  var list = cityEvents();
+  if(list.length){
+    var b = new mapboxgl.LngLatBounds();
+    list.forEach(function(e){ b.extend([e.lng,e.lat]); });
+    map.fitBounds(b,{padding:60,maxZoom:14.5,duration:0});
+  } else {
+    map.jumpTo({center:[CITIES[city].center[1],CITIES[city].center[0]], zoom:CITIES[city].zoom});
+  }
+}
+function setCity(c){
+  city = c;
+  document.querySelectorAll('.toggle button').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.city===c ? 'true':'false'); });
+  render(); fitCity();
+}
+document.querySelectorAll('.toggle button').forEach(function(b){
+  b.addEventListener('click',function(){ setCity(b.dataset.city); });
+});
+window.addEventListener('resize',function(){ map.resize(); });
+
+/* טעינת אירועים */
+function load(){
+  return fetch('events.json',{cache:'no-store'})
+    .then(function(r){ if(!r.ok) throw new Error('no file'); return r.json(); })
+    .catch(function(){ return SAMPLE.slice(); })
+    .then(function(data){
+      events = Array.isArray(data) ? data : [];
+      if(admin){
+        var d = lsGet('draft-events');
+        if(d){ try{ events = JSON.parse(d); dirty = true; }catch(e){} }
+      }
+    });
+}
+
+/* ניהול */
+function markDirty(){ dirty = true; lsSet('draft-events', JSON.stringify(events)); $('#pubbar').hidden = false; }
+
+function geocode(address, c){
+  var cc = CITIES[c];
+  var u = 'https://api.mapbox.com/search/geocode/v6/forward?q=' + encodeURIComponent(address + ', ' + cc.q) +
+          '&limit=1&country=au&language=en&proximity=' + cc.center[1] + ',' + cc.center[0] +
+          '&access_token=' + encodeURIComponent(MAPBOX_TOKEN);
+  return fetch(u).then(function(r){ return r.json(); }).then(function(j){
+    if(!j || !j.features || !j.features.length) return null;
+    var co = j.features[0].geometry.coordinates;
+    return {lat:co[1], lng:co[0]};
+  });
+}
+function firstGrapheme(s){
+  s = (s||'').trim();
+  if(!s) return '📍';
+  try{ var seg = new Intl.Segmenter(undefined,{granularity:'grapheme'}); return Array.from(seg.segment(s))[0].segment; }
+  catch(e){ return Array.from(s)[0]; }
+}
+function setEmoji(v){
+  $('#f-emoji').value = v;
+  document.querySelectorAll('#emojis button').forEach(function(b){ b.setAttribute('aria-pressed', b.textContent===v ? 'true':'false'); });
+}
+function openForm(e){
+  editingId = e ? e.id : null;
+  $('#formTitle').textContent = e ? 'עריכת אירוע' : 'אירוע חדש';
+  $('#f-city').value = e ? e.city : city;
+  $('#f-date').value = e ? (e.date||'') : '';
+  $('#f-time').value = e ? (e.time||'') : '';
+  $('#f-title').value = e ? e.title : '';
+  $('#f-address').value = e ? e.address : '';
+  $('#f-desc').value = e ? (e.desc||'') : '';
+  $('#f-url').value = e ? (e.url||'') : '';
+  setEmoji(e ? e.emoji : '🎭');
+  $('#formMsg').textContent=''; $('#formMsg').className='msg';
+  $('#overlay').hidden = false;
+  $('#f-title').focus();
+}
+function closeForm(){ $('#overlay').hidden = true; editingId = null; }
+
+function initAdmin(){
+  $('#addBtn').hidden = false;
+  if(dirty) $('#pubbar').hidden = false;
+  var box = $('#emojis');
+  QUICK.forEach(function(em){
+    var b = document.createElement('button'); b.type='button'; b.textContent=em; b.setAttribute('aria-pressed','false');
+    b.addEventListener('click',function(){ setEmoji(em); });
+    box.appendChild(b);
+  });
+  $('#f-emoji').addEventListener('input',function(){
+    var v = $('#f-emoji').value;
+    document.querySelectorAll('#emojis button').forEach(function(b){ b.setAttribute('aria-pressed', b.textContent===v.trim() ? 'true':'false'); });
+  });
+  $('#addBtn').addEventListener('click',function(){ openForm(null); });
+  $('#cancelBtn').addEventListener('click',closeForm);
+  $('#overlay').addEventListener('click',function(ev){ if(ev.target===$('#overlay')) closeForm(); });
+
+  $('#dlBtn').addEventListener('click',function(){
+    var blob = new Blob([JSON.stringify(events,null,2)],{type:'application/json'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = 'events.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); },1000);
+    dirty = false; lsDel('draft-events'); $('#pubbar').hidden = true;
+  });
+
+  $('#form').addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var msg = $('#formMsg'), btn = $('#saveBtn');
+    var c = $('#f-city').value, address = $('#f-address').value.trim(), title = $('#f-title').value.trim();
+    if(!title || !address){ msg.className='msg err'; msg.textContent='חסרים שם אירוע וכתובת.'; return; }
+    var ex = editingId ? events.filter(function(x){return x.id===editingId;})[0] : null;
+    btn.disabled = true; msg.className='msg'; msg.textContent='מחפשת את הכתובת על המפה…';
+    var coordsP = (ex && ex.address===address && ex.city===c) ? Promise.resolve({lat:ex.lat,lng:ex.lng}) : geocode(address,c);
+    coordsP.then(function(g){
+      if(!g){ msg.className='msg err'; msg.textContent='לא מצאתי את הכתובת. נסי להוסיף מספר בית ושם פרבר, באנגלית.'; return; }
+      var obj = {
+        id: ex ? ex.id : 'e'+Date.now(), city:c, title:title,
+        date:$('#f-date').value, time:$('#f-time').value.trim(), address:address,
+        desc:$('#f-desc').value.trim(), url:safeUrl($('#f-url').value.trim()),
+        emoji:firstGrapheme($('#f-emoji').value), lat:g.lat, lng:g.lng
+      };
+      if(ex) Object.assign(ex,obj); else events.push(obj);
+      markDirty(); closeForm(); setCity(c);
+      if(markers[obj.id]){ map.flyTo({center:[obj.lng,obj.lat],zoom:15,duration:700}); markers[obj.id].togglePopup(); }
+    }).catch(function(){
+      msg.className='msg err'; msg.textContent='החיפוש נכשל. בדקי חיבור לאינטרנט ונסי שוב.';
+    }).then(function(){ btn.disabled = false; });
+  });
+}
+
+load().then(function(){
+  if(admin) initAdmin();
+  setCity('melbourne');
+});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+[
+  {
+    "id": "s1",
+    "city": "melbourne",
+    "title": "דוגמה: שוק ערב",
+    "date": "2026-12-04",
+    "time": "18:00",
+    "address": "Queen Victoria Market, Melbourne",
+    "desc": "אירוע לדוגמה. מחליפים באירועים אמיתיים בעזרת מצב הניהול.",
+    "url": "",
+    "emoji": "🍴",
+    "lat": -37.8076,
+    "lng": 144.9568
+  },
+  {
+    "id": "s2",
+    "city": "melbourne",
+    "title": "דוגמה: הופעה בכיכר",
+    "date": "2026-12-06",
+    "time": "20:00",
+    "address": "Federation Square, Melbourne",
+    "desc": "אירוע לדוגמה.",
+    "url": "",
+    "emoji": "🎵",
+    "lat": -37.8179,
+    "lng": 144.9691
+  },
+  {
+    "id": "s3",
+    "city": "sydney",
+    "title": "דוגמה: ערב באופרה",
+    "date": "2026-12-10",
+    "time": "19:30",
+    "address": "Sydney Opera House, Bennelong Point",
+    "desc": "אירוע לדוגמה.",
+    "url": "",
+    "emoji": "🎭",
+    "lat": -33.8568,
+    "lng": 151.2153
+  },
+  {
+    "id": "s4",
+    "city": "sydney",
+    "title": "דוגמה: יוגה בחוף",
+    "date": "2026-12-12",
+    "time": "07:00",
+    "address": "Bondi Beach, Sydney",
+    "desc": "אירוע לדוגמה.",
+    "url": "",
+    "emoji": "🏖️",
+    "lat": -33.8915,
+    "lng": 151.2767
+  }
+]
