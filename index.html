@@ -447,6 +447,15 @@ html[dir="rtl"] .wcard h2,.welcome[dir="rtl"] h2{text-transform:none;letter-spac
 html[dir="rtl"] .todaybar .tq{text-transform:none;letter-spacing:0;font-size:.95rem}
 .todaybar .tq::before{content:none !important}
 .todaybar .tq{text-wrap:balance}
+
+.gwhat{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;margin:0 0 18px;display:flex;flex-direction:column;gap:12px}
+.gwhat>b{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--wa)}
+html[dir="rtl"] .gwhat>b{letter-spacing:0;text-transform:none;font-size:.9rem}
+.gw{display:flex;gap:12px;align-items:flex-start}
+.gw>span{font-size:1.5rem;line-height:1.2}
+.gw strong{display:block;font-size:.98rem}
+.gw small{color:var(--muted);line-height:1.4;font-size:.86rem}
+.gwhat p{margin:2px 0 0;padding-top:10px;border-top:1px dashed var(--line);color:var(--muted);font-size:.8rem}
 </style>
 </head>
 <body data-view="map">
@@ -604,7 +613,7 @@ var I18N = {
     details:'Details', directions:'Google Maps', waze:'Waze', share:'Share on WhatsApp', wa:'Join the group on WhatsApp', groupTag:'Group', hasGroup:'Has a group', cityGroup:function(c){return 'CITYSIDE community · '+c;}, groupLead:'Meet people going to the same events', every:function(d){return 'Every '+d;}, and:' & ', by:'by', promoFeatured:'★ Featured', promoSponsored:'Sponsored', submit:'Organising something? List your event on CITYSIDE', listShort:'+ List your event', welcomeTitle:'Don\'t miss the city.\nDon\'t miss the people.', welcomeText:'Events, run clubs and communities in Melbourne and Sydney. Pick a city, find something on, and join the group to meet people going.', explore:'Explore events',
     install:'Install app', installTitle:'Install CITYSIDE', installIos:'Tap the Share button in Safari, then choose “Add to Home Screen”.', installOther:'Open the browser menu and choose “Install app” or “Add to Home screen”.', close:'Close', shareHead:'Found on',
     tabMap:'Map', tabList:'List', tabCal:'Calendar', tabGroups:'Groups', tabTips:'Tips', calTitle:function(c){return 'Calendar \u00b7 '+c;}, calLead:'Tap a day to see what is on.', calNone:'Nothing listed for this day yet.', calToday:'Today', calEvents:function(n){return n===1?'1 event':n+' events';}, todayBar:function(d,n){return n? d+' \u00b7 '+(n===1?'1 event today':n+' events today') : d+' \u00b7 nothing today \u203A';}, todayQ:"Don't miss the city \u2013 Don't miss the people", calPrev:'Previous month', calNext:'Next month', calGo:'Show on map',
-    groupsTitle:function(c){return 'WhatsApp groups · '+c;}, tipsTitle:function(c){return 'Tips · '+c;}, groupsLead:'Join a group, meet people going to the same events and arrive with friends.', tipsLead:'Good to know before you go.', mainGroup:'City group', moreGroups:'More groups', eventGroups:'Event groups', noGroups:'Groups are on their way. Check back soon.', noTips:'No tips yet.', joinShort:'Join', sourceLink:'Source', tipCats:{emergency:'Emergency',safety:'Safety',transport:'Getting around',money:'Money',nature:'Sun & beach',practical:'Practical',food:'Food',culture:'Local culture',other:'Other'},
+    groupsTitle:function(c){return 'WhatsApp groups · '+c;}, tipsTitle:function(c){return 'Tips · '+c;}, groupsLead:'Join a group, meet people going to the same events and arrive with friends.', gwhatTitle:'What are these groups?', gwhat:[['\uD83D\uDC4B','Find people to go with','No one to go with? Say hi, find someone heading to the same event.'],['\uD83D\uDCE3','Hear about events first','Organisers and locals share what is on this week.'],['\uD83D\uDCAC','Ask the locals','Tips, recommendations and plans, in a friendly chat.']], gwhatRules:'Free to join. Be kind, no spam. Leave any time.', tipsLead:'Good to know before you go.', mainGroup:'City group', moreGroups:'More groups', eventGroups:'Event groups', noGroups:'Groups are on their way. Check back soon.', noTips:'No tips yet.', joinShort:'Join', sourceLink:'Source', tipCats:{emergency:'Emergency',safety:'Safety',transport:'Getting around',money:'Money',nature:'Sun & beach',practical:'Practical',food:'Food',culture:'Local culture',other:'Other'},
     filterLabel:'Filter events', dateLabel:'Date', catLabel:'Event type',
     mapLabel:'Events map',
     noToken:'Mapbox token missing. Open index.html and paste your public token in place of PASTE_YOUR_PUBLIC_TOKEN_HERE.'},
@@ -622,7 +631,7 @@ var I18N = {
     details:'לפרטים', directions:'ניווט ב-Google Maps', waze:'ניווט ב-Waze', share:'שיתוף ב-WhatsApp', wa:'הצטרפות לקבוצה ב-WhatsApp', groupTag:'קבוצה', hasGroup:'יש קבוצה', cityGroup:function(c){return 'קהילת CITYSIDE ב'+c;}, groupLead:'להכיר אנשים שמגיעים לאותם אירועים', every:function(d){return 'כל '+d;}, and:' ו', by:'מאת', promoFeatured:'★ מומלץ', promoSponsored:'ממומן', submit:'מארגנים אירוע? פרסמו אותו ב-CITYSIDE', listShort:'+ פרסום אירוע', welcomeTitle:'אל תפספסו את העיר.\nאל תפספסו את האנשים.', welcomeText:'אירועים, קבוצות ריצה וקהילות במלבורן ובסידני. בוחרים עיר, מוצאים מה קורה, ומצטרפים לקבוצה כדי להכיר אנשים שמגיעים.', explore:'לגלות אירועים',
     install:'התקנת האפליקציה', installTitle:'התקנת CITYSIDE', installIos:'ב-Safari לוחצים על כפתור השיתוף ואז על “הוספה למסך הבית”.', installOther:'בתפריט הדפדפן בוחרים “התקנת אפליקציה” או “הוספה למסך הבית”.', close:'סגירה', shareHead:'מצאתי באתר',
     tabMap:'מפה', tabList:'רשימה', tabCal:'לוח', tabGroups:'קבוצות', tabTips:'טיפים', calTitle:function(c){return 'לוח אירועים \u00b7 '+c;}, calLead:'לוחצים על יום כדי לראות מה קורה.', calNone:'עוד לא פורסמו אירועים ליום הזה.', calToday:'היום', calEvents:function(n){return n===1?'אירוע אחד':n+' אירועים';}, todayBar:function(d,n){return n? d+' \u00b7 '+(n===1?'אירוע אחד היום':n+' אירועים היום') : d+' \u00b7 אין אירועים היום \u203A';}, todayQ:'אל תפספסו את העיר \u2013 אל תפספסו את האנשים', calPrev:'חודש קודם', calNext:'חודש הבא', calGo:'להצגה במפה',
-    groupsTitle:function(c){return 'קבוצות WhatsApp · '+c;}, tipsTitle:function(c){return 'טיפים · '+c;}, groupsLead:'מצטרפים לקבוצה, מכירים אנשים שמגיעים לאותם אירועים ומגיעים עם חברים.', tipsLead:'טוב לדעת לפני שיוצאים.', mainGroup:'קבוצת העיר', moreGroups:'עוד קבוצות', eventGroups:'קבוצות אירועים', noGroups:'קבוצות בדרך. חזרו לבדוק בקרוב.', noTips:'עדיין אין טיפים.', joinShort:'הצטרפות', sourceLink:'מקור', tipCats:{emergency:'חירום',safety:'בטיחות',transport:'תחבורה',money:'כסף',nature:'שמש וחוף',practical:'מעשי',food:'אוכל',culture:'תרבות מקומית',other:'אחר'},
+    groupsTitle:function(c){return 'קבוצות WhatsApp · '+c;}, tipsTitle:function(c){return 'טיפים · '+c;}, groupsLead:'מצטרפים לקבוצה, מכירים אנשים שמגיעים לאותם אירועים ומגיעים עם חברים.', gwhatTitle:'מה זה הקבוצות האלה?', gwhat:[['\uD83D\uDC4B','למצוא עם מי לצאת','אין עם מי ללכת? אומרים שלום ומוצאים מישהו שמגיע לאותו אירוע.'],['\uD83D\uDCE3','לשמוע על אירועים ראשונים','מארגנים ותושבים משתפים מה קורה השבוע.'],['\uD83D\uDCAC','לשאול את המקומיים','טיפים, המלצות ותוכניות, בצ׳אט ידידותי.']], gwhatRules:'ההצטרפות חינם. מתנהגים יפה, בלי ספאם. אפשר לעזוב בכל רגע.', tipsLead:'טוב לדעת לפני שיוצאים.', mainGroup:'קבוצת העיר', moreGroups:'עוד קבוצות', eventGroups:'קבוצות אירועים', noGroups:'קבוצות בדרך. חזרו לבדוק בקרוב.', noTips:'עדיין אין טיפים.', joinShort:'הצטרפות', sourceLink:'מקור', tipCats:{emergency:'חירום',safety:'בטיחות',transport:'תחבורה',money:'כסף',nature:'שמש וחוף',practical:'מעשי',food:'אוכל',culture:'תרבות מקומית',other:'אחר'},
     filterLabel:'סינון אירועים', dateLabel:'תאריך', catLabel:'סוג אירוע',
     mapLabel:'מפת אירועים',
     noToken:'חסר מפתח Mapbox. פתחי את index.html והדביקי את המפתח במקום PASTE_YOUR_PUBLIC_TOKEN_HERE.'}
@@ -1028,6 +1037,7 @@ function renderPanel(){
   if(v==='calendar'){ h += calendarHtml(); }
   else if(v==='groups'){
     h += '<h2>'+esc(t().groupsTitle(t()[city]))+'</h2><p class="plead">'+esc(t().groupsLead)+'</p>';
+    h += '<div class="gwhat"><b>'+esc(t().gwhatTitle)+'</b>'+t().gwhat.map(function(x){ return '<div class="gw"><span>'+x[0]+'</span><div><strong>'+esc(x[1])+'</strong><small>'+esc(x[2])+'</small></div></div>'; }).join('')+'<p>'+esc(t().gwhatRules)+'</p></div>';
     var n = 0, i = 0;
     var main = safeWa(cityGroups[city]);
     if(main){ n++; h += '<a class="gmain" href="'+esc(main)+'" target="_blank" rel="noopener noreferrer"><span class="cgi">\uD83D\uDC65</span><span><b>'+esc(t().cityGroup(t()[city]))+'</b><small>'+esc(t().groupLead)+'</small></span></a>'; }
@@ -1061,7 +1071,7 @@ function renderPanel(){
     });
     if(!seen) h += '<p class="pempty">'+esc(t().noTips)+'</p>';
   }
-  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 17</p></div>';
+  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 18</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
