@@ -255,6 +255,24 @@ button:active:not(.item){transform:scale(.97)}
 .tabbar button svg{transition:transform .3s cubic-bezier(.3,1.5,.5,1)}
 .tabbar button[aria-pressed="true"] svg{transform:translateY(-2px) scale(1.12)}
 @media (prefers-reduced-motion:reduce){.blob,.glow,.brand,.controls,.installbtn,.mapboxgl-popup-content{animation:none !important}.toggle::before,.tint{transition:none}}
+
+/* WhatsApp groups: the heart of the site */
+.pop a.wa{background:var(--wa);display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin:2px 0 10px;padding:11px 12px;font-size:1rem;border-radius:12px;box-shadow:0 6px 16px rgba(18,140,74,.35)}
+.pop a.wa:hover{filter:brightness(1.08)}
+.pin-wrap.hasgroup .pinshape{border-color:var(--wa);box-shadow:0 0 0 3px rgba(18,140,74,.28),0 6px 14px rgba(18,140,74,.35)}
+.gbadge{position:absolute;top:-6px;inset-inline-end:-8px;font-style:normal;font-size:12px;line-height:1;background:var(--wa);border-radius:999px;padding:3px 4px;box-shadow:0 2px 6px rgba(0,0,0,.25);z-index:2}
+.pinbounce{position:relative}
+.item .tx small.wab{display:inline-block;align-self:flex-start;background:rgba(18,140,74,.12);padding:2px 8px;border-radius:999px;margin-top:2px}
+.groupchip{border-color:rgba(18,140,74,.4);background:rgba(18,140,74,.08)}
+.groupchip[aria-pressed="true"]{background:var(--wa);border-color:var(--wa);box-shadow:0 4px 12px rgba(18,140,74,.35)}
+.citygroup{flex-basis:100%;display:flex;gap:10px;align-items:center;text-decoration:none;color:#fff;background:linear-gradient(100deg,#128c4a,#25b866);border-radius:14px;padding:10px 12px;margin-top:6px;box-shadow:0 6px 16px rgba(18,140,74,.3);font-weight:500}
+.citygroup[hidden]{display:none}
+.citygroup .cgi{font-size:1.5rem}
+.citygroup b{display:block;font-size:.9rem}
+.citygroup small{display:block;font-size:.78rem;opacity:.92;font-weight:500}
+#map{overflow:hidden}
+.asidehead .citygroup span{color:#fff;font-weight:500;font-size:inherit}
+.asidehead .citygroup .cgi{font-size:1.5rem}
 </style>
 </head>
 <body data-view="map">
@@ -288,7 +306,8 @@ button:active:not(.item){transform:scale(.97)}
 
 <div class="main">
   <aside>
-    <div class="asidehead"><div id="cityname"></div><span id="count"></span><div class="clock" id="clock" aria-live="off"></div></div>
+    <div class="asidehead"><div id="cityname"></div><span id="count"></span><div class="clock" id="clock" aria-live="off"></div>
+      <a class="citygroup" id="cityGroup" href="#" target="_blank" rel="noopener noreferrer" hidden></a></div>
     <ul id="list"></ul>
   </aside>
   <div id="map" role="application"></div>
@@ -379,7 +398,7 @@ var CAT_HE = {music:'מוזיקה',food:'אוכל ושתייה',markets:'שוו�
 
 var I18N = {
   en: {dir:'ltr', locale:'en-AU',
-    sub:"What's on in Melbourne and Sydney",
+    sub:"Find an event · Join its group · Meet new friends",
     melbourne:'Melbourne', sydney:'Sydney',
     count:function(n){ return n===1 ? '1 event' : n+' events'; },
     localTime:function(c){ return 'Local time in '+c; },
@@ -389,14 +408,14 @@ var I18N = {
     clear:'Clear filters',
     when:{all:'Upcoming', today:'Today', tomorrow:'Tomorrow', weekend:'This weekend'},
     cats:{music:'Music',food:'Food & drink',markets:'Markets',parties:'Parties',culture:'Arts & culture',family:'Family',outdoors:'Outdoors'},
-    details:'Details', directions:'Google Maps', waze:'Waze', share:'Share on WhatsApp', wa:'Join the WhatsApp group',
+    details:'Details', directions:'Google Maps', waze:'Waze', share:'Share on WhatsApp', wa:'Join the group on WhatsApp', groupTag:'Group', hasGroup:'Has a group', cityGroup:function(c){return 'Israeli travelers in '+c+' (WhatsApp)';}, groupLead:'Meet people going to the same events',
     install:'Install app', installTitle:'Install CITYSIDE', installIos:'Tap the Share button in Safari, then choose “Add to Home Screen”.', installOther:'Open the browser menu and choose “Install app” or “Add to Home screen”.', close:'Close', shareHead:'Found on',
     tabMap:'Map', tabList:'List',
     filterLabel:'Filter events', dateLabel:'Date', catLabel:'Event type',
     mapLabel:'Events map',
     noToken:'Mapbox token missing. Open index.html and paste your public token in place of PASTE_YOUR_PUBLIC_TOKEN_HERE.'},
   he: {dir:'rtl', locale:'he-IL',
-    sub:'מה קורה עכשיו במלבורן ובסידני',
+    sub:'מוצאים אירוע · מצטרפים לקבוצה · מכירים חברים',
     melbourne:'מלבורן', sydney:'סידני',
     count:function(n){ return n+' אירועים'; },
     localTime:function(c){ return 'שעה ב'+c; },
@@ -406,7 +425,7 @@ var I18N = {
     clear:'נקה סינון',
     when:{all:'הכל', today:'היום', tomorrow:'מחר', weekend:'סוף השבוע'},
     cats:CAT_HE,
-    details:'לפרטים', directions:'ניווט ב-Google Maps', waze:'ניווט ב-Waze', share:'שיתוף ב-WhatsApp', wa:'הצטרפות לקבוצה',
+    details:'לפרטים', directions:'ניווט ב-Google Maps', waze:'ניווט ב-Waze', share:'שיתוף ב-WhatsApp', wa:'הצטרפות לקבוצה ב-WhatsApp', groupTag:'קבוצה', hasGroup:'יש קבוצה', cityGroup:function(c){return 'קבוצת מטיילים ישראלים ב'+c+' (WhatsApp)';}, groupLead:'להכיר אנשים שמגיעים לאותם אירועים',
     install:'התקנת האפליקציה', installTitle:'התקנת CITYSIDE', installIos:'ב-Safari לוחצים על כפתור השיתוף ואז על “הוספה למסך הבית”.', installOther:'בתפריט הדפדפן בוחרים “התקנת אפליקציה” או “הוספה למסך הבית”.', close:'סגירה', shareHead:'מצאתי באתר',
     tabMap:'מפה', tabList:'רשימה',
     filterLabel:'סינון אירועים', dateLabel:'תאריך', catLabel:'סוג אירוע',
@@ -419,7 +438,7 @@ var admin = location.hash === '#admin';
 var events = [], city = 'melbourne', dirty = false, editingId = null;
 var markers = {};
 var lang = 'en';
-var filters = {when:'all', cats:{}};
+var filters = {when:'all', cats:{}, group:false};
 
 function $(s){return document.querySelector(s);}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
@@ -466,6 +485,7 @@ function dateMatches(e){
   }
   return occursBetween(e,a,b);
 }
+function groupMatches(e){ return !filters.group || !!safeWa(e.whatsapp); }
 function catMatches(e){
   var sel = Object.keys(filters.cats).filter(function(k){return filters.cats[k];});
   if(!sel.length) return true;
@@ -541,6 +561,8 @@ function shareUrl(e){
 function popupHtml(e){
   var when = whenHtml(e);
   var h = '<div class="pop" dir="'+t().dir+'"><h3>'+esc(tx(e,'title'))+'</h3>';
+  var w = safeWa(e.whatsapp);
+  if(w) h += '<a class="wa" href="'+esc(w)+'" target="_blank" rel="noopener noreferrer">\uD83D\uDC65 '+t().wa+'</a>';
   if(when) h += '<p class="meta">'+when+'</p>';
   h += '<p class="meta" dir="ltr" style="text-align:start">'+esc(e.address)+'</p>';
   var d = tx(e,'desc');
@@ -551,21 +573,28 @@ function popupHtml(e){
   h += '<a class="alt" href="'+esc(gmapsUrl(e))+'" target="_blank" rel="noopener noreferrer">'+t().directions+'</a>';
   h += '<a class="alt" href="'+esc(wazeUrl(e))+'" target="_blank" rel="noopener noreferrer">'+t().waze+'</a></div>';
   h += '<a class="share" href="'+esc(shareUrl(e))+'" target="_blank" rel="noopener noreferrer">'+t().share+'</a>';
-  var w = safeWa(e.whatsapp);
-  if(w) h += '<a class="wa" href="'+esc(w)+'" target="_blank" rel="noopener noreferrer">'+t().wa+'</a>';
   return h + '</div>';
 }
 
 function cityEvents(){
-  return events.filter(function(e){ return e.city===city && dateMatches(e) && catMatches(e); })
+  return events.filter(function(e){ return e.city===city && dateMatches(e) && catMatches(e) && groupMatches(e); })
     .sort(function(a,b){ return ((a.date||'')+(a.time||'')).localeCompare((b.date||'')+(b.time||'')); });
 }
 function filtersActive(){
-  return filters.when!=='all' || Object.keys(filters.cats).some(function(k){return filters.cats[k];});
+  return filters.when!=='all' || filters.group || Object.keys(filters.cats).some(function(k){return filters.cats[k];});
 }
-function clearFilters(){ filters = {when:'all', cats:{}}; syncChips(); render(); fitCity(); }
+function clearFilters(){ filters = {when:'all', cats:{}, group:false}; syncChips(); render(); fitCity(); }
 
+var cityGroups = {};
+function syncCityGroup(){
+  var a = $('#cityGroup'); if(!a) return;
+  var u = safeWa(cityGroups[city]);
+  if(!u){ a.hidden = true; return; }
+  a.href = u; a.hidden = false;
+  a.innerHTML = '<span class="cgi">\uD83D\uDC65</span><span><b>'+esc(t().cityGroup(t()[city]))+'</b><small>'+esc(t().groupLead)+'</small></span>';
+}
 function render(){
+  syncCityGroup();
   Object.keys(markers).forEach(function(k){ markers[k].remove(); });
   markers = {};
   var list = cityEvents();
@@ -585,9 +614,9 @@ function render(){
   }
   list.forEach(function(e, idx){
     var el = document.createElement('div');
-    el.className = 'pin-wrap'; el.title = tx(e,'title');
+    el.className = 'pin-wrap' + (safeWa(e.whatsapp) ? ' hasgroup' : ''); el.title = tx(e,'title');
     el.style.setProperty('--d', Math.min(idx*45,700)+'ms');
-    el.innerHTML = '<div class="pinbounce"><div class="pinshape"><span>'+esc(e.emoji||'📍')+'</span></div></div>';
+    el.innerHTML = '<div class="pinbounce"><div class="pinshape"><span>'+esc(e.emoji||'📍')+'</span></div>'+(safeWa(e.whatsapp)?'<i class="gbadge">\uD83D\uDC65</i>':'')+'</div>';
     var popup = new mapboxgl.Popup({offset:[0,-48],maxWidth:'270px'}).setHTML(popupHtml(e));
     var m = new mapboxgl.Marker({element:el,anchor:'bottom'}).setLngLat([e.lng,e.lat]).setPopup(popup).addTo(map);
     markers[e.id] = m;
@@ -596,7 +625,7 @@ function render(){
     var ct = catsText(e);
     b.innerHTML = '<span class="em">'+esc(e.emoji||'📍')+'</span><span class="tx"><b>'+esc(tx(e,'title'))+'</b><small>'+whenHtml(e)+'</small><small dir="ltr" style="text-align:start">'+esc(e.address)+'</small>'+
       (ct ? '<small class="cats">'+esc(ct)+'</small>' : '')+
-      (safeWa(e.whatsapp) ? '<small class="wab">WhatsApp</small>' : '')+'</span>';
+      (safeWa(e.whatsapp) ? '<small class="wab">\uD83D\uDC65 '+esc(t().groupTag)+' · WhatsApp</small>' : '')+'</span>';
     b.addEventListener('click',function(){
       if(window.matchMedia('(max-width:720px)').matches) setView('map');
       setTimeout(function(){
@@ -642,6 +671,9 @@ function buildChips(){
     b.addEventListener('click',function(){ filters.when = k; syncChips(); render(); fitCity(); });
     wr.appendChild(b);
   });
+  var gb = document.createElement('button'); gb.type='button'; gb.className='chip groupchip'; gb.id='groupChip'; gb.textContent='\uD83D\uDC65 '+t().hasGroup;
+  gb.addEventListener('click',function(){ filters.group = !filters.group; syncChips(); render(); fitCity(); });
+  cr.appendChild(gb);
   CATS.forEach(function(c){
     var b = document.createElement('button'); b.type='button'; b.className='chip'; b.dataset.cat=c[0]; b.textContent=c[1]+' '+t().cats[c[0]];
     b.addEventListener('click',function(){ filters.cats[c[0]] = !filters.cats[c[0]]; syncChips(); render(); fitCity(); });
@@ -654,6 +686,7 @@ function buildChips(){
 function syncChips(){
   document.querySelectorAll('#whenRow .chip').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.when===filters.when ? 'true':'false'); });
   document.querySelectorAll('#catRow .chip[data-cat]').forEach(function(b){ b.setAttribute('aria-pressed', filters.cats[b.dataset.cat] ? 'true':'false'); });
+  var gc = $('#groupChip'); if(gc) gc.setAttribute('aria-pressed', filters.group ? 'true':'false');
   var c = $('#clearBtn'); if(c) c.hidden = !filtersActive();
 }
 
@@ -943,7 +976,7 @@ function initAdmin(){
       /* keep an explicit day list only if the dates were not changed */
       if(ex && ex.dates && ex.date===date && (ex.endDate||'')===obj.endDate) obj.dates = ex.dates;
       if(ex){ delete ex.dates; Object.assign(ex,obj); } else events.push(obj);
-      markDirty(); closeForm(); filters = {when:'all', cats:{}}; syncChips(); setCity(c);
+      markDirty(); closeForm(); filters = {when:'all', cats:{}, group:false}; syncChips(); setCity(c);
       if(markers[obj.id]){ map.flyTo({center:[obj.lng,obj.lat],zoom:15,duration:700}); markers[obj.id].togglePopup(); }
     }).catch(function(){
       msg.className='msg err'; msg.textContent='החיפוש נכשל. בדקי חיבור לאינטרנט ונסי שוב.';
@@ -952,6 +985,7 @@ function initAdmin(){
 }
 
 lang = (lsGet('lang')==='he') ? 'he' : 'en';
+fetch('groups.json',{cache:'no-store'}).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; }).then(function(g){ cityGroups = g||{}; syncCityGroup(); });
 load().then(function(){
   if(admin) initAdmin();
   applyLang();
