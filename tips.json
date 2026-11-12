@@ -1,11 +1,92 @@
 [
-  {"id":"t1","city":"all","cat":"safety","emoji":"🚨","title":"חירום: מחייגים 000","title_en":"Emergency: call 000","text":"בחירום מחייגים 000 למשטרה, כבאות ואמבולנס. מטלפון נייד אפשר גם 112.","text_en":"Dial 000 for police, fire and ambulance. From a mobile phone, 112 also connects."},
-  {"id":"t2","city":"all","cat":"nature","emoji":"☀️","title":"השמש חזקה גם בימים מעוננים","title_en":"The sun is strong, even on cloudy days","text":"מורחים קרם הגנה SPF 50 ומעלה, חובשים כובע ומשקפי שמש. מדד ה-UV גבוה מאוד באביב ובקיץ.","text_en":"Use SPF 50+ sunscreen, a hat and sunglasses. The UV index is often very high in spring and summer."},
-  {"id":"t3","city":"all","cat":"nature","emoji":"🏖️","title":"שוחים בין הדגלים האדום והצהוב","title_en":"Swim between the red and yellow flags","text":"בין שני הדגלים יש מצילים. שימו לב לשלטי אזהרה על זרמים חזקים ואל תשחו לבד.","text_en":"Lifeguards patrol between the flags. Read warning signs about strong currents and don't swim alone."},
-  {"id":"t4","city":"all","cat":"practical","emoji":"🔌","title":"שקעי חשמל: מתאם נדרש","title_en":"Power sockets: bring an adapter","text":"באוסטרליה משתמשים בשקע מסוג I במתח 230V. מתאם לשקעים ישראליים מומלץ להביא מהבית.","text_en":"Australia uses Type I sockets at 230V. Bring an adapter for your Israeli plugs."},
-  {"id":"t5","city":"all","cat":"practical","emoji":"🕐","title":"הפרשי שעות","title_en":"Time difference","text":"בנובמבר מלבורן וסידני מקדימות את ישראל ב-9 שעות. השעון המדויק מופיע בראש הרשימה באתר.","text_en":"In November Melbourne and Sydney are 9 hours ahead of Israel. The exact time shows at the top of the list."},
-  {"id":"t6","city":"all","cat":"money","emoji":"💵","title":"טיפ הוא רשות","title_en":"Tipping is optional","text":"באוסטרליה אין חובה להשאיר טיפ והמחירים בתפריט כוללים מס. משאירים רק אם מרוצים במיוחד.","text_en":"Tipping isn't expected in Australia, and menu prices include tax. Leave one only if the service was great."},
-  {"id":"t7","city":"all","cat":"safety","emoji":"🪪","title":"מועדונים ובארים: מביאים תעודה","title_en":"Clubs and bars: bring ID","text":"גיל השתייה החוקי הוא 18, ובדרך כלל בודקים תעודה בכניסה. מומלץ להביא רישיון נהיגה או צילום של הדרכון.","text_en":"The legal drinking age is 18 and venues usually check ID at the door. Bring a driving licence or a copy of your passport."},
-  {"id":"t8","city":"melbourne","cat":"transport","emoji":"🚋","title":"תחבורה במלבורן: כרטיס myki","title_en":"Getting around Melbourne: the myki card","text":"בטראמים, ברכבות ובאוטובוסים משתמשים בכרטיס myki. אפשר לקנות ב-7-Eleven או בתחנות ולטעון כסף.","text_en":"Trams, trains and buses use the myki card. Buy one at 7-Eleven or at stations and top it up."},
-  {"id":"t9","city":"sydney","cat":"transport","emoji":"🚆","title":"תחבורה בסידני: כרטיס Opal","title_en":"Getting around Sydney: the Opal card","text":"ברכבות, באוטובוסים, במעבורות וברכבת הקלה משתמשים בכרטיס Opal. אפשר גם לעבור עם כרטיס אשראי או טלפון (contactless).","text_en":"Trains, buses, ferries and light rail use the Opal card. You can also tap on with a contactless card or phone."}
+ {
+  "id": "t1",
+  "city": "all",
+  "cat": "safety",
+  "emoji": "🚨",
+  "title": "חירום: מחייגים 000",
+  "title_en": "Emergency: call 000",
+  "text": "בחירום מחייגים 000 למשטרה, כבאות ואמבולנס. מטלפון נייד אפשר גם 112.",
+  "text_en": "Dial 000 for police, fire and ambulance. From a mobile phone, 112 also connects."
+ },
+ {
+  "id": "t2",
+  "city": "all",
+  "cat": "nature",
+  "emoji": "☀️",
+  "title": "השמש חזקה גם בימים מעוננים",
+  "title_en": "The sun is strong, even on cloudy days",
+  "text": "מורחים קרם הגנה SPF 50 ומעלה, חובשים כובע ומשקפי שמש. מדד ה-UV גבוה מאוד באביב ובקיץ.",
+  "text_en": "Use SPF 50+ sunscreen, a hat and sunglasses. The UV index is often very high in spring and summer."
+ },
+ {
+  "id": "t3",
+  "city": "all",
+  "cat": "nature",
+  "emoji": "🏖️",
+  "title": "שוחים בין הדגלים האדום והצהוב",
+  "title_en": "Swim between the red and yellow flags",
+  "text": "בין שני הדגלים יש מצילים. שימו לב לשלטי אזהרה על זרמים חזקים ואל תשחו לבד.",
+  "text_en": "Lifeguards patrol between the flags. Read warning signs about strong currents and don't swim alone."
+ },
+ {
+  "id": "t4",
+  "city": "all",
+  "cat": "practical",
+  "emoji": "🔌",
+  "title": "שקעי חשמל: מתאם נדרש",
+  "title_en": "Power sockets: bring an adapter",
+  "text": "באוסטרליה משתמשים בשקע מסוג I במתח 230V. אם התקעים שלכם שונים, מומלץ להביא מתאם מהבית.",
+  "text_en": "Australia uses Type I sockets at 230V. If your plugs are different, bring an adapter."
+ },
+ {
+  "id": "t5",
+  "city": "all",
+  "cat": "practical",
+  "emoji": "🕐",
+  "title": "אותה שעה בשתי הערים",
+  "title_en": "Same time in both cities",
+  "text": "מלבורן וסידני נמצאות באותו אזור זמן ועוברות לשעון קיץ באותם תאריכים. השעון המקומי מופיע בראש הרשימה.",
+  "text_en": "Melbourne and Sydney share a time zone and change to daylight saving on the same dates. The local time shows at the top of the list."
+ },
+ {
+  "id": "t6",
+  "city": "all",
+  "cat": "money",
+  "emoji": "💵",
+  "title": "טיפ הוא רשות",
+  "title_en": "Tipping is optional",
+  "text": "באוסטרליה אין חובה להשאיר טיפ והמחירים בתפריט כוללים מס. משאירים רק אם מרוצים במיוחד.",
+  "text_en": "Tipping isn't expected in Australia, and menu prices include tax. Leave one only if the service was great."
+ },
+ {
+  "id": "t7",
+  "city": "all",
+  "cat": "safety",
+  "emoji": "🪪",
+  "title": "מועדונים ובארים: מביאים תעודה",
+  "title_en": "Clubs and bars: bring ID",
+  "text": "גיל השתייה החוקי הוא 18, ובדרך כלל בודקים תעודה בכניסה. מומלץ להביא רישיון נהיגה או צילום של הדרכון.",
+  "text_en": "The legal drinking age is 18 and venues usually check ID at the door. Bring a driving licence or a copy of your passport."
+ },
+ {
+  "id": "t8",
+  "city": "melbourne",
+  "cat": "transport",
+  "emoji": "🚋",
+  "title": "תחבורה במלבורן: כרטיס myki",
+  "title_en": "Getting around Melbourne: the myki card",
+  "text": "בטראמים, ברכבות ובאוטובוסים משתמשים בכרטיס myki. אפשר לקנות ב-7-Eleven או בתחנות ולטעון כסף.",
+  "text_en": "Trams, trains and buses use the myki card. Buy one at 7-Eleven or at stations and top it up."
+ },
+ {
+  "id": "t9",
+  "city": "sydney",
+  "cat": "transport",
+  "emoji": "🚆",
+  "title": "תחבורה בסידני: כרטיס Opal",
+  "title_en": "Getting around Sydney: the Opal card",
+  "text": "ברכבות, באוטובוסים, במעבורות וברכבת הקלה משתמשים בכרטיס Opal. אפשר גם לעבור עם כרטיס אשראי או טלפון (contactless).",
+  "text_en": "Trains, buses, ferries and light rail use the Opal card. You can also tap on with a contactless card or phone."
+ }
 ]

@@ -302,6 +302,17 @@ details.tip p{margin:0;padding:0 16px 14px;line-height:1.6}
 .desknav button[data-view="groups"][aria-pressed="true"]{color:var(--wa)}
 .tabbar button[data-view="groups"][aria-pressed="true"]{color:var(--wa)}
 @media (max-width:720px){.desknav{display:none}}
+
+/* Organisers, promoted events, submit link */
+.promotag{display:inline-block;background:linear-gradient(100deg,#ffb36b,#ff8f70);color:#4a2230;font-size:.7rem;font-weight:800;letter-spacing:.04em;padding:3px 9px;border-radius:999px;margin-bottom:4px;align-self:flex-start}
+.promotag.sp{background:#fff;border:1px solid var(--peach);color:var(--muted)}
+.pop .org{margin:0 0 6px;color:var(--muted);font-size:.85rem}
+.pop .org a{display:inline;background:none;color:var(--accent) !important;padding:0;font-size:inherit;flex:none}
+.pin-wrap.promo .pinshape{box-shadow:0 0 0 3px rgba(255,156,130,.45),0 6px 14px rgba(221,95,75,.4)}
+.submitcta{display:block;text-align:center;text-decoration:none;font-weight:700;color:var(--accent);border:2px dashed var(--peach);border-radius:16px;padding:14px;margin:18px 16px;background:var(--peach-pale);transition:background .25s ease,transform .18s ease}
+.submitcta:hover{background:var(--peach-soft)}
+.submitcta[hidden]{display:none}
+.pinner .submitcta{margin:22px 0 0}
 </style>
 </head>
 <body data-view="map">
@@ -339,6 +350,7 @@ details.tip p{margin:0;padding:0 16px 14px;line-height:1.6}
     <div class="asidehead"><div id="cityname"></div><span id="count"></span><div class="clock" id="clock" aria-live="off"></div>
       <a class="citygroup" id="cityGroup" href="#" target="_blank" rel="noopener noreferrer" hidden></a></div>
     <ul id="list"></ul>
+    <a class="submitcta" id="submitAside" href="#" target="_blank" rel="noopener noreferrer" data-t="submit" data-e="site" hidden></a>
   </aside>
   <div id="map" role="application"></div>
   <section id="panel" aria-live="polite"></section>
@@ -411,6 +423,14 @@ details.tip p{margin:0;padding:0 16px 14px;line-height:1.6}
     <div class="field"><label for="f-desc-en">תיאור באנגלית</label><textarea class="ltr" id="f-desc-en"></textarea></div>
     <div class="field"><label for="f-desc">תיאור בעברית</label><textarea id="f-desc"></textarea></div>
     <div class="field"><label for="f-wa">קישור לקבוצת WhatsApp של האירוע</label><input class="ltr" id="f-wa" type="url" placeholder="https://chat.whatsapp.com/..."><span class="hint">מדביקים את קישור ההזמנה של הקבוצה. אם אין קבוצה, משאירים ריק והכפתור לא יופיע.</span></div>
+    <div class="two">
+      <div class="field"><label for="f-org">שם המארגן / הקהילה (לא חובה)</label><input id="f-org" type="text" placeholder="Run Club Melbourne"></div>
+      <div class="field"><label for="f-orgurl">קישור למארגן (לא חובה)</label><input class="ltr" id="f-orgurl" type="url" placeholder="https://"></div>
+    </div>
+    <div class="two">
+      <div class="field"><label for="f-repeat">אירוע חוזר</label><select id="f-repeat"><option value="">לא, אירוע חד פעמי</option><option value="0">כל יום ראשון</option><option value="1">כל יום שני</option><option value="2">כל יום שלישי</option><option value="3">כל יום רביעי</option><option value="4">כל יום חמישי</option><option value="5">כל יום שישי</option><option value="6">כל שבת</option></select><span class="hint">בחרי תאריך התחלה למעלה. אפשר להגדיר "עד תאריך" לסיום.</span></div>
+      <div class="field"><label for="f-promo">קידום</label><select id="f-promo"><option value="">בלי קידום</option><option value="featured">מומלץ (Featured)</option><option value="sponsored">ממומן (Sponsored)</option></select><span class="hint">אירוע מקודם עולה לראש הרשימה ומסומן בבירור.</span></div>
+    </div>
     <div class="field"><label for="f-url">קישור לפרטים (לא חובה)</label><input class="ltr" id="f-url" type="url" placeholder="https://"></div>
     <div class="msg" id="formMsg" role="status"></div>
     <div class="actions">
@@ -432,8 +452,8 @@ var CITIES = {
 var TZ = {melbourne:'Australia/Melbourne', sydney:'Australia/Sydney'};
 
 /* Event categories: id and the emoji shown on its chip */
-var CATS = [['music','🎵'],['food','🍴'],['markets','🛍️'],['parties','🪩'],['culture','🎨'],['family','👨‍👩‍👧'],['outdoors','🌿']];
-var CAT_HE = {music:'מוזיקה',food:'אוכל ושתייה',markets:'שווקים',parties:'מסיבות',culture:'תרבות ואמנות',family:'משפחה',outdoors:'חוץ וטבע'};
+var CATS = [['music','🎵'],['food','🍴'],['markets','🛍️'],['parties','🪩'],['culture','🎨'],['family','👨‍👩‍👧'],['outdoors','🌿'],['sports','🏃'],['community','🤝']];
+var CAT_HE = {music:'מוזיקה',food:'אוכל ושתייה',markets:'שווקים',parties:'מסיבות',culture:'תרבות ואמנות',family:'משפחה',outdoors:'חוץ וטבע',sports:'ספורט וכושר',community:'קהילות'};
 
 var I18N = {
   en: {dir:'ltr', locale:'en-AU',
@@ -446,8 +466,8 @@ var I18N = {
     noMatch:'No events match these filters.',
     clear:'Clear filters',
     when:{all:'Upcoming', today:'Today', tomorrow:'Tomorrow', weekend:'This weekend'},
-    cats:{music:'Music',food:'Food & drink',markets:'Markets',parties:'Parties',culture:'Arts & culture',family:'Family',outdoors:'Outdoors'},
-    details:'Details', directions:'Google Maps', waze:'Waze', share:'Share on WhatsApp', wa:'Join the group on WhatsApp', groupTag:'Group', hasGroup:'Has a group', cityGroup:function(c){return 'Israeli travelers in '+c+' (WhatsApp)';}, groupLead:'Meet people going to the same events',
+    cats:{music:'Music',food:'Food & drink',markets:'Markets',parties:'Parties',culture:'Arts & culture',family:'Family',outdoors:'Outdoors',sports:'Sports & fitness',community:'Communities'},
+    details:'Details', directions:'Google Maps', waze:'Waze', share:'Share on WhatsApp', wa:'Join the group on WhatsApp', groupTag:'Group', hasGroup:'Has a group', cityGroup:function(c){return 'CITYSIDE community · '+c;}, groupLead:'Meet people going to the same events', every:function(d){return 'Every '+d;}, by:'by', promoFeatured:'★ Featured', promoSponsored:'Sponsored', submit:'Organising something? List your event on CITYSIDE',
     install:'Install app', installTitle:'Install CITYSIDE', installIos:'Tap the Share button in Safari, then choose “Add to Home Screen”.', installOther:'Open the browser menu and choose “Install app” or “Add to Home screen”.', close:'Close', shareHead:'Found on',
     tabMap:'Map', tabList:'List', tabGroups:'Groups', tabTips:'Tips',
     groupsTitle:function(c){return 'WhatsApp groups · '+c;}, tipsTitle:function(c){return 'Tips · '+c;}, groupsLead:'Join a group, meet people going to the same events and arrive with friends.', tipsLead:'Good to know before you go.', mainGroup:'City group', moreGroups:'More groups', eventGroups:'Event groups', noGroups:'Groups are on their way. Check back soon.', noTips:'No tips yet.', joinShort:'Join', sourceLink:'Source', tipCats:{emergency:'Emergency',safety:'Safety',transport:'Getting around',money:'Money',nature:'Sun & beach',practical:'Practical',food:'Food',culture:'Local culture',other:'Other'},
@@ -465,7 +485,7 @@ var I18N = {
     clear:'נקה סינון',
     when:{all:'הכל', today:'היום', tomorrow:'מחר', weekend:'סוף השבוע'},
     cats:CAT_HE,
-    details:'לפרטים', directions:'ניווט ב-Google Maps', waze:'ניווט ב-Waze', share:'שיתוף ב-WhatsApp', wa:'הצטרפות לקבוצה ב-WhatsApp', groupTag:'קבוצה', hasGroup:'יש קבוצה', cityGroup:function(c){return 'קבוצת מטיילים ישראלים ב'+c+' (WhatsApp)';}, groupLead:'להכיר אנשים שמגיעים לאותם אירועים',
+    details:'לפרטים', directions:'ניווט ב-Google Maps', waze:'ניווט ב-Waze', share:'שיתוף ב-WhatsApp', wa:'הצטרפות לקבוצה ב-WhatsApp', groupTag:'קבוצה', hasGroup:'יש קבוצה', cityGroup:function(c){return 'קהילת CITYSIDE ב'+c;}, groupLead:'להכיר אנשים שמגיעים לאותם אירועים', every:function(d){return 'כל '+d;}, by:'מאת', promoFeatured:'★ מומלץ', promoSponsored:'ממומן', submit:'מארגנים אירוע? פרסמו אותו ב-CITYSIDE',
     install:'התקנת האפליקציה', installTitle:'התקנת CITYSIDE', installIos:'ב-Safari לוחצים על כפתור השיתוף ואז על “הוספה למסך הבית”.', installOther:'בתפריט הדפדפן בוחרים “התקנת אפליקציה” או “הוספה למסך הבית”.', close:'סגירה', shareHead:'מצאתי באתר',
     tabMap:'מפה', tabList:'רשימה', tabGroups:'קבוצות', tabTips:'טיפים',
     groupsTitle:function(c){return 'קבוצות WhatsApp · '+c;}, tipsTitle:function(c){return 'טיפים · '+c;}, groupsLead:'מצטרפים לקבוצה, מכירים אנשים שמגיעים לאותם אירועים ומגיעים עם חברים.', tipsLead:'טוב לדעת לפני שיוצאים.', mainGroup:'קבוצת העיר', moreGroups:'עוד קבוצות', eventGroups:'קבוצות אירועים', noGroups:'קבוצות בדרך. חזרו לבדוק בקרוב.', noTips:'עדיין אין טיפים.', joinShort:'הצטרפות', sourceLink:'מקור', tipCats:{emergency:'חירום',safety:'בטיחות',transport:'תחבורה',money:'כסף',nature:'שמש וחוף',practical:'מעשי',food:'אוכל',culture:'תרבות מקומית',other:'אחר'},
@@ -506,8 +526,10 @@ function todayIso(tz){ return new Intl.DateTimeFormat('en-CA',{timeZone:tz,year:
 function addDays(iso,n){ var d = new Date(iso+'T12:00:00Z'); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); }
 function dow(iso){ return new Date(iso+'T12:00:00Z').getUTCDay(); }
 /* "dates" lists exact days for events that skip days; otherwise date..endDate */
-function endOf(e){ if(e.dates && e.dates.length) return e.dates.slice().sort().pop(); return e.endDate || e.date || ''; }
+function isRepeat(e){ return e.repeat==='weekly' && typeof e.weekday==='number'; }
+function endOf(e){ if(isRepeat(e)) return e.endDate || '9999-12-31'; if(e.dates && e.dates.length) return e.dates.slice().sort().pop(); return e.endDate || e.date || ''; }
 function occursOn(e,iso){
+  if(isRepeat(e)) return dow(iso)===e.weekday && (!e.date || iso>=e.date) && (!e.endDate || iso<=e.endDate);
   if(e.dates && e.dates.length) return e.dates.indexOf(iso) >= 0;
   if(!e.date) return false;
   return e.date <= iso && iso <= (e.endDate || e.date);
@@ -546,15 +568,24 @@ function tickClock(){
     var day = new Intl.DateTimeFormat(loc,{timeZone:tz,weekday:'long',day:'numeric',month:'long'}).format(now);
     var hm = new Intl.DateTimeFormat('en-GB',{timeZone:tz,hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(now);
     var hrs = Math.round((tzOffsetMin(tz,now) - tzOffsetMin('Asia/Jerusalem',now)) / 60);
-    el.innerHTML = esc(t().localTime(t()[city])) + ': <strong>' + esc(day) + ', <bdi dir="ltr">' + esc(hm) + '</bdi></strong> · ' + esc(t().diff(hrs));
+    el.innerHTML = esc(t().localTime(t()[city])) + ': <strong>' + esc(day) + ', <bdi dir="ltr">' + esc(hm) + '</bdi></strong>' + (lang==='he' ? ' · ' + esc(t().diff(hrs)) : '');
   }catch(e){ el.textContent = ''; }
 }
 setInterval(tickClock, 15000);
 
 /* Date and time line. The time stays left-to-right so ranges like 22:00–05:00 read correctly in Hebrew. */
+function weekdayName(w){ return new Date('2026-11-'+(15+w)+'T12:00:00').toLocaleDateString(t().locale,{weekday:'long'}); }
+/* The next day an event happens, used to sort repeating events. */
+function nextDay(e){
+  if(!isRepeat(e)) return e.date || '';
+  var d = todayIso(TZ[e.city] || TZ.melbourne); if(e.date && e.date > d) d = e.date;
+  for(var i=0;i<7 && dow(d)!==e.weekday;i++) d = addDays(d,1);
+  return d;
+}
 function whenHtml(e){
   var parts = [];
-  if(e.date){
+  if(isRepeat(e)){ parts.push(esc(t().every(weekdayName(e.weekday)))); }
+  else if(e.date){
     if(e.endDate && e.endDate !== e.date) parts.push(esc(fmtDate(e.date,true)+' – '+fmtDate(e.endDate,true)));
     else parts.push(esc(fmtDate(e.date)));
   }
@@ -599,27 +630,40 @@ function shareUrl(e){
   lines.push('', t().shareHead+' CITYSIDE: '+site);
   return 'https://wa.me/?text='+encodeURIComponent(lines.join('\n'));
 }
+function promoTag(e){
+  if(e.promo==='sponsored') return '<span class="promotag sp">'+esc(t().promoSponsored)+'</span>';
+  if(e.promo==='featured') return '<span class="promotag">'+esc(t().promoFeatured)+'</span>';
+  return '';
+}
+function orgLine(e){
+  if(!e.organizer) return '';
+  var u = safeUrl(e.organizerUrl), n = esc(e.organizer);
+  return '<p class="org">'+esc(t().by)+' '+(u ? '<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer" data-t="organizer" data-e="'+esc(e.id)+'">'+n+'</a>' : n)+'</p>';
+}
 function popupHtml(e){
   var when = whenHtml(e);
-  var h = '<div class="pop" dir="'+t().dir+'"><h3>'+esc(tx(e,'title'))+'</h3>';
+  var h = '<div class="pop" dir="'+t().dir+'">'+promoTag(e)+'<h3>'+esc(tx(e,'title'))+'</h3>'+orgLine(e);
   var w = safeWa(e.whatsapp);
-  if(w) h += '<a class="wa" href="'+esc(w)+'" target="_blank" rel="noopener noreferrer">\uD83D\uDC65 '+t().wa+'</a>';
+  if(w) h += '<a class="wa" href="'+esc(w)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(e.id)+'">\uD83D\uDC65 '+t().wa+'</a>';
   if(when) h += '<p class="meta">'+when+'</p>';
   h += '<p class="meta" dir="ltr" style="text-align:start">'+esc(e.address)+'</p>';
   var d = tx(e,'desc');
   if(d) h += '<p>'+esc(d)+'</p>';
   h += '<div class="links top">';
   var u = safeUrl(e.url);
-  if(u) h += '<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">'+t().details+'</a>';
-  h += '<a class="alt" href="'+esc(gmapsUrl(e))+'" target="_blank" rel="noopener noreferrer">'+t().directions+'</a>';
-  h += '<a class="alt" href="'+esc(wazeUrl(e))+'" target="_blank" rel="noopener noreferrer">'+t().waze+'</a></div>';
-  h += '<a class="share" href="'+esc(shareUrl(e))+'" target="_blank" rel="noopener noreferrer">'+t().share+'</a>';
+  if(u) h += '<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer" data-t="details" data-e="'+esc(e.id)+'">'+t().details+'</a>';
+  h += '<a class="alt" href="'+esc(gmapsUrl(e))+'" target="_blank" rel="noopener noreferrer" data-t="gmaps" data-e="'+esc(e.id)+'">'+t().directions+'</a>';
+  h += '<a class="alt" href="'+esc(wazeUrl(e))+'" target="_blank" rel="noopener noreferrer" data-t="waze" data-e="'+esc(e.id)+'">'+t().waze+'</a></div>';
+  h += '<a class="share" href="'+esc(shareUrl(e))+'" target="_blank" rel="noopener noreferrer" data-t="share" data-e="'+esc(e.id)+'">'+t().share+'</a>';
   return h + '</div>';
 }
 
 function cityEvents(){
   return events.filter(function(e){ return e.city===city && dateMatches(e) && catMatches(e) && groupMatches(e); })
-    .sort(function(a,b){ return ((a.date||'')+(a.time||'')).localeCompare((b.date||'')+(b.time||'')); });
+    .sort(function(a,b){
+      var pa = a.promo ? 0 : 1, pb = b.promo ? 0 : 1; if(pa!==pb) return pa-pb;
+      return (nextDay(a)+(a.time||'')).localeCompare(nextDay(b)+(b.time||''));
+    });
 }
 function filtersActive(){
   return filters.when!=='all' || filters.group || Object.keys(filters.cats).some(function(k){return filters.cats[k];});
@@ -634,8 +678,32 @@ function syncCityGroup(){
   a.href = u; a.hidden = false;
   a.innerHTML = '<span class="cgi">\uD83D\uDC65</span><span><b>'+esc(t().cityGroup(t()[city]))+'</b><small>'+esc(t().groupLead)+'</small></span>';
 }
-var tips = [], moreGroups = [];
+var tips = [], moreGroups = [], config = {};
 function loc(o,f){ var en=o[f+'_en'], he=o[f]; return (lang==='en' ? (en||he) : (he||en)) || ''; }
+function submitHtml(){
+  var u = safeUrl(config.submitUrl); if(!u) return '';
+  return '<a class="submitcta" href="'+esc(u)+'" target="_blank" rel="noopener noreferrer" data-t="submit" data-e="site">'+esc(t().submit)+' \u2197</a>';
+}
+function syncSubmit(){
+  var a = $('#submitAside'); if(!a) return;
+  var u = safeUrl(config.submitUrl);
+  if(!u){ a.hidden = true; return; }
+  a.hidden = false; a.href = u; a.textContent = t().submit + ' \u2197';
+}
+/* Click counting for organisers. Does nothing until an analytics code is set in config.json. */
+function track(name){ try{ if(!admin && window.goatcounter && window.goatcounter.count) window.goatcounter.count({path:name, title:name, event:true}); }catch(x){} }
+document.addEventListener('click',function(ev){
+  var a = ev.target.closest ? ev.target.closest('a[data-t]') : null;
+  if(a) track('e/'+a.dataset.e+'/'+a.dataset.t);
+});
+function loadAnalytics(){
+  var code = (config.analytics||'').replace(/[^a-z0-9-]/gi,'');
+  if(!code || admin) return;
+  var sc = document.createElement('script');
+  sc.async = true; sc.src = 'https://gc.zgo.at/count.js';
+  sc.setAttribute('data-goatcounter','https://'+code+'.goatcounter.com/count');
+  document.head.appendChild(sc);
+}
 function renderPanel(){
   var v = document.body.getAttribute('data-view'), p = $('#panel');
   if(!p || (v!=='groups' && v!=='tips')) return;
@@ -652,10 +720,10 @@ function renderPanel(){
     }
     var today = todayIso(TZ[city]);
     var evs = events.filter(function(e){ return e.city===city && safeWa(e.whatsapp) && (endOf(e)||'9999-12-31')>=today; })
-      .sort(function(a,b){ return ((a.date||'')+(a.time||'')).localeCompare((b.date||'')+(b.time||'')); });
+      .sort(function(a,b){ return (nextDay(a)+(a.time||'')).localeCompare(nextDay(b)+(b.time||'')); });
     if(evs.length){
       h += '<h3 class="psec">'+esc(t().eventGroups)+'</h3>';
-      evs.forEach(function(e){ n++; h += gcard(e.emoji||'\uD83D\uDCCD', tx(e,'title'), whenHtml(e), e.whatsapp, i++, true); });
+      evs.forEach(function(e){ n++; h += gcard(e.emoji||'\uD83D\uDCCD', tx(e,'title'), whenHtml(e), e.whatsapp, i++, true, e.id); });
     }
     if(!n) h += '<p class="pempty">'+esc(t().noGroups)+'</p>';
   } else {
@@ -675,13 +743,13 @@ function renderPanel(){
     });
     if(!seen) h += '<p class="pempty">'+esc(t().noTips)+'</p>';
   }
-  p.innerHTML = h + '</div>';
+  p.innerHTML = h + submitHtml() + '</div>';
 }
-function gcard(em,title,sub,url,i,subIsHtml){
-  return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+esc(t().joinShort)+'</a></div>';
+function gcard(em,title,sub,url,i,subIsHtml,eid){
+  return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
 }
 function render(){
-  syncCityGroup();
+  syncCityGroup(); syncSubmit();
   renderPanel();
   Object.keys(markers).forEach(function(k){ markers[k].remove(); });
   markers = {};
@@ -702,7 +770,7 @@ function render(){
   }
   list.forEach(function(e, idx){
     var el = document.createElement('div');
-    el.className = 'pin-wrap' + (safeWa(e.whatsapp) ? ' hasgroup' : ''); el.title = tx(e,'title');
+    el.className = 'pin-wrap' + (safeWa(e.whatsapp) ? ' hasgroup' : '') + (e.promo ? ' promo' : ''); el.title = tx(e,'title');
     el.style.setProperty('--d', Math.min(idx*45,700)+'ms');
     el.innerHTML = '<div class="pinbounce"><div class="pinshape"><span>'+esc(e.emoji||'📍')+'</span></div>'+(safeWa(e.whatsapp)?'<i class="gbadge">\uD83D\uDC65</i>':'')+'</div>';
     var popup = new mapboxgl.Popup({offset:[0,-48],maxWidth:'270px'}).setHTML(popupHtml(e));
@@ -711,7 +779,7 @@ function render(){
     var li = document.createElement('li'); li.style.setProperty('--i', Math.min(idx,14));
     var b = document.createElement('button'); b.type='button'; b.className='item';
     var ct = catsText(e);
-    b.innerHTML = '<span class="em">'+esc(e.emoji||'📍')+'</span><span class="tx"><b>'+esc(tx(e,'title'))+'</b><small>'+whenHtml(e)+'</small><small dir="ltr" style="text-align:start">'+esc(e.address)+'</small>'+
+    b.innerHTML = '<span class="em">'+esc(e.emoji||'📍')+'</span><span class="tx">'+(e.promo ? promoTag(e) : '')+'<b>'+esc(tx(e,'title'))+'</b><small>'+whenHtml(e)+'</small><small dir="ltr" style="text-align:start">'+esc(e.address)+'</small>'+
       (ct ? '<small class="cats">'+esc(ct)+'</small>' : '')+
       (safeWa(e.whatsapp) ? '<small class="wab">\uD83D\uDC65 '+esc(t().groupTag)+' · WhatsApp</small>' : '')+'</span>';
     b.addEventListener('click',function(){
@@ -979,6 +1047,8 @@ function openForm(e){
   $('#f-desc-en').value = e ? (e.desc_en||'') : '';
   $('#f-wa').value = e ? (e.whatsapp||'') : '';
   $('#f-url').value = e ? (e.url||'') : '';
+  $('#f-org').value = e ? (e.organizer||'') : ''; $('#f-orgurl').value = e ? (e.organizerUrl||'') : '';
+  $('#f-repeat').value = (e && isRepeat(e)) ? String(e.weekday) : ''; $('#f-promo').value = e ? (e.promo||'') : '';
   var have = e ? (e.cats||[]) : [];
   document.querySelectorAll('#f-cats input').forEach(function(i){ i.checked = have.indexOf(i.value) >= 0; });
   setEmoji(e ? e.emoji : '🎭');
@@ -1067,7 +1137,11 @@ function initAdmin(){
       };
       /* keep an explicit day list only if the dates were not changed */
       if(ex && ex.dates && ex.date===date && (ex.endDate||'')===obj.endDate) obj.dates = ex.dates;
-      if(ex){ delete ex.dates; Object.assign(ex,obj); } else events.push(obj);
+      var rp = $('#f-repeat').value;
+      if(rp!==''){ obj.repeat = 'weekly'; obj.weekday = Number(rp); if(!date){ msg.className='msg err'; msg.textContent='לאירוע חוזר צריך תאריך התחלה.'; return; } }
+      var org = $('#f-org').value.trim(); if(org){ obj.organizer = org; var ou = safeUrl($('#f-orgurl').value.trim()); if(ou) obj.organizerUrl = ou; }
+      var pr = $('#f-promo').value; if(pr) obj.promo = pr;
+      if(ex){ delete ex.dates; delete ex.repeat; delete ex.weekday; delete ex.organizer; delete ex.organizerUrl; delete ex.promo; Object.assign(ex,obj); } else events.push(obj);
       markDirty(); closeForm(); filters = {when:'all', cats:{}, group:false}; syncChips(); setCity(c);
       if(markers[obj.id]){ map.flyTo({center:[obj.lng,obj.lat],zoom:15,duration:700}); markers[obj.id].togglePopup(); }
     }).catch(function(){
@@ -1077,6 +1151,7 @@ function initAdmin(){
 }
 
 lang = (lsGet('lang')==='he') ? 'he' : 'en';
+fetch('config.json',{cache:'no-store'}).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; }).then(function(c){ config = c||{}; syncSubmit(); renderPanel(); loadAnalytics(); });
 fetch('groups.json',{cache:'no-store'}).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; }).then(function(g){ cityGroups = g||{}; moreGroups = Array.isArray(g&&g.more) ? g.more : []; syncCityGroup(); renderPanel(); });
 fetch('tips.json',{cache:'no-store'}).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; }).then(function(d){ tips = Array.isArray(d) ? d : []; renderPanel(); });
 load().then(function(){
