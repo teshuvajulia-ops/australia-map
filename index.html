@@ -1127,7 +1127,7 @@ function renderPanel(){
     });
     if(!seen) h += '<p class="pempty">'+esc(t().noTips)+'</p>';
   }
-  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 20</p></div>';
+  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 21</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
