@@ -155,10 +155,47 @@ aside{width:360px;max-width:42vw;display:flex;flex-direction:column;background:v
   .publishbar{inset-block-end:calc(60px + env(safe-area-inset-bottom,0px));padding-bottom:10px}
 }
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto !important}}
+/* Motion: parallax banner, city wipe, pin drop */
+header{position:relative;overflow:hidden;isolation:isolate;min-height:128px}
+.brand,.controls{position:relative;z-index:3}
+.hero-layers{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.hero-layers::after{content:"";position:absolute;inset:0;z-index:5;background:linear-gradient(180deg,rgba(7,28,36,.35),rgba(7,28,36,0) 70%);transition:background .9s ease}
+header[data-city="sydney"] .hero-layers::after{background:linear-gradient(180deg,rgba(88,26,20,.4),rgba(242,177,52,.12) 85%)}
+header[data-city="melbourne"] .hero-layers::after{background:linear-gradient(180deg,rgba(7,40,56,.45),rgba(14,90,110,.1) 85%)}
+.hl{position:absolute;left:-6%;right:-6%;bottom:0;will-change:translate;translate:calc(var(--mx,0)*var(--f,0)*1px) calc(var(--my,0)*var(--f,0)*.35px)}
+.hl i{display:block;width:100%;height:100%;background-repeat:repeat-x;background-position:0 100%;background-size:auto 100%}
+.hl.clouds{top:6px;height:70px;--f:-10;z-index:1}
+.hl.clouds i{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cg fill='%23fff' opacity='.55'%3E%3Cellipse cx='120' cy='40' rx='70' ry='11'/%3E%3Cellipse cx='170' cy='33' rx='46' ry='9'/%3E%3Cellipse cx='520' cy='70' rx='90' ry='12'/%3E%3Cellipse cx='585' cy='62' rx='50' ry='9'/%3E%3Cellipse cx='900' cy='34' rx='80' ry='10'/%3E%3Cellipse cx='950' cy='27' rx='42' ry='8'/%3E%3Cellipse cx='1120' cy='88' rx='60' ry='8'/%3E%3C/g%3E%3C/svg%3E");background-size:1200px 100%;animation:cdrift 140s linear infinite}
+.hl.hills{height:46px;--f:-22;z-index:2}
+.hl.hills i{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 80' preserveAspectRatio='none'%3E%3Cpath d='M0 80V52C90 34 170 30 260 44C340 56 400 62 500 46C600 30 690 24 790 40C880 54 960 62 1050 44C1110 34 1160 34 1200 42V80Z' fill='%237d2c1a' opacity='.85'/%3E%3Cpath d='M0 80V64C120 52 220 54 340 62C470 70 560 56 690 52C820 48 930 64 1060 62C1120 60 1170 56 1200 58V80Z' fill='%234a1a12'/%3E%3C/svg%3E");background-size:100% 100%;background-repeat:no-repeat}
+.hl.roo{left:auto;right:30%;width:92px;height:63px;bottom:18px;--f:-40;z-index:3}
+.hl.roo i{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 110'%3E%3Cg fill='%231b0f0c'%3E%3Cpath d='M50 64C34 72 16 88 2 106C16 102 38 94 58 84Z'/%3E%3Cpath d='M46 60C50 38 78 30 96 44C106 52 104 64 96 72L62 88C50 86 44 72 46 60Z'/%3E%3Cpath d='M88 46C92 32 102 22 112 19L130 29C132 33 128 35 122 35C116 37 112 46 106 54Z'/%3E%3Cpath d='M108 21L106 5L116 18Z'/%3E%3Cpath d='M60 78C70 98 88 100 100 100L116 101L116 107L82 107C64 105 50 94 48 80Z'/%3E%3Cpath d='M98 56L113 63L109 68L97 63Z'/%3E%3C/g%3E%3C/svg%3E");background-size:contain;background-repeat:no-repeat;background-position:50% 100%}
+.hl.roo.hop{animation:roocross 1.5s cubic-bezier(.3,.6,.4,1) both}
+.hl.roo.hop i{animation:roohop .5s ease-in-out 3}
+.hl.grass{height:26px;--f:-62;z-index:4}
+.hl.grass i{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 50' preserveAspectRatio='none'%3E%3Cpath d='M0 50V30L10 8L18 30L30 4L40 30L52 12L60 32L74 2L84 32L98 14L108 34L124 6L134 34L150 16L160 36H1040L1056 12L1066 34L1082 4L1092 34L1108 16L1118 34L1134 8L1144 32L1160 14L1170 32L1186 6L1200 30V50Z' fill='%231b0f0c'/%3E%3Cpath d='M160 50V38L220 36L330 40L470 38L620 40L780 36L920 40L1040 38V50Z' fill='%231b0f0c'/%3E%3C/svg%3E");background-size:100% 100%;background-repeat:no-repeat}
+@keyframes cdrift{to{background-position-x:1200px}}
+@keyframes roocross{from{transform:translateX(-72vw)}to{transform:none}}
+@keyframes roohop{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-22px) rotate(-8deg)}}
+.pin-wrap{position:relative}
+.pinbounce{width:40px;height:48px;transform-origin:50% 100%;transition:transform .18s ease;animation:pindrop .65s cubic-bezier(.3,1.4,.5,1) backwards;animation-delay:var(--d,0ms)}
+.pin-wrap:hover .pinbounce{transform:translateY(-5px) scale(1.1)}
+.pin-wrap::after{content:"";position:absolute;left:50%;bottom:-2px;width:16px;height:6px;margin-left:-8px;border-radius:50%;background:rgba(16,38,46,.35);animation:pinshadow .65s ease-out backwards;animation-delay:var(--d,0ms);pointer-events:none}
+@keyframes pindrop{0%{opacity:0;transform:translateY(-70px) scale(.55)}55%{opacity:1;transform:translateY(0) scale(1.1,.9)}78%{transform:translateY(-7px) scale(.97,1.04)}100%{opacity:1;transform:none}}
+@keyframes pinshadow{0%{opacity:0;transform:scale(.3)}55%{opacity:1;transform:scale(1.2)}100%{opacity:1;transform:scale(1)}}
+#list li{animation:itemin .4s ease backwards;animation-delay:calc(var(--i,0)*40ms)}
+@keyframes itemin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.wipe{position:absolute;inset:0;z-index:5;pointer-events:none;display:grid;place-items:center;background:linear-gradient(100deg,#0b4f55,var(--accent) 55%,#0e3347);color:#fff;font-weight:800;font-size:clamp(2rem,9vw,4.5rem);letter-spacing:-.03em;transform:translateX(-101%);will-change:transform}
+.wipe small{display:block;font-size:.9rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.85;text-align:center}
+.wipe.go{animation:wipego 1s cubic-bezier(.65,0,.35,1)}
+@keyframes wipego{0%{transform:translateX(-101%)}42%,58%{transform:translateX(0)}100%{transform:translateX(101%)}}
+@media (max-width:720px){header{min-height:104px}.hl.roo{width:68px;height:47px;right:6%}}
+@media (prefers-reduced-motion:reduce){.hl,.hl i,.pinbounce,.pin-wrap::after,#list li,.wipe{animation:none !important;translate:none !important}.wipe{display:none}}
 </style>
 </head>
 <body data-view="map">
-<header>
+<header data-city="melbourne">
+  <div class="hero-layers" aria-hidden="true"><div class="hl clouds"><i></i></div><div class="hl hills"><i></i></div><div class="hl roo" id="roo"><i></i></div><div class="hl grass"><i></i></div></div>
   <a class="brand" href="./" aria-label="To Do Australia">
     <svg class="logo" viewBox="0 0 48 48" role="img" aria-hidden="true">
       <circle class="sun" cx="38" cy="10" r="6"/>
@@ -405,7 +442,7 @@ function catsText(e){
 
 /* Map */
 /* Your public Mapbox token (starts with pk.). */
-var MAPBOX_TOKEN = pk.eyJ1IjoidGVzaHV2YWp1bGlhIiwiYSI6ImNtd2NtbzllZTA0Y2EzMHNoMTJ1dDI3cmMifQ.GPpx-wmBop9tpMQgtJpUwQ';
+var MAPBOX_TOKEN = 'pk.eyJ1IjoidGVzaHV2YWp1bGlhIiwiYSI6ImNtd2NtbzllZTA0Y2EzMHNoMTJ1dDI3cmMifQ.GPpx-wmBop9tpMQgtJpUwQ';
 mapboxgl.accessToken = MAPBOX_TOKEN;
 var map = new mapboxgl.Map({
   container:'map',
@@ -464,14 +501,15 @@ function render(){
     }
     ul.appendChild(li0);
   }
-  list.forEach(function(e){
+  list.forEach(function(e, idx){
     var el = document.createElement('div');
     el.className = 'pin-wrap'; el.title = tx(e,'title');
-    el.innerHTML = '<div class="pinshape"><span>'+esc(e.emoji||'📍')+'</span></div>';
+    el.style.setProperty('--d', Math.min(idx*45,700)+'ms');
+    el.innerHTML = '<div class="pinbounce"><div class="pinshape"><span>'+esc(e.emoji||'📍')+'</span></div></div>';
     var popup = new mapboxgl.Popup({offset:[0,-48],maxWidth:'270px'}).setHTML(popupHtml(e));
     var m = new mapboxgl.Marker({element:el,anchor:'bottom'}).setLngLat([e.lng,e.lat]).setPopup(popup).addTo(map);
     markers[e.id] = m;
-    var li = document.createElement('li');
+    var li = document.createElement('li'); li.style.setProperty('--i', Math.min(idx,14));
     var b = document.createElement('button'); b.type='button'; b.className='item';
     var ct = catsText(e);
     b.innerHTML = '<span class="em">'+esc(e.emoji||'📍')+'</span><span class="tx"><b>'+esc(tx(e,'title'))+'</b><small>'+whenHtml(e)+'</small><small dir="ltr" style="text-align:start">'+esc(e.address)+'</small>'+
@@ -571,10 +609,22 @@ function setLang(l){
   lsSet('lang', lang);
   applyLang();
 }
+var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+var wipeEl = document.createElement('div'); wipeEl.className='wipe'; wipeEl.setAttribute('aria-hidden','true');
+$('#map').appendChild(wipeEl);
+var swapTimer = null;
 function setCity(c){
+  var changed = (c!==city);
   city = c;
   document.querySelectorAll('#cityToggle button').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.city===c ? 'true':'false'); });
-  render(); fitCity();
+  document.querySelector('header').setAttribute('data-city', c);
+  if(!changed || REDUCED){ render(); fitCity(); return; }
+  /* Teal curtain wipes across the map; the city swaps while it covers the screen. */
+  wipeEl.innerHTML = '<div><small>To Do</small>'+esc(t()[c])+'</div>';
+  wipeEl.classList.remove('go'); void wipeEl.offsetWidth; wipeEl.classList.add('go');
+  var roo = $('#roo'); roo.classList.remove('hop'); void roo.offsetWidth; roo.classList.add('hop');
+  clearTimeout(swapTimer);
+  swapTimer = setTimeout(function(){ render(); fitCity(); }, 420);
 }
 document.querySelectorAll('#cityToggle button').forEach(function(b){
   b.addEventListener('click',function(){ setCity(b.dataset.city); });
@@ -583,6 +633,23 @@ document.querySelectorAll('.toggle.lang button').forEach(function(b){
   b.addEventListener('click',function(){ setLang(b.dataset.lang); });
 });
 window.addEventListener('resize',function(){ map.resize(); });
+
+/* Parallax: layers follow the pointer or finger, and sway gently when idle. */
+(function(){
+  if(REDUCED) return;
+  var hdr = document.querySelector('header'), tx0=0, ty0=0, cx=0, cy=0, last=0;
+  function aim(x,y){ var r=hdr.getBoundingClientRect(); tx0=(x/innerWidth-.5)*2; ty0=((y-r.top)/Math.max(r.height,1)-.5)*2; last=performance.now(); }
+  window.addEventListener('pointermove',function(e){ aim(e.clientX,e.clientY); },{passive:true});
+  hdr.addEventListener('touchmove',function(e){ var p=e.touches[0]; aim(p.clientX,p.clientY); },{passive:true});
+  var lst = document.getElementById('list');
+  if(lst) lst.addEventListener('scroll',function(){ tx0 = Math.max(-1,Math.min(1,lst.scrollTop/200-.5)); last=performance.now(); },{passive:true});
+  (function frame(now){
+    if(now-last>2500){ tx0=Math.sin(now/2600)*.7; ty0=Math.cos(now/3100)*.4; }
+    cx+=(tx0-cx)*.06; cy+=(ty0-cy)*.06;
+    hdr.style.setProperty('--mx',cx.toFixed(3)); hdr.style.setProperty('--my',cy.toFixed(3));
+    requestAnimationFrame(frame);
+  })(performance.now());
+})();
 
 /* Loading events */
 function load(){
