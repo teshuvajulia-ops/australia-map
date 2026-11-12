@@ -456,6 +456,22 @@ html[dir="rtl"] .gwhat>b{letter-spacing:0;text-transform:none;font-size:.9rem}
 .gw strong{display:block;font-size:.98rem}
 .gw small{color:var(--muted);line-height:1.4;font-size:.86rem}
 .gwhat p{margin:2px 0 0;padding-top:10px;border-top:1px dashed var(--line);color:var(--muted);font-size:.8rem}
+
+/* Event details sheet */
+.evsheet{position:fixed;inset:0;z-index:2700;display:flex;align-items:flex-end;justify-content:center;background:rgba(60,30,30,.4);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);animation:wfade .25s ease}
+.evsheet.out{opacity:0;transition:opacity .25s}
+.evcard{position:relative;width:100%;max-width:520px;max-height:88vh;overflow:auto;background:#fff;border-radius:24px 24px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));box-shadow:0 -12px 40px rgba(60,30,30,.25);animation:sheetup .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes sheetup{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
+@media (min-width:721px){.evsheet{align-items:center}.evcard{border-radius:24px;padding-bottom:18px}}
+.evx{position:absolute;inset-block-start:10px;inset-inline-end:12px;width:36px;height:36px;border-radius:50%;border:0;background:var(--peach-pale);color:var(--ink);font-size:1.4rem;line-height:1}
+.evhead{display:flex;align-items:center;gap:10px;margin-bottom:6px;padding-inline-end:44px}
+.evhead .em{font-size:2rem}
+.evhead small{color:var(--muted);font-size:.8rem}
+.evcard .pop h3{font-size:1.3rem;margin-bottom:6px}
+.evcard .pop .meta{font-size:.92rem}
+.evcard .pop p{font-size:1rem;line-height:1.5}
+.evmap{display:block;width:100%;margin-top:10px;padding:11px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-weight:700}
+@media (prefers-reduced-motion:reduce){.evsheet,.evcard{animation:none}}
 </style>
 </head>
 <body data-view="map">
@@ -612,7 +628,7 @@ var I18N = {
     cats:{running:'Run clubs',surf:'Surfing',volleyball:'Volleyball',music:'Music',food:'Food & drink',markets:'Markets',parties:'Parties',culture:'Arts & culture',family:'Family',outdoors:'Outdoors',sports:'Sports & fitness',community:'Communities'},
     details:'Details', directions:'Google Maps', waze:'Waze', share:'Share on WhatsApp', wa:'Join the group on WhatsApp', groupTag:'Group', hasGroup:'Has a group', cityGroup:function(c){return 'CITYSIDE community · '+c;}, groupLead:'Meet people going to the same events', every:function(d){return 'Every '+d;}, and:' & ', by:'by', promoFeatured:'★ Featured', promoSponsored:'Sponsored', submit:'Organising something? List your event on CITYSIDE', listShort:'+ List your event', welcomeTitle:'Don\'t miss the city.\nDon\'t miss the people.', welcomeText:'Events, run clubs and communities in Melbourne and Sydney. Pick a city, find something on, and join the group to meet people going.', explore:'Explore events',
     install:'Install app', installTitle:'Install CITYSIDE', installIos:'Tap the Share button in Safari, then choose “Add to Home Screen”.', installOther:'Open the browser menu and choose “Install app” or “Add to Home screen”.', close:'Close', shareHead:'Found on',
-    tabMap:'Map', tabList:'List', tabCal:'Calendar', tabGroups:'Groups', tabTips:'Tips', calTitle:function(c){return 'Calendar \u00b7 '+c;}, calLead:'Tap a day to see what is on.', calNone:'Nothing listed for this day yet.', calToday:'Today', calEvents:function(n){return n===1?'1 event':n+' events';}, todayBar:function(d,n){return n? d+' \u00b7 '+(n===1?'1 event today':n+' events today') : d+' \u00b7 nothing today \u203A';}, todayQ:"Don't miss the city \u2013 Don't miss the people", calPrev:'Previous month', calNext:'Next month', calGo:'Show on map',
+    tabMap:'Map', tabList:'List', tabCal:'Calendar', tabGroups:'Groups', tabTips:'Tips', calTitle:function(c){return 'Calendar \u00b7 '+c;}, calLead:'Tap a day to see what is on.', calNone:'Nothing listed for this day yet.', calToday:'Today', calEvents:function(n){return n===1?'1 event':n+' events';}, todayBar:function(d,n){return n? d+' \u00b7 '+(n===1?'1 event today':n+' events today') : d+' \u00b7 nothing today \u203A';}, todayQ:"Don't miss the city \u2013 Don't miss the people", calPrev:'Previous month', calNext:'Next month', calGo:'Details', evMap:'Show on map', evClose:'Close',
     groupsTitle:function(c){return 'WhatsApp groups · '+c;}, tipsTitle:function(c){return 'Tips · '+c;}, groupsLead:'Join a group, meet people going to the same events and arrive with friends.', gwhatTitle:'What are these groups?', gwhat:[['\uD83D\uDC4B','Find people to go with','No one to go with? Say hi, find someone heading to the same event.'],['\uD83D\uDCE3','Hear about events first','Organisers and locals share what is on this week.'],['\uD83D\uDCAC','Ask the locals','Tips, recommendations and plans, in a friendly chat.']], gwhatRules:'Free to join. Be kind, no spam. Leave any time.', tipsLead:'Good to know before you go.', mainGroup:'City group', moreGroups:'More groups', eventGroups:'Event groups', noGroups:'Groups are on their way. Check back soon.', noTips:'No tips yet.', joinShort:'Join', sourceLink:'Source', tipCats:{emergency:'Emergency',safety:'Safety',transport:'Getting around',money:'Money',nature:'Sun & beach',practical:'Practical',food:'Food',culture:'Local culture',other:'Other'},
     filterLabel:'Filter events', dateLabel:'Date', catLabel:'Event type',
     mapLabel:'Events map',
@@ -630,7 +646,7 @@ var I18N = {
     cats:CAT_HE,
     details:'לפרטים', directions:'ניווט ב-Google Maps', waze:'ניווט ב-Waze', share:'שיתוף ב-WhatsApp', wa:'הצטרפות לקבוצה ב-WhatsApp', groupTag:'קבוצה', hasGroup:'יש קבוצה', cityGroup:function(c){return 'קהילת CITYSIDE ב'+c;}, groupLead:'להכיר אנשים שמגיעים לאותם אירועים', every:function(d){return 'כל '+d;}, and:' ו', by:'מאת', promoFeatured:'★ מומלץ', promoSponsored:'ממומן', submit:'מארגנים אירוע? פרסמו אותו ב-CITYSIDE', listShort:'+ פרסום אירוע', welcomeTitle:'אל תפספסו את העיר.\nאל תפספסו את האנשים.', welcomeText:'אירועים, קבוצות ריצה וקהילות במלבורן ובסידני. בוחרים עיר, מוצאים מה קורה, ומצטרפים לקבוצה כדי להכיר אנשים שמגיעים.', explore:'לגלות אירועים',
     install:'התקנת האפליקציה', installTitle:'התקנת CITYSIDE', installIos:'ב-Safari לוחצים על כפתור השיתוף ואז על “הוספה למסך הבית”.', installOther:'בתפריט הדפדפן בוחרים “התקנת אפליקציה” או “הוספה למסך הבית”.', close:'סגירה', shareHead:'מצאתי באתר',
-    tabMap:'מפה', tabList:'רשימה', tabCal:'לוח', tabGroups:'קבוצות', tabTips:'טיפים', calTitle:function(c){return 'לוח אירועים \u00b7 '+c;}, calLead:'לוחצים על יום כדי לראות מה קורה.', calNone:'עוד לא פורסמו אירועים ליום הזה.', calToday:'היום', calEvents:function(n){return n===1?'אירוע אחד':n+' אירועים';}, todayBar:function(d,n){return n? d+' \u00b7 '+(n===1?'אירוע אחד היום':n+' אירועים היום') : d+' \u00b7 אין אירועים היום \u203A';}, todayQ:'אל תפספסו את העיר \u2013 אל תפספסו את האנשים', calPrev:'חודש קודם', calNext:'חודש הבא', calGo:'להצגה במפה',
+    tabMap:'מפה', tabList:'רשימה', tabCal:'לוח', tabGroups:'קבוצות', tabTips:'טיפים', calTitle:function(c){return 'לוח אירועים \u00b7 '+c;}, calLead:'לוחצים על יום כדי לראות מה קורה.', calNone:'עוד לא פורסמו אירועים ליום הזה.', calToday:'היום', calEvents:function(n){return n===1?'אירוע אחד':n+' אירועים';}, todayBar:function(d,n){return n? d+' \u00b7 '+(n===1?'אירוע אחד היום':n+' אירועים היום') : d+' \u00b7 אין אירועים היום \u203A';}, todayQ:'אל תפספסו את העיר \u2013 אל תפספסו את האנשים', calPrev:'חודש קודם', calNext:'חודש הבא', calGo:'פרטים', evMap:'הצגה במפה', evClose:'סגירה',
     groupsTitle:function(c){return 'קבוצות WhatsApp · '+c;}, tipsTitle:function(c){return 'טיפים · '+c;}, groupsLead:'מצטרפים לקבוצה, מכירים אנשים שמגיעים לאותם אירועים ומגיעים עם חברים.', gwhatTitle:'מה זה הקבוצות האלה?', gwhat:[['\uD83D\uDC4B','למצוא עם מי לצאת','אין עם מי ללכת? אומרים שלום ומוצאים מישהו שמגיע לאותו אירוע.'],['\uD83D\uDCE3','לשמוע על אירועים ראשונים','מארגנים ותושבים משתפים מה קורה השבוע.'],['\uD83D\uDCAC','לשאול את המקומיים','טיפים, המלצות ותוכניות, בצ׳אט ידידותי.']], gwhatRules:'ההצטרפות חינם. מתנהגים יפה, בלי ספאם. אפשר לעזוב בכל רגע.', tipsLead:'טוב לדעת לפני שיוצאים.', mainGroup:'קבוצת העיר', moreGroups:'עוד קבוצות', eventGroups:'קבוצות אירועים', noGroups:'קבוצות בדרך. חזרו לבדוק בקרוב.', noTips:'עדיין אין טיפים.', joinShort:'הצטרפות', sourceLink:'מקור', tipCats:{emergency:'חירום',safety:'בטיחות',transport:'תחבורה',money:'כסף',nature:'שמש וחוף',practical:'מעשי',food:'אוכל',culture:'תרבות מקומית',other:'אחר'},
     filterLabel:'סינון אירועים', dateLabel:'תאריך', catLabel:'סוג אירוע',
     mapLabel:'מפת אירועים',
@@ -1012,15 +1028,34 @@ document.addEventListener('click',function(ev){
   }
   if(el.dataset.calDay){ calSel = el.dataset.calDay; renderPanel(); return; }
   if(el.dataset.calEv){
-    var e = events.filter(function(x){ return x.id===el.dataset.calEv; })[0]; if(!e) return;
-    filters = {when:'all', cats:{}, group:false, near:filters.near}; syncChips(); render();
-    setView('map');
-    setTimeout(function(){
-      map.flyTo({center:[e.lng,e.lat],zoom:Math.max(map.getZoom(),14),duration:700});
-      var m2 = markers[e.id]; if(m2 && !m2.getPopup().isOpen()) m2.togglePopup();
-    }, 120);
+    var e = events.filter(function(x){ return x.id===el.dataset.calEv; })[0]; if(e) openEventSheet(e);
   }
 });
+/* Event details card (bottom sheet on phones) */
+function showEventOnMap(e){
+  filters = {when:'all', cats:{}, group:false, near:filters.near}; syncChips(); render();
+  setView('map');
+  setTimeout(function(){
+    map.flyTo({center:[e.lng,e.lat],zoom:Math.max(map.getZoom(),14),duration:700});
+    var m2 = markers[e.id]; if(m2 && !m2.getPopup().isOpen()) m2.togglePopup();
+  }, 120);
+}
+function openEventSheet(e){
+  var old = document.getElementById('evsheet'); if(old) old.remove();
+  var o = document.createElement('div'); o.id='evsheet'; o.className='evsheet'; o.setAttribute('role','dialog'); o.setAttribute('aria-modal','true');
+  var ct = catsText(e);
+  o.innerHTML = '<div class="evcard" dir="'+t().dir+'"><button type="button" class="evx" aria-label="'+esc(t().evClose)+'">\u00d7</button>'+
+    '<div class="evhead"><span class="em">'+esc(e.emoji||'\uD83D\uDCCD')+'</span>'+(ct?'<small>'+esc(ct)+'</small>':'')+'</div>'+
+    popupHtml(e)+'<button type="button" class="evmap">\uD83D\uDDFA '+esc(t().evMap)+'</button></div>';
+  function close(){ o.classList.add('out'); setTimeout(function(){ o.remove(); }, 250); document.removeEventListener('keydown',onKey); }
+  function onKey(ev){ if(ev.key==='Escape') close(); }
+  o.addEventListener('click',function(ev){ if(ev.target===o) close(); });
+  o.querySelector('.evx').addEventListener('click',close);
+  o.querySelector('.evmap').addEventListener('click',function(){ close(); showEventOnMap(e); });
+  document.addEventListener('keydown',onKey);
+  document.body.appendChild(o);
+  o.querySelector('.evx').focus();
+}
 function syncTodayBar(){
   var b = $('#todaybar'); if(!b) return;
   try{
@@ -1071,7 +1106,7 @@ function renderPanel(){
     });
     if(!seen) h += '<p class="pempty">'+esc(t().noTips)+'</p>';
   }
-  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 18</p></div>';
+  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 19</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
@@ -1112,7 +1147,7 @@ function render(){
       (userPos ? '<small class="dist">\uD83D\uDCCD '+esc(t().kmAway(distKm(e)))+'</small>' : '')+
       (safeWa(e.whatsapp) ? '<small class="wab">\uD83D\uDC65 '+esc(t().groupTag)+' · WhatsApp</small>' : '')+'</span>';
     b.addEventListener('click',function(){
-      if(window.matchMedia('(max-width:720px)').matches) setView('map');
+      if(window.matchMedia('(max-width:720px)').matches){ openEventSheet(e); return; }
       setTimeout(function(){
         map.flyTo({center:[e.lng,e.lat],zoom:Math.max(map.getZoom(),14),duration:700});
         if(!m.getPopup().isOpen()) m.togglePopup();
