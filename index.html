@@ -428,7 +428,7 @@ details.tip p{margin:0;padding:0 16px 14px;line-height:1.6}
       <div class="field"><label for="f-orgurl">קישור למארגן (לא חובה)</label><input class="ltr" id="f-orgurl" type="url" placeholder="https://"></div>
     </div>
     <div class="two">
-      <div class="field"><label for="f-repeat">אירוע חוזר</label><select id="f-repeat"><option value="">לא, אירוע חד פעמי</option><option value="0">כל יום ראשון</option><option value="1">כל יום שני</option><option value="2">כל יום שלישי</option><option value="3">כל יום רביעי</option><option value="4">כל יום חמישי</option><option value="5">כל יום שישי</option><option value="6">כל שבת</option></select><span class="hint">בחרי תאריך התחלה למעלה. אפשר להגדיר "עד תאריך" לסיום.</span></div>
+      <div class="field"><label>אירוע חוזר (סמני את הימים)</label><div class="catbox" id="f-days"></div><span class="hint">בחרי תאריך התחלה למעלה. אפשר כמה ימים, למשל שלישי וחמישי. בלי סימון = אירוע חד פעמי.</span></div>
       <div class="field"><label for="f-promo">קידום</label><select id="f-promo"><option value="">בלי קידום</option><option value="featured">מומלץ (Featured)</option><option value="sponsored">ממומן (Sponsored)</option></select><span class="hint">אירוע מקודם עולה לראש הרשימה ומסומן בבירור.</span></div>
     </div>
     <div class="field"><label for="f-url">קישור לפרטים (לא חובה)</label><input class="ltr" id="f-url" type="url" placeholder="https://"></div>
@@ -467,7 +467,7 @@ var I18N = {
     clear:'Clear filters',
     when:{all:'Upcoming', today:'Today', tomorrow:'Tomorrow', weekend:'This weekend'},
     cats:{music:'Music',food:'Food & drink',markets:'Markets',parties:'Parties',culture:'Arts & culture',family:'Family',outdoors:'Outdoors',sports:'Sports & fitness',community:'Communities'},
-    details:'Details', directions:'Google Maps', waze:'Waze', share:'Share on WhatsApp', wa:'Join the group on WhatsApp', groupTag:'Group', hasGroup:'Has a group', cityGroup:function(c){return 'CITYSIDE community · '+c;}, groupLead:'Meet people going to the same events', every:function(d){return 'Every '+d;}, by:'by', promoFeatured:'★ Featured', promoSponsored:'Sponsored', submit:'Organising something? List your event on CITYSIDE',
+    details:'Details', directions:'Google Maps', waze:'Waze', share:'Share on WhatsApp', wa:'Join the group on WhatsApp', groupTag:'Group', hasGroup:'Has a group', cityGroup:function(c){return 'CITYSIDE community · '+c;}, groupLead:'Meet people going to the same events', every:function(d){return 'Every '+d;}, and:' & ', by:'by', promoFeatured:'★ Featured', promoSponsored:'Sponsored', submit:'Organising something? List your event on CITYSIDE',
     install:'Install app', installTitle:'Install CITYSIDE', installIos:'Tap the Share button in Safari, then choose “Add to Home Screen”.', installOther:'Open the browser menu and choose “Install app” or “Add to Home screen”.', close:'Close', shareHead:'Found on',
     tabMap:'Map', tabList:'List', tabGroups:'Groups', tabTips:'Tips',
     groupsTitle:function(c){return 'WhatsApp groups · '+c;}, tipsTitle:function(c){return 'Tips · '+c;}, groupsLead:'Join a group, meet people going to the same events and arrive with friends.', tipsLead:'Good to know before you go.', mainGroup:'City group', moreGroups:'More groups', eventGroups:'Event groups', noGroups:'Groups are on their way. Check back soon.', noTips:'No tips yet.', joinShort:'Join', sourceLink:'Source', tipCats:{emergency:'Emergency',safety:'Safety',transport:'Getting around',money:'Money',nature:'Sun & beach',practical:'Practical',food:'Food',culture:'Local culture',other:'Other'},
@@ -485,7 +485,7 @@ var I18N = {
     clear:'נקה סינון',
     when:{all:'הכל', today:'היום', tomorrow:'מחר', weekend:'סוף השבוע'},
     cats:CAT_HE,
-    details:'לפרטים', directions:'ניווט ב-Google Maps', waze:'ניווט ב-Waze', share:'שיתוף ב-WhatsApp', wa:'הצטרפות לקבוצה ב-WhatsApp', groupTag:'קבוצה', hasGroup:'יש קבוצה', cityGroup:function(c){return 'קהילת CITYSIDE ב'+c;}, groupLead:'להכיר אנשים שמגיעים לאותם אירועים', every:function(d){return 'כל '+d;}, by:'מאת', promoFeatured:'★ מומלץ', promoSponsored:'ממומן', submit:'מארגנים אירוע? פרסמו אותו ב-CITYSIDE',
+    details:'לפרטים', directions:'ניווט ב-Google Maps', waze:'ניווט ב-Waze', share:'שיתוף ב-WhatsApp', wa:'הצטרפות לקבוצה ב-WhatsApp', groupTag:'קבוצה', hasGroup:'יש קבוצה', cityGroup:function(c){return 'קהילת CITYSIDE ב'+c;}, groupLead:'להכיר אנשים שמגיעים לאותם אירועים', every:function(d){return 'כל '+d;}, and:' ו', by:'מאת', promoFeatured:'★ מומלץ', promoSponsored:'ממומן', submit:'מארגנים אירוע? פרסמו אותו ב-CITYSIDE',
     install:'התקנת האפליקציה', installTitle:'התקנת CITYSIDE', installIos:'ב-Safari לוחצים על כפתור השיתוף ואז על “הוספה למסך הבית”.', installOther:'בתפריט הדפדפן בוחרים “התקנת אפליקציה” או “הוספה למסך הבית”.', close:'סגירה', shareHead:'מצאתי באתר',
     tabMap:'מפה', tabList:'רשימה', tabGroups:'קבוצות', tabTips:'טיפים',
     groupsTitle:function(c){return 'קבוצות WhatsApp · '+c;}, tipsTitle:function(c){return 'טיפים · '+c;}, groupsLead:'מצטרפים לקבוצה, מכירים אנשים שמגיעים לאותם אירועים ומגיעים עם חברים.', tipsLead:'טוב לדעת לפני שיוצאים.', mainGroup:'קבוצת העיר', moreGroups:'עוד קבוצות', eventGroups:'קבוצות אירועים', noGroups:'קבוצות בדרך. חזרו לבדוק בקרוב.', noTips:'עדיין אין טיפים.', joinShort:'הצטרפות', sourceLink:'מקור', tipCats:{emergency:'חירום',safety:'בטיחות',transport:'תחבורה',money:'כסף',nature:'שמש וחוף',practical:'מעשי',food:'אוכל',culture:'תרבות מקומית',other:'אחר'},
@@ -526,10 +526,11 @@ function todayIso(tz){ return new Intl.DateTimeFormat('en-CA',{timeZone:tz,year:
 function addDays(iso,n){ var d = new Date(iso+'T12:00:00Z'); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); }
 function dow(iso){ return new Date(iso+'T12:00:00Z').getUTCDay(); }
 /* "dates" lists exact days for events that skip days; otherwise date..endDate */
-function isRepeat(e){ return e.repeat==='weekly' && typeof e.weekday==='number'; }
+function repDays(e){ return Array.isArray(e.weekdays) && e.weekdays.length ? e.weekdays : (typeof e.weekday==='number' ? [e.weekday] : []); }
+function isRepeat(e){ return e.repeat==='weekly' && repDays(e).length>0; }
 function endOf(e){ if(isRepeat(e)) return e.endDate || '9999-12-31'; if(e.dates && e.dates.length) return e.dates.slice().sort().pop(); return e.endDate || e.date || ''; }
 function occursOn(e,iso){
-  if(isRepeat(e)) return dow(iso)===e.weekday && (!e.date || iso>=e.date) && (!e.endDate || iso<=e.endDate);
+  if(isRepeat(e)) return repDays(e).indexOf(dow(iso))>=0 && (!e.date || iso>=e.date) && (!e.endDate || iso<=e.endDate);
   if(e.dates && e.dates.length) return e.dates.indexOf(iso) >= 0;
   if(!e.date) return false;
   return e.date <= iso && iso <= (e.endDate || e.date);
@@ -579,12 +580,12 @@ function weekdayName(w){ return new Date('2026-11-'+(15+w)+'T12:00:00').toLocale
 function nextDay(e){
   if(!isRepeat(e)) return e.date || '';
   var d = todayIso(TZ[e.city] || TZ.melbourne); if(e.date && e.date > d) d = e.date;
-  for(var i=0;i<7 && dow(d)!==e.weekday;i++) d = addDays(d,1);
+  for(var i=0;i<7 && repDays(e).indexOf(dow(d))<0;i++) d = addDays(d,1);
   return d;
 }
 function whenHtml(e){
   var parts = [];
-  if(isRepeat(e)){ parts.push(esc(t().every(weekdayName(e.weekday)))); }
+  if(isRepeat(e)){ parts.push(esc(t().every(repDays(e).slice().sort().map(weekdayName).join(t().and)))); }
   else if(e.date){
     if(e.endDate && e.endDate !== e.date) parts.push(esc(fmtDate(e.date,true)+' – '+fmtDate(e.endDate,true)));
     else parts.push(esc(fmtDate(e.date)));
@@ -1048,7 +1049,7 @@ function openForm(e){
   $('#f-wa').value = e ? (e.whatsapp||'') : '';
   $('#f-url').value = e ? (e.url||'') : '';
   $('#f-org').value = e ? (e.organizer||'') : ''; $('#f-orgurl').value = e ? (e.organizerUrl||'') : '';
-  $('#f-repeat').value = (e && isRepeat(e)) ? String(e.weekday) : ''; $('#f-promo').value = e ? (e.promo||'') : '';
+  var wd = (e && isRepeat(e)) ? repDays(e) : []; document.querySelectorAll('#f-days input').forEach(function(i){ i.checked = wd.indexOf(Number(i.value))>=0; }); $('#f-promo').value = e ? (e.promo||'') : '';
   var have = e ? (e.cats||[]) : [];
   document.querySelectorAll('#f-cats input').forEach(function(i){ i.checked = have.indexOf(i.value) >= 0; });
   setEmoji(e ? e.emoji : '🎭');
@@ -1087,6 +1088,8 @@ function initAdmin(){
     b.addEventListener('click',function(){ setEmoji(em); });
     box.appendChild(b);
   });
+  var dbx = $('#f-days'), DN = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
+  DN.forEach(function(n,k){ var l = document.createElement('label'); var i2 = document.createElement('input'); i2.type='checkbox'; i2.value=String(k); l.appendChild(i2); l.appendChild(document.createTextNode(n)); dbx.appendChild(l); });
   var cb = $('#f-cats');
   CATS.forEach(function(c){
     var l = document.createElement('label');
@@ -1137,11 +1140,11 @@ function initAdmin(){
       };
       /* keep an explicit day list only if the dates were not changed */
       if(ex && ex.dates && ex.date===date && (ex.endDate||'')===obj.endDate) obj.dates = ex.dates;
-      var rp = $('#f-repeat').value;
-      if(rp!==''){ obj.repeat = 'weekly'; obj.weekday = Number(rp); if(!date){ msg.className='msg err'; msg.textContent='לאירוע חוזר צריך תאריך התחלה.'; return; } }
+      var rp = []; document.querySelectorAll('#f-days input:checked').forEach(function(i){ rp.push(Number(i.value)); });
+      if(rp.length){ obj.repeat = 'weekly'; obj.weekdays = rp.sort(); if(!date){ msg.className='msg err'; msg.textContent='לאירוע חוזר צריך תאריך התחלה.'; return; } }
       var org = $('#f-org').value.trim(); if(org){ obj.organizer = org; var ou = safeUrl($('#f-orgurl').value.trim()); if(ou) obj.organizerUrl = ou; }
       var pr = $('#f-promo').value; if(pr) obj.promo = pr;
-      if(ex){ delete ex.dates; delete ex.repeat; delete ex.weekday; delete ex.organizer; delete ex.organizerUrl; delete ex.promo; Object.assign(ex,obj); } else events.push(obj);
+      if(ex){ delete ex.dates; delete ex.repeat; delete ex.weekday; delete ex.weekdays; delete ex.organizer; delete ex.organizerUrl; delete ex.promo; Object.assign(ex,obj); } else events.push(obj);
       markDirty(); closeForm(); filters = {when:'all', cats:{}, group:false}; syncChips(); setCity(c);
       if(markers[obj.id]){ map.flyTo({center:[obj.lng,obj.lat],zoom:15,duration:700}); markers[obj.id].togglePopup(); }
     }).catch(function(){
