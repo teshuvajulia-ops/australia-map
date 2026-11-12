@@ -420,6 +420,7 @@
     "desc": "ריצה או הליכה של 5 ק\"מ, חינם, מדי שבת. נרשמים פעם אחת באתר parkrun כדי לקבל ברקוד.",
     "desc_en": "Free weekly 5k run or walk. Register once on parkrun to get your barcode.",
     "cats": [
+      "running",
       "sports",
       "community"
     ],
@@ -444,6 +445,7 @@
     "desc": "ריצה חברתית שיוצאת מהפאב. הריצה הראשונה חינם ואחר כך $5. הלוח לפי Time Out מלבורן, כדאי לוודא מול הקבוצה.",
     "desc_en": "Social group run from the pub. First run free, then $5. Schedule per Time Out Melbourne; check the club before you go.",
     "cats": [
+      "running",
       "sports",
       "community"
     ],
@@ -468,6 +470,7 @@
     "desc": "ריצות צהריים בטן טראק (גם בימי חמישי). דמי חבר שנתיים $37.5. הלוח לפי Time Out מלבורן, כדאי לוודא מול הקבוצה.",
     "desc_en": "Lunchtime runs at the Tan Track (also Thursdays). $37.50 yearly fee. Schedule per Time Out Melbourne; check the club before you go.",
     "cats": [
+      "running",
       "sports",
       "community"
     ],
@@ -492,6 +495,7 @@
     "desc": "ריצות בימי ראשון בטן טראק. דמי חבר שנתיים $30. הלוח לפי Time Out מלבורן, כדאי לוודא מול הקבוצה.",
     "desc_en": "Sunday runs at the Tan Track. $30 yearly fee. Schedule per Time Out Melbourne; check the club before you go.",
     "cats": [
+      "running",
       "sports",
       "community"
     ],
@@ -516,6 +520,7 @@
     "desc": "ריצות חינם ביום רביעי ובשבת ב-6:00 וביום ראשון ב-6:30. הלוח לפי Time Out מלבורן, כדאי לוודא מול הקבוצה.",
     "desc_en": "Free runs on Wednesday and Saturday at 6:00 and Sunday at 6:30. Schedule per Time Out Melbourne; check the club before you go.",
     "cats": [
+      "running",
       "sports",
       "community"
     ],
@@ -540,6 +545,7 @@
     "desc": "אימון קבוצתי בבוקר ביום שלישי באולימפיק פארק. בלי דמי הצטרפות. הלוח לפי Time Out מלבורן, כדאי לוודא מול הקבוצה.",
     "desc_en": "Tuesday morning group training at Olympic Park. No joining fee. Schedule per Time Out Melbourne; check the club before you go.",
     "cats": [
+      "running",
       "sports",
       "community"
     ],
@@ -564,6 +570,7 @@
     "desc": "ריצת בוקר חינם בימי שישי. הלוח לפי Time Out סידני, כדאי לוודא מול הקבוצה.",
     "desc_en": "Free Friday morning run. Schedule per Time Out Sydney; check the club before you go.",
     "cats": [
+      "running",
       "sports",
       "community"
     ],
@@ -588,6 +595,7 @@
     "desc": "ריצות חינם בימי שני וביום רביעי. הלוח לפי Time Out סידני, כדאי לוודא מול הקבוצה.",
     "desc_en": "Free runs on Mondays and Wednesdays. Schedule per Time Out Sydney; check the club before you go.",
     "cats": [
+      "running",
       "sports",
       "community"
     ],
@@ -612,6 +620,7 @@
     "desc": "ריצה חינם בימי שישי מ-Bondi Pavilion (וגם ביום רביעי ב-Ramsgate Beach). הלוח לפי Time Out סידני, כדאי לוודא מול הקבוצה.",
     "desc_en": "Free Friday run from Bondi Pavilion (also Wednesdays at Ramsgate Beach). Schedule per Time Out Sydney; check the club before you go.",
     "cats": [
+      "running",
       "sports",
       "community"
     ],
@@ -636,6 +645,7 @@
     "desc": "ריצה חברתית ארוכה בשבתות, חינם (וגם בימי שלישי ב-18:30). הלוח לפי Time Out סידני, כדאי לוודא מול הקבוצה.",
     "desc_en": "Free social long run on Saturdays (also Tuesdays at 6:30pm). Schedule per Time Out Sydney; check the club before you go.",
     "cats": [
+      "running",
       "sports",
       "community"
     ],
@@ -660,6 +670,7 @@
     "desc": "ריצת בוקר חינם בימי שלישי מ-North Steyne Surf Club. הלוח לפי Time Out סידני, כדאי לוודא מול הקבוצה.",
     "desc_en": "Free Tuesday morning run from North Steyne Surf Club. Schedule per Time Out Sydney; check the club before you go.",
     "cats": [
+      "running",
       "sports",
       "community"
     ],
@@ -684,6 +695,7 @@
     "desc": "ריצת שחר חינם בשבתות בצד הדרומי של חוף ברונטה. הלוח לפי Time Out סידני, כדאי לוודא מול הקבוצה.",
     "desc_en": "Free early Saturday run on the south side of Bronte Beach. Schedule per Time Out Sydney; check the club before you go.",
     "cats": [
+      "running",
       "sports",
       "community"
     ],
@@ -708,6 +720,7 @@
     "desc": "ריצה קלה בימי ראשון מהמאפייה, חינם (אימון המסלול בימי שלישי עולה $9). הלוח לפי Time Out סידני, כדאי לוודא מול הקבוצה.",
     "desc_en": "Free Sunday shuffle run from the bakery (Tuesday track session costs $9). Schedule per Time Out Sydney; check the club before you go.",
     "cats": [
+      "running",
       "sports",
       "community"
     ],
@@ -720,5 +733,104 @@
     "weekday": 0,
     "organizer": "Shuffle Sydney",
     "organizerUrl": "https://shufflesydney.com"
+  },
+  {
+    "id": "e33",
+    "city": "melbourne",
+    "title": "כדורעף חופים חברתי (Republica Social 4's)",
+    "title_en": "Social beach volleyball at Republica",
+    "date": "2026-11-12",
+    "endDate": "2027-04-30",
+    "time": "18:00",
+    "address": "St Kilda Beach, next to Republica, Jacka Blvd, St Kilda VIC",
+    "desc": "כדורעף חופים חברתי בקבוצות של 4, שלוש פעמים בשבוע בערבים, עונה מאוקטובר עד אפריל. $35 לשחקן ($30 לסטודנטים) ועוד חברות עונתית ב-MBVA ($30). המשחקים מבוטלים בגשם. כדאי להירשם מראש ולוודא מול המארגנים.",
+    "desc_en": "Social 4-a-side beach volleyball, three evenings a week, October to April. $35 per player ($30 students) plus a $30 season MBVA membership. Cancelled in bad weather. Register ahead and check with the organiser.",
+    "cats": [
+      "volleyball",
+      "sports",
+      "outdoors",
+      "community"
+    ],
+    "whatsapp": "",
+    "url": "https://www.vicbeach.com.au/republica/",
+    "emoji": "🏐",
+    "lat": -37.8689,
+    "lng": 144.9769,
+    "repeat": "weekly",
+    "weekdays": [
+      2,
+      3,
+      4
+    ],
+    "organizer": "Vicbeach / MBVA",
+    "organizerUrl": "https://www.vicbeach.com.au/republica/"
+  },
+  {
+    "id": "e34",
+    "city": "sydney",
+    "title": "כדורעף חופים בקוגי (CBVA)",
+    "title_en": "Beach volleyball at Coogee (CBVA)",
+    "time": "",
+    "address": "North end of Coogee Beach, Coogee NSW",
+    "desc": "מועדון הכדורעף של קוגי: אימונים ומשחק חברתי. כדי לשחק צריך להגיש בקשה, לעבור הדרכה ולשלם דמי חברות. מועדי המשחק מופיעים באתר המועדון.",
+    "desc_en": "Coogee Beach Volleyball Association runs training and social play. You apply online, complete an induction and pay membership. Session times are on the club website.",
+    "cats": [
+      "volleyball",
+      "sports",
+      "outdoors",
+      "community"
+    ],
+    "whatsapp": "",
+    "url": "https://cbva.org.au/adults",
+    "emoji": "🏐",
+    "lat": -33.9206,
+    "lng": 151.259,
+    "organizer": "CBVA",
+    "organizerUrl": "https://cbva.org.au/adults"
+  },
+  {
+    "id": "e35",
+    "city": "sydney",
+    "title": "כדורעף חופים חברתי במנלי",
+    "title_en": "Social beach volleyball at Manly",
+    "time": "",
+    "address": "Manly Beach, Manly NSW",
+    "desc": "אירועי כדורעף חברתיים במנלי, כולל פורמט King/Queen of the Court שבו נרשמים לבד ומחליפים בני זוג. כ-$27.50 למפגש, הרשמה עד 12:00 ביום שלפני. מועדים באתר.",
+    "desc_en": "Social beach volleyball events at Manly, including King/Queen of the Court where you sign up solo and rotate partners. About $27.50 a session; sign-ups close at noon the day before. Dates on the website.",
+    "cats": [
+      "volleyball",
+      "sports",
+      "outdoors",
+      "community"
+    ],
+    "whatsapp": "",
+    "url": "https://beachvolleyball.com.au/social-events-manly",
+    "emoji": "🏐",
+    "lat": -33.7969,
+    "lng": 151.287,
+    "organizer": "Sydney Beach Volleyball",
+    "organizerUrl": "https://beachvolleyball.com.au/social-events-manly"
+  },
+  {
+    "id": "e36",
+    "city": "melbourne",
+    "title": "Surf & Sip: גלישה לנשים ב-URBNSURF",
+    "title_en": "Surf & Sip at URBNSURF Melbourne",
+    "time": "18:00",
+    "address": "URBNSURF Melbourne, Tullamarine VIC",
+    "desc": "מפגש גלישה חודשי לנשים בלבד, ואחריו משקה ופגישות. מתאים גם למתחילות. מחיר לפי המסלול (כ-$45). התאריכים משתנים, בדקו באתר URBNSURF לפני שמגיעים.",
+    "desc_en": "Monthly women-only surf session followed by drinks, great for first-timers too. About $45 depending on the option. Dates change, check the URBNSURF site before you go.",
+    "cats": [
+      "surf",
+      "sports",
+      "community"
+    ],
+    "whatsapp": "",
+    "url": "https://urbnsurf.com/melbourne/?p=10496",
+    "emoji": "🏄",
+    "lat": -37.7004,
+    "lng": 144.8797,
+    "organizer": "URBNSURF",
+    "organizerUrl": "https://urbnsurf.com/melbourne/?p=10496"
   }
 ]
