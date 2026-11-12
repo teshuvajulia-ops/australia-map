@@ -1206,7 +1206,7 @@ function initAdmin(){
 }
 
 lang = 'en'; /* always start in English */
-fetch('config.json',{cache:'no-store'}).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; }).then(function(c){ config = c||{}; syncSubmit(); renderPanel(); loadAnalytics(); showWelcome(); });
+fetch('config.json',{cache:'no-store'}).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; }).then(function(c){ config = c||{}; syncSubmit(); renderPanel(); loadAnalytics(); setTimeout(showWelcome, 7000); });
 fetch('groups.json',{cache:'no-store'}).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; }).then(function(g){ cityGroups = g||{}; moreGroups = Array.isArray(g&&g.more) ? g.more : []; syncCityGroup(); renderPanel(); });
 fetch('tips.json',{cache:'no-store'}).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; }).then(function(d){ tips = Array.isArray(d) ? d : []; renderPanel(); });
 load().then(function(){
