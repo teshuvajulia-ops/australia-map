@@ -6,6 +6,12 @@
 <title>To Do Australia</title>
 <meta name="description" content="Events, markets, festivals and parties in Melbourne and Sydney, on one map.">
 <meta name="theme-color" content="#0b7a75">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="To Do AU">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='38' cy='10' r='6' fill='%23f2b134'/%3E%3Cpath d='M24 4C15.2 4 8 11 8 19.6c0 11.2 13.2 22.6 15.1 24.2a1.4 1.4 0 0 0 1.8 0C26.8 42.2 40 30.8 40 19.6 40 11 32.8 4 24 4z' fill='%230b7a75'/%3E%3Cpath d='M16 20l6 6 10-11' fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -99,8 +105,15 @@ aside{width:360px;max-width:42vw;display:flex;flex-direction:column;background:v
 .pop .links{display:flex;gap:8px;flex-wrap:wrap}
 .pop a{display:inline-block;padding:6px 12px;border-radius:8px;background:var(--accent);color:#fff !important;text-decoration:none;font-weight:700;font-size:.85rem}
 .pop a.alt{background:var(--bg);color:var(--ink) !important;border:1px solid var(--line)}
+.pop a.share{display:block;width:100%;text-align:center;margin:0 0 6px;padding:8px 12px;background:#fff;color:var(--wa) !important;border:2px solid var(--wa)}
 .pop a.wa{background:var(--wa);display:block;width:100%;text-align:center;margin-top:2px;padding:9px 12px;font-size:.92rem}
 .pop .links.top{margin-bottom:8px}
+.pop .links a{flex:1 1 auto;text-align:center}
+.installbtn[hidden]{display:none}
+.installbtn{margin-inline-start:auto;position:relative;z-index:3;border:1px solid rgba(255,255,255,.6);background:rgba(255,255,255,.2);color:#fff;border-radius:999px;padding:8px 14px;font-weight:700;font-size:.88rem;text-shadow:0 1px 4px rgba(0,0,0,.4);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.installsheet{position:fixed;inset-inline:0;inset-block-end:0;z-index:2000;background:#fff;color:var(--ink);padding:18px max(18px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px));border-radius:18px 18px 0 0;box-shadow:0 -8px 30px rgba(16,38,46,.3);animation:itemin .3s ease}
+.installsheet h3{margin:0 0 6px;font-size:1.05rem}.installsheet p{margin:0 0 12px;line-height:1.5}
+.installsheet button{border:0;background:var(--accent);color:#fff;border-radius:10px;padding:9px 18px;font-weight:700}
 
 /* Bottom bar (phones only) */
 .tabbar{display:none;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -189,7 +202,8 @@ header[data-city="melbourne"] .hero-layers::after{background:linear-gradient(180
 .wipe small{display:block;font-size:.9rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;opacity:.85;text-align:center}
 .wipe.go{animation:wipego 1s cubic-bezier(.65,0,.35,1)}
 @keyframes wipego{0%{transform:translateX(-101%)}42%,58%{transform:translateX(0)}100%{transform:translateX(101%)}}
-@media (max-width:720px){header{min-height:104px}.hl.roo{width:68px;height:47px;right:6%}}
+@media (max-width:720px){.installbtn{position:absolute;top:10px;inset-inline-end:max(12px,env(safe-area-inset-right,0px));margin:0;width:42px;height:42px;padding:0;font-size:0;display:grid;place-items:center}.installbtn::before{content:"\1F4F2";font-size:20px;text-shadow:none}.installbtn[hidden]{display:none}
+  header{min-height:104px}.hl.roo{width:68px;height:47px;right:6%}}
 @media (prefers-reduced-motion:reduce){.hl,.hl i,.pinbounce,.pin-wrap::after,#list li,.wipe{animation:none !important;translate:none !important}.wipe{display:none}}
 </style>
 </head>
@@ -204,6 +218,7 @@ header[data-city="melbourne"] .hero-layers::after{background:linear-gradient(180
     </svg>
     <span class="brandtext"><span class="wordmark">To Do <b>Australia</b></span><small id="sub"></small></span>
   </a>
+  <button type="button" class="installbtn" id="installBtn" hidden></button>
   <div class="controls">
     <div class="toggle" role="group" aria-label="City" id="cityToggle">
       <button type="button" data-city="melbourne" aria-pressed="true"></button>
@@ -324,7 +339,8 @@ var I18N = {
     clear:'Clear filters',
     when:{all:'Upcoming', today:'Today', tomorrow:'Tomorrow', weekend:'This weekend'},
     cats:{music:'Music',food:'Food & drink',markets:'Markets',parties:'Parties',culture:'Arts & culture',family:'Family',outdoors:'Outdoors'},
-    details:'Details', directions:'Directions', wa:'Join the WhatsApp group',
+    details:'Details', directions:'Google Maps', waze:'Waze', share:'Share on WhatsApp', wa:'Join the WhatsApp group',
+    install:'Install app', installTitle:'Install To Do Australia', installIos:'Tap the Share button in Safari, then choose “Add to Home Screen”.', installOther:'Open the browser menu and choose “Install app” or “Add to Home screen”.', close:'Close', shareHead:'Found on',
     tabMap:'Map', tabList:'List',
     filterLabel:'Filter events', dateLabel:'Date', catLabel:'Event type',
     mapLabel:'Events map',
@@ -340,7 +356,8 @@ var I18N = {
     clear:'נקה סינון',
     when:{all:'הכל', today:'היום', tomorrow:'מחר', weekend:'סוף השבוע'},
     cats:CAT_HE,
-    details:'לפרטים', directions:'ניווט', wa:'הצטרפות לקבוצה',
+    details:'לפרטים', directions:'ניווט ב-Google Maps', waze:'ניווט ב-Waze', share:'שיתוף ב-WhatsApp', wa:'הצטרפות לקבוצה',
+    install:'התקנת האפליקציה', installTitle:'התקנת To Do Australia', installIos:'ב-Safari לוחצים על כפתור השיתוף ואז על “הוספה למסך הבית”.', installOther:'בתפריט הדפדפן בוחרים “התקנת אפליקציה” או “הוספה למסך הבית”.', close:'סגירה', shareHead:'מצאתי באתר',
     tabMap:'מפה', tabList:'רשימה',
     filterLabel:'סינון אירועים', dateLabel:'תאריך', catLabel:'סוג אירוע',
     mapLabel:'מפת אירועים',
@@ -458,6 +475,19 @@ if(MAPBOX_TOKEN.indexOf('PASTE')===0){
   $('#map').appendChild(tokenNote);
 }
 
+/* Navigation and sharing links */
+function gmapsUrl(e){ return 'https://www.google.com/maps/dir/?api=1&destination='+e.lat+','+e.lng+'&travelmode=driving'; }
+function wazeUrl(e){ return 'https://waze.com/ul?ll='+e.lat+','+e.lng+'&navigate=yes'; }
+function shareUrl(e){
+  var site = location.origin + location.pathname;
+  var when = whenHtml(e).replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').replace(/&#39;/g,"'");
+  var lines = ['*'+tx(e,'title')+'*'];
+  if(when) lines.push('\uD83D\uDCC5 '+when);
+  if(e.address) lines.push('\uD83D\uDCCD '+e.address);
+  lines.push('\uD83D\uDDFA '+'https://www.google.com/maps/search/?api=1&query='+e.lat+','+e.lng);
+  lines.push('', t().shareHead+' To Do Australia: '+site);
+  return 'https://wa.me/?text='+encodeURIComponent(lines.join('\n'));
+}
 function popupHtml(e){
   var when = whenHtml(e);
   var h = '<div class="pop" dir="'+t().dir+'"><h3>'+esc(tx(e,'title'))+'</h3>';
@@ -468,7 +498,9 @@ function popupHtml(e){
   h += '<div class="links top">';
   var u = safeUrl(e.url);
   if(u) h += '<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">'+t().details+'</a>';
-  h += '<a class="alt" href="https://www.google.com/maps/search/?api=1&query='+e.lat+','+e.lng+'" target="_blank" rel="noopener noreferrer">'+t().directions+'</a></div>';
+  h += '<a class="alt" href="'+esc(gmapsUrl(e))+'" target="_blank" rel="noopener noreferrer">'+t().directions+'</a>';
+  h += '<a class="alt" href="'+esc(wazeUrl(e))+'" target="_blank" rel="noopener noreferrer">'+t().waze+'</a></div>';
+  h += '<a class="share" href="'+esc(shareUrl(e))+'" target="_blank" rel="noopener noreferrer">'+t().share+'</a>';
   var w = safeWa(e.whatsapp);
   if(w) h += '<a class="wa" href="'+esc(w)+'" target="_blank" rel="noopener noreferrer">'+t().wa+'</a>';
   return h + '</div>';
@@ -601,6 +633,7 @@ function applyLang(){
     b.setAttribute('aria-pressed', b.dataset.lang===lang ? 'true':'false');
   });
   if(tokenNote) tokenNote.textContent = t().noToken;
+  if(typeof syncInstall==='function') syncInstall();
   buildChips();
   render();
 }
@@ -633,6 +666,29 @@ document.querySelectorAll('.toggle.lang button').forEach(function(b){
   b.addEventListener('click',function(){ setLang(b.dataset.lang); });
 });
 window.addEventListener('resize',function(){ map.resize(); });
+
+/* Install as an app */
+var deferredInstall = null;
+var instBtn = document.getElementById('installBtn');
+function isStandalone(){ return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true; }
+var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1);
+function syncInstall(){
+  instBtn.textContent = '\uD83D\uDCF2 ' + t().install;
+  instBtn.hidden = isStandalone() || !(deferredInstall || isIOS);
+}
+window.addEventListener('beforeinstallprompt',function(ev){ ev.preventDefault(); deferredInstall = ev; syncInstall(); });
+window.addEventListener('appinstalled',function(){ deferredInstall = null; syncInstall(); });
+instBtn.addEventListener('click',function(){
+  if(deferredInstall){ deferredInstall.prompt(); deferredInstall.userChoice.then(function(){ deferredInstall = null; syncInstall(); }); return; }
+  var old = document.getElementById('installSheet'); if(old) old.remove();
+  var sh = document.createElement('div'); sh.className='installsheet'; sh.id='installSheet'; sh.setAttribute('role','dialog'); sh.dir = t().dir;
+  sh.innerHTML = '<h3>'+esc(t().installTitle)+'</h3><p>'+esc(isIOS ? t().installIos : t().installOther)+'</p><button type="button">'+esc(t().close)+'</button>';
+  sh.querySelector('button').addEventListener('click',function(){ sh.remove(); });
+  document.body.appendChild(sh);
+});
+if('serviceWorker' in navigator && /^https?:/.test(location.protocol)){
+  window.addEventListener('load',function(){ try{ navigator.serviceWorker.register('sw.js').catch(function(){}); }catch(x){} });
+}
 
 /* Parallax: layers follow the pointer or finger, and sway gently when idle. */
 (function(){
