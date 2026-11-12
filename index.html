@@ -362,6 +362,15 @@ small.dist{color:#2f7cf6;font-weight:700}
 #areapick .apc{display:flex;flex-wrap:wrap;gap:8px}
 #areapick .aphint{margin:10px 0 0;font-size:.74rem;line-height:1.4;color:var(--muted)}
 @media (min-width:721px){#areapick{inset-block-end:24px}}
+
+#areapick .apsearch{width:100%;box-sizing:border-box;border:2px solid var(--peach);border-radius:999px;padding:10px 16px;font-size:1rem;margin-bottom:8px;background:#fff;color:var(--ink)}
+#areapick .apsearch:focus{outline:0;border-color:var(--accent)}
+#areapick .apres{list-style:none;margin:0 0 8px;padding:0;max-height:34vh;overflow:auto}
+#areapick .apres button{display:block;width:100%;text-align:start;border:0;background:transparent;padding:8px 10px;border-radius:12px}
+#areapick .apres button:hover,#areapick .apres button:active{background:var(--peach-pale)}
+#areapick .apres b{display:block;font-size:.95rem}
+#areapick .apres small{color:var(--muted);font-size:.78rem}
+#areapick .apres .none{padding:8px 10px;color:var(--muted);font-size:.9rem}
 </style>
 </head>
 <body data-view="map">
@@ -512,7 +521,7 @@ var I18N = {
     localTime:function(c){ return 'Local time in '+c; },
     diff:function(h){ return h===0 ? 'same time as Israel' : Math.abs(h)+(Math.abs(h)===1?' hour ':' hours ')+(h>0?'ahead of Israel':'behind Israel'); },
     empty:'No events in this city yet.',
-    noMatch:'No events match these filters.', nearMe:'Near me', kmAway:function(k){return k<1?'<1 km away':(k<10?k.toFixed(1):Math.round(k))+' km away';}, geoDenied:'Location is blocked. On iPhone: Settings > Privacy & Security > Location Services > turn on for Safari (or your browser), then reload. On Android/desktop: tap the lock icon next to the address and allow Location.', pickArea:'No location? Pick your area', geoUnavail:'Could not find your location. Check that Location Services is on, then try again.', geoSecure:'Location needs a secure (https) page.', geoFar:'You seem to be outside Melbourne and Sydney, so showing events by city.', geoWait:'Finding you...',
+    noMatch:'No events match these filters.', nearMe:'Near me', kmAway:function(k){return k<1?'<1 km away':(k<10?k.toFixed(1):Math.round(k))+' km away';}, geoDenied:'Location is blocked. On iPhone: Settings > Privacy & Security > Location Services > turn on for Safari (or your browser), then reload. On Android/desktop: tap the lock icon next to the address and allow Location.', pickArea:'No location? Pick your area', searchPh:'Search a suburb or address', noResults:'No places found', geoUnavail:'Could not find your location. Check that Location Services is on, then try again.', geoSecure:'Location needs a secure (https) page.', geoFar:'You seem to be outside Melbourne and Sydney, so showing events by city.', geoWait:'Finding you...',
     clear:'Clear filters',
     when:{all:'Upcoming', today:'Today', tomorrow:'Tomorrow', weekend:'This weekend'},
     cats:{music:'Music',food:'Food & drink',markets:'Markets',parties:'Parties',culture:'Arts & culture',family:'Family',outdoors:'Outdoors',sports:'Sports & fitness',community:'Communities'},
@@ -530,7 +539,7 @@ var I18N = {
     localTime:function(c){ return 'שעה ב'+c; },
     diff:function(h){ return h===0 ? 'אותה שעה כמו בישראל' : (Math.abs(h)===1?'שעה ':Math.abs(h)+' שעות ')+(h>0?'לפני ישראל':'אחרי ישראל'); },
     empty:'עדיין אין אירועים בעיר הזו.',
-    noMatch:'אין אירועים שמתאימים לסינון.', nearMe:'לידי', kmAway:function(k){return k<1?'פחות מ-1 ק"מ ממך':'‏'+(k<10?k.toFixed(1):Math.round(k))+' ק"מ ממך';}, geoDenied:'המיקום חסום. באייפון: הגדרות > פרטיות ואבטחה > שירותי מיקום > להפעיל עבור Safari (או הדפדפן שלך) ולרענן את הדף. באנדרואיד/מחשב: ללחוץ על המנעול ליד הכתובת ולאשר מיקום.', pickArea:'בלי מיקום? בחרו אזור', geoUnavail:'לא הצלחנו לאתר את המיקום. כדאי לוודא ששירותי המיקום דלוקים ולנסות שוב.', geoSecure:'מיקום דורש דף מאובטח (https).', geoFar:'נראה שאת/ה מחוץ למלבורן וסידני, לכן מוצגים אירועים לפי עיר.', geoWait:'מאתר מיקום...',
+    noMatch:'אין אירועים שמתאימים לסינון.', nearMe:'לידי', kmAway:function(k){return k<1?'פחות מ-1 ק"מ ממך':'‏'+(k<10?k.toFixed(1):Math.round(k))+' ק"מ ממך';}, geoDenied:'המיקום חסום. באייפון: הגדרות > פרטיות ואבטחה > שירותי מיקום > להפעיל עבור Safari (או הדפדפן שלך) ולרענן את הדף. באנדרואיד/מחשב: ללחוץ על המנעול ליד הכתובת ולאשר מיקום.', pickArea:'בלי מיקום? בחרו אזור', searchPh:'חיפוש פרבר או כתובת', noResults:'לא נמצאו מקומות', geoUnavail:'לא הצלחנו לאתר את המיקום. כדאי לוודא ששירותי המיקום דלוקים ולנסות שוב.', geoSecure:'מיקום דורש דף מאובטח (https).', geoFar:'נראה שאת/ה מחוץ למלבורן וסידני, לכן מוצגים אירועים לפי עיר.', geoWait:'מאתר מיקום...',
     clear:'נקה סינון',
     when:{all:'הכל', today:'היום', tomorrow:'מחר', weekend:'סוף השבוע'},
     cats:CAT_HE,
@@ -733,13 +742,51 @@ var AREAS = {
   melbourne:[['CBD',-37.8136,144.9631],['Fitzroy',-37.7998,144.9780],['Carlton',-37.8002,144.9669],['Brunswick',-37.7667,144.9600],['Richmond',-37.8230,144.9980],['South Yarra',-37.8386,144.9929],['St Kilda',-37.8676,144.9803],['Docklands',-37.8148,144.9460]],
   sydney:[['CBD',-33.8688,151.2093],['Surry Hills',-33.8830,151.2110],['Darlinghurst',-33.8745,151.2220],['Newtown',-33.8984,151.1790],['Bondi',-33.8915,151.2767],['Manly',-33.7969,151.2840],['Paddington',-33.8847,151.2260],['Parramatta',-33.8150,151.0011]]
 };
+function placeSearch(q){
+  var cc = CITIES[city];
+  var u = 'https://api.mapbox.com/search/geocode/v6/forward?q=' + encodeURIComponent(q) +
+    '&limit=5&country=au&language=en&autocomplete=true&proximity=' + cc.center[1] + ',' + cc.center[0] +
+    '&access_token=' + encodeURIComponent(MAPBOX_TOKEN);
+  return fetch(u).then(function(r){ return r.json(); }).then(function(j){
+    return (j && j.features || []).map(function(f){
+      var p = f.properties||{}, co = f.geometry.coordinates;
+      return {name:p.name_preferred||p.name||'', sub:p.place_formatted||'', lat:co[1], lng:co[0]};
+    });
+  });
+}
+function applyPlace(lat,lng){
+  userPos = {lat:lat, lng:lng};
+  var n = nearestCity();
+  if(n.km>120){ userPos = null; geoToast(t().geoFar); return false; }
+  filters.near = true;
+  if(n.key!==city) setCity(n.key);
+  showUserDot(); syncChips(); render(); fitCity();
+  return true;
+}
 function openAreaPick(hint){
   var o = $('#areapick'); if(o) o.remove();
   o = document.createElement('div'); o.id='areapick'; o.dir = t().dir;
-  var h = '<div class="aph"><b>'+esc(t().pickArea)+'</b><button type="button" class="apx" aria-label="Close">\u00d7</button></div><div class="apc">';
+  var h = '<div class="aph"><b>'+esc(t().pickArea)+'</b><button type="button" class="apx" aria-label="Close">\u00d7</button></div>'+
+    '<input type="search" class="apsearch" autocomplete="off" enterkeyhint="search" placeholder="'+esc(t().searchPh)+'"><ul class="apres"></ul><div class="apc">';
   (AREAS[city]||[]).forEach(function(a,i){ h += '<button type="button" class="chip" data-i="'+i+'">'+esc(a[0])+'</button>'; });
   o.innerHTML = h+'</div>'+(hint ? '<p class="aphint">'+esc(hint)+'</p>' : '');
   o.querySelector('.apx').addEventListener('click',function(){ o.remove(); });
+  var inp = o.querySelector('.apsearch'), res = o.querySelector('.apres'), tm = null, seq = 0;
+  function runSearch(){
+    var q = inp.value.trim(), my = ++seq; res.innerHTML = '';
+    if(q.length<2) return;
+    placeSearch(q).then(function(list){
+      if(my!==seq) return;
+      if(!list.length){ var li=document.createElement('li'); li.className='none'; li.textContent=t().noResults; res.appendChild(li); return; }
+      list.forEach(function(r){
+        var li = document.createElement('li'), b = document.createElement('button'); b.type='button';
+        b.innerHTML = '<b>'+esc(r.name)+'</b><small>'+esc(r.sub)+'</small>';
+        b.addEventListener('click',function(){ if(applyPlace(r.lat,r.lng)) o.remove(); });
+        li.appendChild(b); res.appendChild(li);
+      });
+    }).catch(function(){});
+  }
+  inp.addEventListener('input',function(){ clearTimeout(tm); tm = setTimeout(runSearch, 350); });
   o.querySelectorAll('.chip').forEach(function(b){ b.addEventListener('click',function(){
     var a = AREAS[city][+b.dataset.i]; userPos = {lat:a[1], lng:a[2]}; filters.near = true;
     o.remove(); var gt=$('#geotoast'); if(gt) gt.classList.remove('on');
