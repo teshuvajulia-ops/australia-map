@@ -505,7 +505,7 @@ var I18N = {
     localTime:function(c){ return 'Local time in '+c; },
     diff:function(h){ return h===0 ? 'same time as Israel' : Math.abs(h)+(Math.abs(h)===1?' hour ':' hours ')+(h>0?'ahead of Israel':'behind Israel'); },
     empty:'No events in this city yet.',
-    noMatch:'No events match these filters.', nearMe:'Near me', kmAway:function(k){return k<1?'<1 km away':(k<10?k.toFixed(1):Math.round(k))+' km away';}, geoDenied:'Location is off. Allow it in your browser to see what is near you.', geoFar:'You seem to be outside Melbourne and Sydney, so showing events by city.', geoWait:'Finding you...',
+    noMatch:'No events match these filters.', nearMe:'Near me', kmAway:function(k){return k<1?'<1 km away':(k<10?k.toFixed(1):Math.round(k))+' km away';}, geoDenied:'Location is blocked. On iPhone: Settings > Privacy & Security > Location Services > turn on for Safari (or your browser), then reload. On Android/desktop: tap the lock icon next to the address and allow Location.', geoUnavail:'Could not find your location. Check that Location Services is on, then try again.', geoSecure:'Location needs a secure (https) page.', geoFar:'You seem to be outside Melbourne and Sydney, so showing events by city.', geoWait:'Finding you...',
     clear:'Clear filters',
     when:{all:'Upcoming', today:'Today', tomorrow:'Tomorrow', weekend:'This weekend'},
     cats:{music:'Music',food:'Food & drink',markets:'Markets',parties:'Parties',culture:'Arts & culture',family:'Family',outdoors:'Outdoors',sports:'Sports & fitness',community:'Communities'},
@@ -523,7 +523,7 @@ var I18N = {
     localTime:function(c){ return 'שעה ב'+c; },
     diff:function(h){ return h===0 ? 'אותה שעה כמו בישראל' : (Math.abs(h)===1?'שעה ':Math.abs(h)+' שעות ')+(h>0?'לפני ישראל':'אחרי ישראל'); },
     empty:'עדיין אין אירועים בעיר הזו.',
-    noMatch:'אין אירועים שמתאימים לסינון.', nearMe:'לידי', kmAway:function(k){return k<1?'פחות מ-1 ק"מ ממך':'‏'+(k<10?k.toFixed(1):Math.round(k))+' ק"מ ממך';}, geoDenied:'המיקום כבוי. צריך לאשר גישה למיקום בדפדפן כדי לראות מה קרוב אליך.', geoFar:'נראה שאת/ה מחוץ למלבורן וסידני, לכן מוצגים אירועים לפי עיר.', geoWait:'מאתר מיקום...',
+    noMatch:'אין אירועים שמתאימים לסינון.', nearMe:'לידי', kmAway:function(k){return k<1?'פחות מ-1 ק"מ ממך':'‏'+(k<10?k.toFixed(1):Math.round(k))+' ק"מ ממך';}, geoDenied:'המיקום חסום. באייפון: הגדרות > פרטיות ואבטחה > שירותי מיקום > להפעיל עבור Safari (או הדפדפן שלך) ולרענן את הדף. באנדרואיד/מחשב: ללחוץ על המנעול ליד הכתובת ולאשר מיקום.', geoUnavail:'לא הצלחנו לאתר את המיקום. כדאי לוודא ששירותי המיקום דלוקים ולנסות שוב.', geoSecure:'מיקום דורש דף מאובטח (https).', geoFar:'נראה שאת/ה מחוץ למלבורן וסידני, לכן מוצגים אירועים לפי עיר.', geoWait:'מאתר מיקום...',
     clear:'נקה סינון',
     when:{all:'הכל', today:'היום', tomorrow:'מחר', weekend:'סוף השבוע'},
     cats:CAT_HE,
@@ -710,7 +710,7 @@ function distKm(e){
 }
 function geoToast(msg){
   var n = $('#geotoast'); if(!n){ n = document.createElement('div'); n.id='geotoast'; n.setAttribute('role','status'); document.body.appendChild(n); }
-  n.textContent = msg; n.classList.add('on'); clearTimeout(n._t); n._t = setTimeout(function(){ n.classList.remove('on'); }, 4500);
+  n.textContent = msg; n.classList.add('on'); clearTimeout(n._t); n._t = setTimeout(function(){ n.classList.remove('on'); }, msg.length>70 ? 11000 : 4500);
 }
 function showUserDot(){
   if(!userPos) return;
@@ -724,7 +724,8 @@ function nearestCity(){
 }
 function toggleNear(){
   if(filters.near){ filters.near=false; syncChips(); render(); fitCity(); return; }
-  if(!navigator.geolocation){ geoToast(t().geoDenied); return; }
+  if(!navigator.geolocation){ geoToast(t().geoUnavail); return; }
+  if(window.isSecureContext===false){ geoToast(t().geoSecure); return; }
   geoToast(t().geoWait);
   navigator.geolocation.getCurrentPosition(function(p){
     userPos = {lat:p.coords.latitude, lng:p.coords.longitude};
@@ -734,7 +735,7 @@ function toggleNear(){
     if(n.key!==city){ setCity(n.key); }
     showUserDot(); syncChips(); render(); fitCity();
     var n2=$('#geotoast'); if(n2) n2.classList.remove('on');
-  }, function(){ geoToast(t().geoDenied); }, {enableHighAccuracy:true, timeout:12000, maximumAge:60000});
+  }, function(err){ geoToast(err && err.code===1 ? t().geoDenied : t().geoUnavail); }, {enableHighAccuracy:false, timeout:15000, maximumAge:60000});
 }
 function cityEvents(){
   return events.filter(function(e){ return e.city===city && dateMatches(e) && catMatches(e) && groupMatches(e); })
