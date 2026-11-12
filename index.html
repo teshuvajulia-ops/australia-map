@@ -334,7 +334,7 @@ details.tip p{margin:0;padding:0 16px 14px;line-height:1.6}
 @media (max-width:720px){
   header{padding-top:8px;padding-bottom:8px;gap:6px 10px}
   .logo{width:34px;height:34px}
-  .brandtext small{display:none}
+  .brandtext small{display:block;font-size:.55rem;letter-spacing:.1em;margin-top:2px;white-space:nowrap}
   .controls{flex-wrap:nowrap;gap:6px;width:100%}
   .controls .toggle{padding:2px}
   .controls .toggle button{padding:5px 12px;font-size:.88rem}
@@ -422,7 +422,7 @@ html[dir="rtl"] .pinner h2,html[dir="rtl"] .wcard h2,html[dir="rtl"] .calhead b,
 @media (prefers-reduced-motion:reduce){.chip,.wgo,.deskcta,.calday,.calev,.calnav,.installbtn,.todaybar,.tabbar button,.item,.gcard{transition:none !important;animation:none !important;transform:none !important}.wgo::after,.deskcta::after,.ripple{display:none}}
 
 /* Wordmark logo */
-.wordimg{display:block;height:34px;width:auto;max-width:62vw}
+.wordimg{display:block;height:34px;width:auto;max-width:62vw;align-self:flex-start;object-fit:contain}
 .wlogoimg{display:block;height:auto;width:min(240px,70%);margin:4px auto 14px}
 @media (min-width:721px){.wordimg{height:44px}}
 .brand{gap:0}
@@ -440,6 +440,7 @@ html[dir="rtl"] .pinner h2,html[dir="rtl"] .wcard h2,html[dir="rtl"] .calhead b,
 html[dir="rtl"] .wcard h2,.welcome[dir="rtl"] h2{text-transform:none;letter-spacing:0}
 .brandtext small{font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:.66rem}
 .ver{margin:18px 0 6px;text-align:center;font-size:.72rem;color:var(--muted);opacity:.7}
+@media (max-width:720px){.brandtext small{display:block;font-size:.54rem;letter-spacing:.1em;margin-top:3px;white-space:nowrap}}
 </style>
 </head>
 <body data-view="map">
