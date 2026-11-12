@@ -329,6 +329,22 @@ details.tip p{margin:0;padding:0 16px 14px;line-height:1.6}
 .deskcta{background:var(--accent);color:#fff !important;border-radius:999px;padding:8px 14px;font-weight:700;font-size:.9rem;text-decoration:none;display:inline-flex;align-items:center;box-shadow:0 6px 16px rgba(221,95,75,.35)}
 .deskcta[hidden]{display:none}
 @media (prefers-reduced-motion:reduce){.welcome,.wcard{animation:none}}
+
+/* Compact mobile header and slimmer tab bar */
+@media (max-width:720px){
+  header{padding-top:8px;padding-bottom:8px;gap:6px 10px}
+  .logo{width:34px;height:34px}
+  .brandtext small{display:none}
+  .controls{flex-wrap:nowrap;gap:6px;width:100%}
+  .controls .toggle{padding:2px}
+  .controls .toggle button{padding:5px 12px;font-size:.88rem}
+  .controls .toggle.lang{margin-inline-start:auto}
+  .controls .toggle.lang button{padding:5px 9px;font-size:.8rem}
+  .installbtn{width:36px !important;height:36px !important}
+  .tabbar button{padding:4px 0 3px;gap:0;font-size:.68rem}
+  .tabbar button svg{width:19px;height:19px}
+  .fab,.setbtn{inset-block-end:calc(50px + env(safe-area-inset-bottom,0px))}
+}
 </style>
 </head>
 <body data-view="map">
