@@ -472,6 +472,27 @@ html[dir="rtl"] .gwhat>b{letter-spacing:0;text-transform:none;font-size:.9rem}
 .evcard .pop p{font-size:1rem;line-height:1.5}
 .evmap{display:block;width:100%;margin-top:10px;padding:11px;border-radius:14px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-weight:700}
 @media (prefers-reduced-motion:reduce){.evsheet,.evcard{animation:none}}
+
+/* Desktop layout: compact header, centred content, one-row filters */
+@media (min-width:721px){
+  header{min-height:0 !important;padding-block:10px;flex-wrap:nowrap;gap:12px;padding-inline:max(16px,calc((100% - 1280px)/2))}
+  header .controls{order:1;width:auto;margin-inline-start:12px;flex-wrap:nowrap}
+  header .installbtn{order:2;margin-inline-start:auto}
+  header .desknav{order:3;margin-inline-start:0}
+  .filters{flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px 12px;padding-block:10px;padding-inline:max(16px,calc((100% - 1280px)/2))}
+  .todaybar .tq{white-space:nowrap}
+  #whenRow{flex:1 1 auto;flex-wrap:nowrap;overflow-x:auto}
+  #catRow{flex:1 1 100%;flex-wrap:nowrap;overflow-x:auto}
+}
+@media (min-width:721px) and (max-width:1000px){
+  header{flex-wrap:wrap}
+  header .controls{order:3;width:100%;margin-inline-start:0}
+  header .desknav{order:2;margin-inline-start:auto}
+  header .installbtn{order:2;margin-inline-start:0}
+}
+/* Fade at the end of scrollable chip rows so people see there is more */
+.chiprow{padding-inline-end:28px;-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent)}
+html[dir="rtl"] .chiprow{-webkit-mask-image:linear-gradient(to left,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to left,#000 calc(100% - 28px),transparent)}
 </style>
 </head>
 <body data-view="map">
@@ -1106,7 +1127,7 @@ function renderPanel(){
     });
     if(!seen) h += '<p class="pempty">'+esc(t().noTips)+'</p>';
   }
-  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 19</p></div>';
+  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 20</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
