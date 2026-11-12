@@ -313,6 +313,22 @@ details.tip p{margin:0;padding:0 16px 14px;line-height:1.6}
 .submitcta:hover{background:var(--peach-soft)}
 .submitcta[hidden]{display:none}
 .pinner .submitcta{margin:22px 0 0}
+
+/* Welcome screen and header CTA */
+.welcome{position:fixed;inset:0;z-index:3000;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,rgba(255,225,214,.96),rgba(255,184,198,.96));-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);animation:wfade .4s ease}
+.welcome.out{opacity:0;transition:opacity .35s ease}
+.wcard{width:100%;max-width:420px;text-align:center;background:#fff;border-radius:28px;padding:30px 24px 24px;box-shadow:0 24px 60px rgba(221,95,75,.35);animation:wup .55s cubic-bezier(.2,.8,.2,1)}
+.wlogo{width:64px;height:64px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;font-size:30px;background:var(--peach-soft)}
+.wcard h2{margin:0 0 8px;font-size:1.5rem;letter-spacing:.01em}
+.wcard p{margin:0 0 20px;color:var(--muted);line-height:1.55}
+.wgo{display:block;width:100%;border:0;background:var(--accent);color:#fff;font-weight:800;font-size:1.05rem;padding:14px;border-radius:999px;box-shadow:0 10px 22px rgba(221,95,75,.4)}
+.wlist{display:block;margin-top:12px;padding:12px;border:2px dashed var(--peach);border-radius:16px;color:var(--accent);font-weight:700;text-decoration:none;font-size:.92rem}
+.wlist:hover{background:var(--peach-pale)}
+@keyframes wfade{from{opacity:0}to{opacity:1}}
+@keyframes wup{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+.deskcta{background:var(--accent);color:#fff !important;border-radius:999px;padding:8px 14px;font-weight:700;font-size:.9rem;text-decoration:none;display:inline-flex;align-items:center;box-shadow:0 6px 16px rgba(221,95,75,.35)}
+.deskcta[hidden]{display:none}
+@media (prefers-reduced-motion:reduce){.welcome,.wcard{animation:none}}
 </style>
 </head>
 <body data-view="map">
@@ -327,7 +343,7 @@ details.tip p{margin:0;padding:0 16px 14px;line-height:1.6}
     <span class="brandtext"><span class="wordmark">CITY<b>SIDE</b></span><small id="sub"></small></span>
   </a>
   <button type="button" class="installbtn" id="installBtn" hidden></button>
-  <nav class="desknav" id="deskNav" aria-label="Sections"><button type="button" data-view="map" aria-pressed="true"></button><button type="button" data-view="groups" aria-pressed="false"></button><button type="button" data-view="tips" aria-pressed="false"></button></nav>
+  <nav class="desknav" id="deskNav" aria-label="Sections"><button type="button" data-view="map" aria-pressed="true"></button><button type="button" data-view="groups" aria-pressed="false"></button><button type="button" data-view="tips" aria-pressed="false"></button><a class="deskcta" id="deskCta" href="#" target="_blank" rel="noopener noreferrer" data-t="submit" data-e="site" hidden></a></nav>
   <div class="controls">
     <div class="toggle" role="group" aria-label="City" id="cityToggle">
       <button type="button" data-city="melbourne" aria-pressed="true"></button>
@@ -467,7 +483,7 @@ var I18N = {
     clear:'Clear filters',
     when:{all:'Upcoming', today:'Today', tomorrow:'Tomorrow', weekend:'This weekend'},
     cats:{music:'Music',food:'Food & drink',markets:'Markets',parties:'Parties',culture:'Arts & culture',family:'Family',outdoors:'Outdoors',sports:'Sports & fitness',community:'Communities'},
-    details:'Details', directions:'Google Maps', waze:'Waze', share:'Share on WhatsApp', wa:'Join the group on WhatsApp', groupTag:'Group', hasGroup:'Has a group', cityGroup:function(c){return 'CITYSIDE community · '+c;}, groupLead:'Meet people going to the same events', every:function(d){return 'Every '+d;}, and:' & ', by:'by', promoFeatured:'★ Featured', promoSponsored:'Sponsored', submit:'Organising something? List your event on CITYSIDE',
+    details:'Details', directions:'Google Maps', waze:'Waze', share:'Share on WhatsApp', wa:'Join the group on WhatsApp', groupTag:'Group', hasGroup:'Has a group', cityGroup:function(c){return 'CITYSIDE community · '+c;}, groupLead:'Meet people going to the same events', every:function(d){return 'Every '+d;}, and:' & ', by:'by', promoFeatured:'★ Featured', promoSponsored:'Sponsored', submit:'Organising something? List your event on CITYSIDE', listShort:'+ List your event', welcomeTitle:'Welcome to CITYSIDE', welcomeText:'Events, run clubs and communities in Melbourne and Sydney. Pick a city, find something on, and join the group to meet people going.', explore:'Explore events',
     install:'Install app', installTitle:'Install CITYSIDE', installIos:'Tap the Share button in Safari, then choose “Add to Home Screen”.', installOther:'Open the browser menu and choose “Install app” or “Add to Home screen”.', close:'Close', shareHead:'Found on',
     tabMap:'Map', tabList:'List', tabGroups:'Groups', tabTips:'Tips',
     groupsTitle:function(c){return 'WhatsApp groups · '+c;}, tipsTitle:function(c){return 'Tips · '+c;}, groupsLead:'Join a group, meet people going to the same events and arrive with friends.', tipsLead:'Good to know before you go.', mainGroup:'City group', moreGroups:'More groups', eventGroups:'Event groups', noGroups:'Groups are on their way. Check back soon.', noTips:'No tips yet.', joinShort:'Join', sourceLink:'Source', tipCats:{emergency:'Emergency',safety:'Safety',transport:'Getting around',money:'Money',nature:'Sun & beach',practical:'Practical',food:'Food',culture:'Local culture',other:'Other'},
@@ -485,7 +501,7 @@ var I18N = {
     clear:'נקה סינון',
     when:{all:'הכל', today:'היום', tomorrow:'מחר', weekend:'סוף השבוע'},
     cats:CAT_HE,
-    details:'לפרטים', directions:'ניווט ב-Google Maps', waze:'ניווט ב-Waze', share:'שיתוף ב-WhatsApp', wa:'הצטרפות לקבוצה ב-WhatsApp', groupTag:'קבוצה', hasGroup:'יש קבוצה', cityGroup:function(c){return 'קהילת CITYSIDE ב'+c;}, groupLead:'להכיר אנשים שמגיעים לאותם אירועים', every:function(d){return 'כל '+d;}, and:' ו', by:'מאת', promoFeatured:'★ מומלץ', promoSponsored:'ממומן', submit:'מארגנים אירוע? פרסמו אותו ב-CITYSIDE',
+    details:'לפרטים', directions:'ניווט ב-Google Maps', waze:'ניווט ב-Waze', share:'שיתוף ב-WhatsApp', wa:'הצטרפות לקבוצה ב-WhatsApp', groupTag:'קבוצה', hasGroup:'יש קבוצה', cityGroup:function(c){return 'קהילת CITYSIDE ב'+c;}, groupLead:'להכיר אנשים שמגיעים לאותם אירועים', every:function(d){return 'כל '+d;}, and:' ו', by:'מאת', promoFeatured:'★ מומלץ', promoSponsored:'ממומן', submit:'מארגנים אירוע? פרסמו אותו ב-CITYSIDE', listShort:'+ פרסום אירוע', welcomeTitle:'ברוכים הבאים ל-CITYSIDE', welcomeText:'אירועים, קבוצות ריצה וקהילות במלבורן ובסידני. בוחרים עיר, מוצאים מה קורה, ומצטרפים לקבוצה כדי להכיר אנשים שמגיעים.', explore:'לגלות אירועים',
     install:'התקנת האפליקציה', installTitle:'התקנת CITYSIDE', installIos:'ב-Safari לוחצים על כפתור השיתוף ואז על “הוספה למסך הבית”.', installOther:'בתפריט הדפדפן בוחרים “התקנת אפליקציה” או “הוספה למסך הבית”.', close:'סגירה', shareHead:'מצאתי באתר',
     tabMap:'מפה', tabList:'רשימה', tabGroups:'קבוצות', tabTips:'טיפים',
     groupsTitle:function(c){return 'קבוצות WhatsApp · '+c;}, tipsTitle:function(c){return 'טיפים · '+c;}, groupsLead:'מצטרפים לקבוצה, מכירים אנשים שמגיעים לאותם אירועים ומגיעים עם חברים.', tipsLead:'טוב לדעת לפני שיוצאים.', mainGroup:'קבוצת העיר', moreGroups:'עוד קבוצות', eventGroups:'קבוצות אירועים', noGroups:'קבוצות בדרך. חזרו לבדוק בקרוב.', noTips:'עדיין אין טיפים.', joinShort:'הצטרפות', sourceLink:'מקור', tipCats:{emergency:'חירום',safety:'בטיחות',transport:'תחבורה',money:'כסף',nature:'שמש וחוף',practical:'מעשי',food:'אוכל',culture:'תרבות מקומית',other:'אחר'},
@@ -686,6 +702,8 @@ function submitHtml(){
   return '<a class="submitcta" href="'+esc(u)+'" target="_blank" rel="noopener noreferrer" data-t="submit" data-e="site">'+esc(t().submit)+' \u2197</a>';
 }
 function syncSubmit(){
+  var dc = $('#deskCta'), du = safeUrl(config.submitUrl);
+  if(dc){ dc.hidden = !du; if(du){ dc.href = du; dc.textContent = t().listShort; } }
   var a = $('#submitAside'); if(!a) return;
   var u = safeUrl(config.submitUrl);
   if(!u){ a.hidden = true; return; }
@@ -697,6 +715,24 @@ document.addEventListener('click',function(ev){
   var a = ev.target.closest ? ev.target.closest('a[data-t]') : null;
   if(a) track('e/'+a.dataset.e+'/'+a.dataset.t);
 });
+/* Welcome screen: shown once per browser, easy to close. */
+function showWelcome(){
+  if(admin || lsGet('cs-welcome')==='1' || document.getElementById('welcome')) return;
+  var u = safeUrl(config.submitUrl);
+  var w = document.createElement('div'); w.id='welcome'; w.className='welcome'; w.setAttribute('role','dialog'); w.setAttribute('aria-modal','true'); w.setAttribute('aria-labelledby','welcomeH');
+  w.dir = t().dir;
+  w.innerHTML = '<div class="wcard"><div class="wlogo">\uD83D\uDCCD</div><h2 id="welcomeH">'+esc(t().welcomeTitle)+'</h2><p>'+esc(t().welcomeText)+'</p>'+
+    '<button type="button" class="wgo">'+esc(t().explore)+'</button>'+
+    (u ? '<a class="wlist" href="'+esc(u)+'" target="_blank" rel="noopener noreferrer" data-t="submit" data-e="welcome">'+esc(t().submit)+' \u2197</a>' : '')+'</div>';
+  function close(){ lsSet('cs-welcome','1'); w.classList.add('out'); setTimeout(function(){ w.remove(); }, 350); document.removeEventListener('keydown',onKey); }
+  function onKey(ev){ if(ev.key==='Escape') close(); }
+  w.querySelector('.wgo').addEventListener('click',close);
+  w.addEventListener('click',function(ev){ if(ev.target===w) close(); });
+  var l = w.querySelector('.wlist'); if(l) l.addEventListener('click',function(){ lsSet('cs-welcome','1'); });
+  document.addEventListener('keydown',onKey);
+  document.body.appendChild(w);
+  w.querySelector('.wgo').focus();
+}
 function loadAnalytics(){
   var code = (config.analytics||'').replace(/[^a-z0-9-]/gi,'');
   if(!code || admin) return;
@@ -1154,7 +1190,7 @@ function initAdmin(){
 }
 
 lang = (lsGet('lang')==='he') ? 'he' : 'en';
-fetch('config.json',{cache:'no-store'}).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; }).then(function(c){ config = c||{}; syncSubmit(); renderPanel(); loadAnalytics(); });
+fetch('config.json',{cache:'no-store'}).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; }).then(function(c){ config = c||{}; syncSubmit(); renderPanel(); loadAnalytics(); showWelcome(); });
 fetch('groups.json',{cache:'no-store'}).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; }).then(function(g){ cityGroups = g||{}; moreGroups = Array.isArray(g&&g.more) ? g.more : []; syncCityGroup(); renderPanel(); });
 fetch('tips.json',{cache:'no-store'}).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; }).then(function(d){ tips = Array.isArray(d) ? d : []; renderPanel(); });
 load().then(function(){
