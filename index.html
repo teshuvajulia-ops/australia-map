@@ -15,7 +15,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='38' cy='10' r='6' fill='%23f2b134'/%3E%3Cpath d='M24 4C15.2 4 8 11 8 19.6c0 11.2 13.2 22.6 15.1 24.2a1.4 1.4 0 0 0 1.8 0C26.8 42.2 40 30.8 40 19.6 40 11 32.8 4 24 4z' fill='%23dd5f4b'/%3E%3Cpath d='M16 20l6 6 10-11' fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&family=Playfair+Display:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* Layout: header banner, filter bar, map with event list beside it.
    On phones the map and the list are two views, switched from a bar at the bottom. */
@@ -394,6 +394,13 @@ small.dist{color:#2f7cf6;font-weight:700}
 .calev small{color:var(--muted)}
 .calgo{color:var(--accent);font-weight:700;font-size:.8rem;white-space:nowrap}
 @media (max-width:420px){.calgo{display:none}}
+
+/* Fonts: Plus Jakarta Sans for text, Playfair Display for headings (Latin). Hebrew falls back to Heebo. */
+:root{--font:"Plus Jakarta Sans","Heebo",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--font-head:"Playfair Display","Heebo",Georgia,serif}
+.wordmark,.pinner h2,.pinner h3.caldayh,.wcard h2,.calhead b,.asidehead #cityname{font-family:var(--font-head);font-weight:800}
+.wordmark{letter-spacing:.04em}
+.wordmark b{font-weight:900}
+html[dir="rtl"] .pinner h2,html[dir="rtl"] .wcard h2,html[dir="rtl"] .calhead b,html[dir="rtl"] .asidehead #cityname,html[dir="rtl"] .pinner h3.caldayh{font-family:"Heebo",sans-serif;font-weight:800}
 </style>
 </head>
 <body data-view="map">
