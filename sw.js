@@ -1,5 +1,5 @@
 /* Network first, so visitors always get the newest events; cached copy is only a fallback when offline. */
-var C = 'todo-au-v1';
+var C = 'cityside-v1';
 self.addEventListener('install', function(e){ self.skipWaiting(); });
 self.addEventListener('activate', function(e){
   e.waitUntil(caches.keys().then(function(k){ return Promise.all(k.filter(function(x){return x!==C;}).map(function(x){return caches.delete(x);})); }).then(function(){ return self.clients.claim(); }));

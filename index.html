@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>To Do Australia</title>
+<title>CITYSIDE</title>
 <meta name="description" content="Events, markets, festivals and parties in Melbourne and Sydney, on one map.">
 <meta name="theme-color" content="#0b7a75">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="To Do AU">
+<meta name="apple-mobile-web-app-title" content="CITYSIDE">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='38' cy='10' r='6' fill='%23f2b134'/%3E%3Cpath d='M24 4C15.2 4 8 11 8 19.6c0 11.2 13.2 22.6 15.1 24.2a1.4 1.4 0 0 0 1.8 0C26.8 42.2 40 30.8 40 19.6 40 11 32.8 4 24 4z' fill='%230b7a75'/%3E%3Cpath d='M16 20l6 6 10-11' fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.css">
@@ -47,7 +47,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px 16
 .logo .pin{fill:var(--accent)}
 .logo .tick{fill:none;stroke:#fff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
 .brandtext{display:flex;flex-direction:column;line-height:1.1;min-width:0}
-.wordmark{font-weight:800;font-size:1.25rem;letter-spacing:-.02em}
+.wordmark{font-weight:800;font-size:1.3rem;letter-spacing:.06em}
 .wordmark b{color:var(--sun);font-weight:800}
 .brandtext small{color:rgba(255,255,255,.92);font-size:.8rem;font-weight:500;margin-top:3px}
 .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
@@ -210,13 +210,13 @@ header[data-city="melbourne"] .hero-layers::after{background:linear-gradient(180
 <body data-view="map">
 <header data-city="melbourne">
   <div class="hero-layers" aria-hidden="true"><div class="hl clouds"><i></i></div><div class="hl hills"><i></i></div><div class="hl roo" id="roo"><i></i></div><div class="hl grass"><i></i></div></div>
-  <a class="brand" href="./" aria-label="To Do Australia">
+  <a class="brand" href="./" aria-label="CITYSIDE">
     <svg class="logo" viewBox="0 0 48 48" role="img" aria-hidden="true">
       <circle class="sun" cx="38" cy="10" r="6"/>
       <path class="pin" d="M24 4C15.2 4 8 11 8 19.6c0 11.2 13.2 22.6 15.1 24.2a1.4 1.4 0 0 0 1.8 0C26.8 42.2 40 30.8 40 19.6 40 11 32.8 4 24 4z"/>
       <path class="tick" d="M16 20l6 6 10-11"/>
     </svg>
-    <span class="brandtext"><span class="wordmark">To Do <b>Australia</b></span><small id="sub"></small></span>
+    <span class="brandtext"><span class="wordmark">CITY<b>SIDE</b></span><small id="sub"></small></span>
   </a>
   <button type="button" class="installbtn" id="installBtn" hidden></button>
   <div class="controls">
@@ -340,7 +340,7 @@ var I18N = {
     when:{all:'Upcoming', today:'Today', tomorrow:'Tomorrow', weekend:'This weekend'},
     cats:{music:'Music',food:'Food & drink',markets:'Markets',parties:'Parties',culture:'Arts & culture',family:'Family',outdoors:'Outdoors'},
     details:'Details', directions:'Google Maps', waze:'Waze', share:'Share on WhatsApp', wa:'Join the WhatsApp group',
-    install:'Install app', installTitle:'Install To Do Australia', installIos:'Tap the Share button in Safari, then choose “Add to Home Screen”.', installOther:'Open the browser menu and choose “Install app” or “Add to Home screen”.', close:'Close', shareHead:'Found on',
+    install:'Install app', installTitle:'Install CITYSIDE', installIos:'Tap the Share button in Safari, then choose “Add to Home Screen”.', installOther:'Open the browser menu and choose “Install app” or “Add to Home screen”.', close:'Close', shareHead:'Found on',
     tabMap:'Map', tabList:'List',
     filterLabel:'Filter events', dateLabel:'Date', catLabel:'Event type',
     mapLabel:'Events map',
@@ -357,7 +357,7 @@ var I18N = {
     when:{all:'הכל', today:'היום', tomorrow:'מחר', weekend:'סוף השבוע'},
     cats:CAT_HE,
     details:'לפרטים', directions:'ניווט ב-Google Maps', waze:'ניווט ב-Waze', share:'שיתוף ב-WhatsApp', wa:'הצטרפות לקבוצה',
-    install:'התקנת האפליקציה', installTitle:'התקנת To Do Australia', installIos:'ב-Safari לוחצים על כפתור השיתוף ואז על “הוספה למסך הבית”.', installOther:'בתפריט הדפדפן בוחרים “התקנת אפליקציה” או “הוספה למסך הבית”.', close:'סגירה', shareHead:'מצאתי באתר',
+    install:'התקנת האפליקציה', installTitle:'התקנת CITYSIDE', installIos:'ב-Safari לוחצים על כפתור השיתוף ואז על “הוספה למסך הבית”.', installOther:'בתפריט הדפדפן בוחרים “התקנת אפליקציה” או “הוספה למסך הבית”.', close:'סגירה', shareHead:'מצאתי באתר',
     tabMap:'מפה', tabList:'רשימה',
     filterLabel:'סינון אירועים', dateLabel:'תאריך', catLabel:'סוג אירוע',
     mapLabel:'מפת אירועים',
@@ -485,7 +485,7 @@ function shareUrl(e){
   if(when) lines.push('\uD83D\uDCC5 '+when);
   if(e.address) lines.push('\uD83D\uDCCD '+e.address);
   lines.push('\uD83D\uDDFA '+'https://www.google.com/maps/search/?api=1&query='+e.lat+','+e.lng);
-  lines.push('', t().shareHead+' To Do Australia: '+site);
+  lines.push('', t().shareHead+' CITYSIDE: '+site);
   return 'https://wa.me/?text='+encodeURIComponent(lines.join('\n'));
 }
 function popupHtml(e){
@@ -653,7 +653,7 @@ function setCity(c){
   document.querySelector('header').setAttribute('data-city', c);
   if(!changed || REDUCED){ render(); fitCity(); return; }
   /* Teal curtain wipes across the map; the city swaps while it covers the screen. */
-  wipeEl.innerHTML = '<div><small>To Do</small>'+esc(t()[c])+'</div>';
+  wipeEl.innerHTML = '<div><small>CITYSIDE</small>'+esc(t()[c])+'</div>';
   wipeEl.classList.remove('go'); void wipeEl.offsetWidth; wipeEl.classList.add('go');
   var roo = $('#roo'); roo.classList.remove('hop'); void roo.offsetWidth; roo.classList.add('hop');
   clearTimeout(swapTimer);
