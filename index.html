@@ -276,8 +276,8 @@ button:active:not(.item){transform:scale(.97)}
 
 /* Groups and Tips pages */
 #panel{display:none;flex:1;min-width:0;overflow-y:auto;padding:18px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px));background:linear-gradient(180deg,var(--peach-pale),var(--bg) 220px)}
-body[data-view="groups"] #panel,body[data-view="tips"] #panel{display:block;animation:itemin .35s ease}
-body[data-view="groups"] aside,body[data-view="tips"] aside,body[data-view="groups"] #map,body[data-view="tips"] #map,body[data-view="groups"] .filters,body[data-view="tips"] .filters{display:none}
+body[data-view="groups"] #panel,body[data-view="tips"] #panel,body[data-view="calendar"] #panel{display:block;animation:itemin .35s ease}
+body[data-view="groups"] aside,body[data-view="tips"] aside,body[data-view="groups"] #map,body[data-view="tips"] #map,body[data-view="groups"] .filters,body[data-view="tips"] .filters,body[data-view="calendar"] aside,body[data-view="calendar"] #map,body[data-view="calendar"] .filters{display:none}
 .pinner{max-width:720px;margin:0 auto}
 .pinner h2{margin:0 0 4px;font-size:1.35rem}
 .plead{margin:0 0 16px;color:var(--muted);line-height:1.5}
@@ -371,6 +371,29 @@ small.dist{color:#2f7cf6;font-weight:700}
 #areapick .apres b{display:block;font-size:.95rem}
 #areapick .apres small{color:var(--muted);font-size:.78rem}
 #areapick .apres .none{padding:8px 10px;color:var(--muted);font-size:.9rem}
+
+/* Today bar and calendar */
+.todaybar{display:block;width:100%;text-align:start;border:0;background:var(--peach-pale);color:var(--ink);border-radius:12px;padding:7px 12px;font-weight:700;font-size:.85rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.todaybar.none{font-weight:600;color:var(--muted)}
+@media (min-width:721px){.todaybar{width:auto;flex:0 0 auto}}
+.calhead{display:flex;align-items:center;justify-content:space-between;margin:6px 0 10px}
+.calhead b{font-size:1.1rem}
+.calnav{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:1.4rem;line-height:1;color:var(--accent)}
+.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.calwd{text-align:center;font-size:.72rem;font-weight:700;color:var(--muted);padding:4px 0;text-transform:uppercase;letter-spacing:.04em}
+.calday{border:1px solid transparent;background:#fff;border-radius:12px;min-height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-weight:700;color:var(--ink);padding:4px 0}
+.calday em{display:flex;gap:3px;height:6px}
+.calday em i{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.calday.is-today{border-color:var(--accent);color:var(--accent)}
+.calday.is-sel{background:var(--accent);color:#fff}
+.calday.is-sel em i{background:#fff}
+.caldayh{text-transform:none;letter-spacing:0;font-size:.95rem}
+.calev{display:flex;align-items:center;gap:12px;width:100%;text-align:start;border:1px solid var(--line);background:#fff;border-radius:16px;padding:12px;margin-bottom:8px;color:var(--ink)}
+.calev .em{font-size:1.6rem}
+.calev .gtx{flex:1;min-width:0;display:flex;flex-direction:column}
+.calev small{color:var(--muted)}
+.calgo{color:var(--accent);font-weight:700;font-size:.8rem;white-space:nowrap}
+@media (max-width:420px){.calgo{display:none}}
 </style>
 </head>
 <body data-view="map">
@@ -385,7 +408,7 @@ small.dist{color:#2f7cf6;font-weight:700}
     <span class="brandtext"><span class="wordmark">CITY<b>SIDE</b></span><small id="sub"></small></span>
   </a>
   <button type="button" class="installbtn" id="installBtn" hidden></button>
-  <nav class="desknav" id="deskNav" aria-label="Sections"><button type="button" data-view="map" aria-pressed="true"></button><button type="button" data-view="groups" aria-pressed="false"></button><button type="button" data-view="tips" aria-pressed="false"></button><a class="deskcta" id="deskCta" href="#" target="_blank" rel="noopener noreferrer" data-t="submit" data-e="site" hidden></a></nav>
+  <nav class="desknav" id="deskNav" aria-label="Sections"><button type="button" data-view="map" aria-pressed="true"></button><button type="button" data-view="calendar" aria-pressed="false"></button><button type="button" data-view="groups" aria-pressed="false"></button><button type="button" data-view="tips" aria-pressed="false"></button><a class="deskcta" id="deskCta" href="#" target="_blank" rel="noopener noreferrer" data-t="submit" data-e="site" hidden></a></nav>
   <div class="controls">
     <div class="toggle" role="group" aria-label="City" id="cityToggle">
       <button type="button" data-city="melbourne" aria-pressed="true"></button>
@@ -399,6 +422,7 @@ small.dist{color:#2f7cf6;font-weight:700}
 </header>
 
 <div class="filters" id="filters">
+  <button type="button" class="todaybar" id="todaybar"></button>
   <div class="chiprow" id="whenRow" role="group"></div>
   <div class="chiprow" id="catRow" role="group"></div>
 </div>
@@ -422,6 +446,10 @@ small.dist{color:#2f7cf6;font-weight:700}
   <button type="button" data-view="list" aria-pressed="false">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>
     <span id="tabList"></span>
+  </button>
+  <button type="button" data-view="calendar" aria-pressed="false">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+    <span id="tabCal"></span>
   </button>
   <button type="button" data-view="groups" aria-pressed="false">
     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14c3 0 5 2 5 5"/></svg>
@@ -527,7 +555,7 @@ var I18N = {
     cats:{music:'Music',food:'Food & drink',markets:'Markets',parties:'Parties',culture:'Arts & culture',family:'Family',outdoors:'Outdoors',sports:'Sports & fitness',community:'Communities'},
     details:'Details', directions:'Google Maps', waze:'Waze', share:'Share on WhatsApp', wa:'Join the group on WhatsApp', groupTag:'Group', hasGroup:'Has a group', cityGroup:function(c){return 'CITYSIDE community · '+c;}, groupLead:'Meet people going to the same events', every:function(d){return 'Every '+d;}, and:' & ', by:'by', promoFeatured:'★ Featured', promoSponsored:'Sponsored', submit:'Organising something? List your event on CITYSIDE', listShort:'+ List your event', welcomeTitle:'Welcome to CITYSIDE', welcomeText:'Events, run clubs and communities in Melbourne and Sydney. Pick a city, find something on, and join the group to meet people going.', explore:'Explore events',
     install:'Install app', installTitle:'Install CITYSIDE', installIos:'Tap the Share button in Safari, then choose “Add to Home Screen”.', installOther:'Open the browser menu and choose “Install app” or “Add to Home screen”.', close:'Close', shareHead:'Found on',
-    tabMap:'Map', tabList:'List', tabGroups:'Groups', tabTips:'Tips',
+    tabMap:'Map', tabList:'List', tabCal:'Calendar', tabGroups:'Groups', tabTips:'Tips', calTitle:function(c){return 'Calendar \u00b7 '+c;}, calLead:'Tap a day to see what is on.', calNone:'Nothing listed for this day yet.', calToday:'Today', calEvents:function(n){return n===1?'1 event':n+' events';}, todayBar:function(d,n){return n? d+' \u00b7 '+(n===1?'1 event today':n+' events today') : d+' \u00b7 nothing today, see the calendar';}, calPrev:'Previous month', calNext:'Next month', calGo:'Show on map',
     groupsTitle:function(c){return 'WhatsApp groups · '+c;}, tipsTitle:function(c){return 'Tips · '+c;}, groupsLead:'Join a group, meet people going to the same events and arrive with friends.', tipsLead:'Good to know before you go.', mainGroup:'City group', moreGroups:'More groups', eventGroups:'Event groups', noGroups:'Groups are on their way. Check back soon.', noTips:'No tips yet.', joinShort:'Join', sourceLink:'Source', tipCats:{emergency:'Emergency',safety:'Safety',transport:'Getting around',money:'Money',nature:'Sun & beach',practical:'Practical',food:'Food',culture:'Local culture',other:'Other'},
     filterLabel:'Filter events', dateLabel:'Date', catLabel:'Event type',
     mapLabel:'Events map',
@@ -545,7 +573,7 @@ var I18N = {
     cats:CAT_HE,
     details:'לפרטים', directions:'ניווט ב-Google Maps', waze:'ניווט ב-Waze', share:'שיתוף ב-WhatsApp', wa:'הצטרפות לקבוצה ב-WhatsApp', groupTag:'קבוצה', hasGroup:'יש קבוצה', cityGroup:function(c){return 'קהילת CITYSIDE ב'+c;}, groupLead:'להכיר אנשים שמגיעים לאותם אירועים', every:function(d){return 'כל '+d;}, and:' ו', by:'מאת', promoFeatured:'★ מומלץ', promoSponsored:'ממומן', submit:'מארגנים אירוע? פרסמו אותו ב-CITYSIDE', listShort:'+ פרסום אירוע', welcomeTitle:'ברוכים הבאים ל-CITYSIDE', welcomeText:'אירועים, קבוצות ריצה וקהילות במלבורן ובסידני. בוחרים עיר, מוצאים מה קורה, ומצטרפים לקבוצה כדי להכיר אנשים שמגיעים.', explore:'לגלות אירועים',
     install:'התקנת האפליקציה', installTitle:'התקנת CITYSIDE', installIos:'ב-Safari לוחצים על כפתור השיתוף ואז על “הוספה למסך הבית”.', installOther:'בתפריט הדפדפן בוחרים “התקנת אפליקציה” או “הוספה למסך הבית”.', close:'סגירה', shareHead:'מצאתי באתר',
-    tabMap:'מפה', tabList:'רשימה', tabGroups:'קבוצות', tabTips:'טיפים',
+    tabMap:'מפה', tabList:'רשימה', tabCal:'לוח', tabGroups:'קבוצות', tabTips:'טיפים', calTitle:function(c){return 'לוח אירועים \u00b7 '+c;}, calLead:'לוחצים על יום כדי לראות מה קורה.', calNone:'עוד לא פורסמו אירועים ליום הזה.', calToday:'היום', calEvents:function(n){return n===1?'אירוע אחד':n+' אירועים';}, todayBar:function(d,n){return n? d+' \u00b7 '+(n===1?'אירוע אחד היום':n+' אירועים היום') : d+' \u00b7 אין אירועים היום, אפשר להציץ בלוח';}, calPrev:'חודש קודם', calNext:'חודש הבא', calGo:'להצגה במפה',
     groupsTitle:function(c){return 'קבוצות WhatsApp · '+c;}, tipsTitle:function(c){return 'טיפים · '+c;}, groupsLead:'מצטרפים לקבוצה, מכירים אנשים שמגיעים לאותם אירועים ומגיעים עם חברים.', tipsLead:'טוב לדעת לפני שיוצאים.', mainGroup:'קבוצת העיר', moreGroups:'עוד קבוצות', eventGroups:'קבוצות אירועים', noGroups:'קבוצות בדרך. חזרו לבדוק בקרוב.', noTips:'עדיין אין טיפים.', joinShort:'הצטרפות', sourceLink:'מקור', tipCats:{emergency:'חירום',safety:'בטיחות',transport:'תחבורה',money:'כסף',nature:'שמש וחוף',practical:'מעשי',food:'אוכל',culture:'תרבות מקומית',other:'אחר'},
     filterLabel:'סינון אירועים', dateLabel:'תאריך', catLabel:'סוג אירוע',
     mapLabel:'מפת אירועים',
@@ -877,11 +905,80 @@ function loadAnalytics(){
   sc.setAttribute('data-goatcounter','https://'+code+'.goatcounter.com/count');
   document.head.appendChild(sc);
 }
+/* Calendar view: month grid plus the events of the chosen day. */
+var calY = null, calM = null, calSel = null;
+function dayEvents(iso){
+  return events.filter(function(e){ return e.city===city && occursOn(e,iso); })
+    .sort(function(a,b){ return (a.time||'99').localeCompare(b.time||'99'); });
+}
+function calendarHtml(){
+  var today = todayIso(TZ[city]);
+  if(calY===null){ calY = +today.slice(0,4); calM = +today.slice(5,7)-1; calSel = today; }
+  var loc2 = t().locale;
+  var title = new Intl.DateTimeFormat(loc2,{month:'long',year:'numeric',timeZone:'UTC'}).format(new Date(Date.UTC(calY,calM,1)));
+  var h = '<h2>'+esc(t().calTitle(t()[city]))+'</h2><p class="plead">'+esc(t().calLead)+'</p>';
+  var rtl = t().dir==='rtl';
+  h += '<div class="calhead"><button type="button" class="calnav" data-cal-nav="-1" aria-label="'+esc(t().calPrev)+'">'+(rtl?'\u203A':'\u2039')+'</button><b>'+esc(title)+'</b><button type="button" class="calnav" data-cal-nav="1" aria-label="'+esc(t().calNext)+'">'+(rtl?'\u2039':'\u203A')+'</button></div>';
+  h += '<div class="calgrid" role="grid">';
+  for(var w=0; w<7; w++){
+    h += '<div class="calwd">'+esc(new Date(Date.UTC(2026,10,9+w)).toLocaleDateString(loc2,{weekday:'short',timeZone:'UTC'}))+'</div>';
+  }
+  var first = (new Date(Date.UTC(calY,calM,1)).getUTCDay()+6)%7, dim = new Date(Date.UTC(calY,calM+1,0)).getUTCDate();
+  for(var b=0;b<first;b++) h += '<div></div>';
+  for(var d=1; d<=dim; d++){
+    var iso = calY+'-'+('0'+(calM+1)).slice(-2)+'-'+('0'+d).slice(-2);
+    var n = dayEvents(iso).length, dots = '';
+    for(var k=0;k<Math.min(n,3);k++) dots += '<i></i>';
+    h += '<button type="button" class="calday'+(iso===today?' is-today':'')+(iso===calSel?' is-sel':'')+(n?' has':'')+'" data-cal-day="'+iso+'" aria-pressed="'+(iso===calSel)+'"><span>'+d+'</span><em>'+dots+'</em></button>';
+  }
+  h += '</div>';
+  var evs = dayEvents(calSel);
+  var dl = new Intl.DateTimeFormat(loc2,{weekday:'long',day:'numeric',month:'long',timeZone:'UTC'}).format(new Date(calSel+'T12:00:00Z'));
+  h += '<h3 class="psec caldayh">'+esc(dl)+(calSel===today?' \u00b7 '+esc(t().calToday):'')+(evs.length?' \u00b7 '+esc(t().calEvents(evs.length)):'')+'</h3>';
+  if(!evs.length) h += '<p class="pempty">'+esc(t().calNone)+'</p>';
+  evs.forEach(function(e){
+    h += '<button type="button" class="calev" data-cal-ev="'+esc(e.id)+'"><span class="em">'+esc(e.emoji||'\uD83D\uDCCD')+'</span><span class="gtx"><b>'+esc(tx(e,'title'))+'</b><small>'+(e.time?'<bdi dir="ltr">'+esc(e.time)+'</bdi> \u00b7 ':'')+'<bdi dir="ltr">'+esc(e.address||'')+'</bdi></small></span><span class="calgo">'+esc(t().calGo)+' \u203A</span></button>';
+  });
+  return h;
+}
+document.addEventListener('click',function(ev){
+  var el = ev.target.closest && ev.target.closest('[data-cal-nav],[data-cal-day],[data-cal-ev],#todaybar');
+  if(!el) return;
+  if(el.id==='todaybar'){
+    var n = dayEvents(todayIso(TZ[city])).length;
+    if(n){ filters.when='today'; syncChips(); render(); fitCity(); setView('map'); }
+    else { calY=null; setView('calendar'); }
+    return;
+  }
+  if(el.dataset.calNav){
+    var m = calM + (+el.dataset.calNav); calY += Math.floor(m/12); calM = ((m%12)+12)%12; renderPanel(); return;
+  }
+  if(el.dataset.calDay){ calSel = el.dataset.calDay; renderPanel(); return; }
+  if(el.dataset.calEv){
+    var e = events.filter(function(x){ return x.id===el.dataset.calEv; })[0]; if(!e) return;
+    filters = {when:'all', cats:{}, group:false, near:filters.near}; syncChips(); render();
+    setView('map');
+    setTimeout(function(){
+      map.flyTo({center:[e.lng,e.lat],zoom:Math.max(map.getZoom(),14),duration:700});
+      var m2 = markers[e.id]; if(m2 && !m2.getPopup().isOpen()) m2.togglePopup();
+    }, 120);
+  }
+});
+function syncTodayBar(){
+  var b = $('#todaybar'); if(!b) return;
+  try{
+    var now = new Date(), tz = TZ[city];
+    var ds = new Intl.DateTimeFormat(t().locale,{timeZone:tz,weekday:'long',day:'numeric',month:'short'}).format(now);
+    b.textContent = '\uD83D\uDCC5 ' + t().todayBar(ds, dayEvents(todayIso(tz)).length);
+    b.classList.toggle('none', !dayEvents(todayIso(tz)).length);
+  }catch(e){}
+}
 function renderPanel(){
   var v = document.body.getAttribute('data-view'), p = $('#panel');
-  if(!p || (v!=='groups' && v!=='tips')) return;
+  if(!p || (v!=='groups' && v!=='tips' && v!=='calendar')) return;
   var h = '<div class="pinner" dir="'+t().dir+'">';
-  if(v==='groups'){
+  if(v==='calendar'){ h += calendarHtml(); }
+  else if(v==='groups'){
     h += '<h2>'+esc(t().groupsTitle(t()[city]))+'</h2><p class="plead">'+esc(t().groupsLead)+'</p>';
     var n = 0, i = 0;
     var main = safeWa(cityGroups[city]);
@@ -922,7 +1019,7 @@ function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
 }
 function render(){
-  syncCityGroup(); syncSubmit();
+  syncCityGroup(); syncSubmit(); syncTodayBar();
   renderPanel();
   Object.keys(markers).forEach(function(k){ markers[k].remove(); });
   markers = {};
@@ -1025,7 +1122,7 @@ function syncChips(){
 function setView(v){
   document.body.setAttribute('data-view',v);
   document.querySelectorAll('.tabbar button,.desknav button').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.view===v ? 'true':'false'); });
-  if(v==='groups' || v==='tips') renderPanel();
+  if(v==='groups' || v==='tips' || v==='calendar') renderPanel();
   if(v==='map' || v==='list') setTimeout(function(){ map.resize(); }, 30);
 }
 document.querySelectorAll('.tabbar button,.desknav button').forEach(function(b){
@@ -1040,9 +1137,9 @@ function applyLang(){
   $('#map').setAttribute('aria-label', t().mapLabel);
   $('#filters').setAttribute('aria-label', t().filterLabel);
   $('#tabMap').textContent = t().tabMap; $('#tabList').textContent = t().tabList;
-  $('#tabGroups').textContent = t().tabGroups; $('#tabTips').textContent = t().tabTips;
+  $('#tabCal').textContent = t().tabCal; $('#tabGroups').textContent = t().tabGroups; $('#tabTips').textContent = t().tabTips;
   var dn = document.querySelectorAll('.desknav button');
-  dn[0].textContent = '\uD83D\uDDFA ' + t().tabMap; dn[1].textContent = '\uD83D\uDC65 ' + t().tabGroups; dn[2].textContent = '\uD83D\uDCA1 ' + t().tabTips;
+  dn[0].textContent = '\uD83D\uDDFA ' + t().tabMap; dn[1].textContent = '\uD83D\uDCC5 ' + t().tabCal; dn[2].textContent = '\uD83D\uDC65 ' + t().tabGroups; dn[3].textContent = '\uD83D\uDCA1 ' + t().tabTips;
   document.querySelectorAll('#cityToggle button').forEach(function(b){
     b.textContent = t()[b.dataset.city];
     b.setAttribute('aria-pressed', b.dataset.city===city ? 'true':'false');
