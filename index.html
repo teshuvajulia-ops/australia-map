@@ -345,6 +345,16 @@ details.tip p{margin:0;padding:0 16px 14px;line-height:1.6}
   .tabbar button svg{width:19px;height:19px}
   .fab,.setbtn{inset-block-end:calc(50px + env(safe-area-inset-bottom,0px))}
 }
+
+/* Near me */
+.nearchip[aria-pressed="true"]{background:#2f7cf6;border-color:#2f7cf6;color:#fff}
+.youdot{width:18px;height:18px;border-radius:50%;background:#2f7cf6;border:3px solid #fff;box-shadow:0 0 0 0 rgba(47,124,246,.5),0 2px 8px rgba(0,0,0,.3);animation:youpulse 2s infinite}
+@keyframes youpulse{70%{box-shadow:0 0 0 14px rgba(47,124,246,0),0 2px 8px rgba(0,0,0,.3)}100%{box-shadow:0 0 0 0 rgba(47,124,246,0),0 2px 8px rgba(0,0,0,.3)}}
+small.dist{color:#2f7cf6;font-weight:700}
+#geotoast{position:fixed;z-index:2500;inset-inline:16px;inset-block-end:calc(64px + env(safe-area-inset-bottom,0px));max-width:420px;margin-inline:auto;background:#3a2229;color:#fff;padding:11px 16px;border-radius:14px;font-weight:600;font-size:.9rem;text-align:center;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .3s,transform .3s}
+#geotoast.on{opacity:1;transform:none}
+@media (min-width:721px){#geotoast{inset-block-end:24px}}
+@media (prefers-reduced-motion:reduce){.youdot{animation:none}}
 </style>
 </head>
 <body data-view="map">
@@ -495,7 +505,7 @@ var I18N = {
     localTime:function(c){ return 'Local time in '+c; },
     diff:function(h){ return h===0 ? 'same time as Israel' : Math.abs(h)+(Math.abs(h)===1?' hour ':' hours ')+(h>0?'ahead of Israel':'behind Israel'); },
     empty:'No events in this city yet.',
-    noMatch:'No events match these filters.',
+    noMatch:'No events match these filters.', nearMe:'Near me', kmAway:function(k){return k<1?'<1 km away':(k<10?k.toFixed(1):Math.round(k))+' km away';}, geoDenied:'Location is off. Allow it in your browser to see what is near you.', geoFar:'You seem to be outside Melbourne and Sydney, so showing events by city.', geoWait:'Finding you...',
     clear:'Clear filters',
     when:{all:'Upcoming', today:'Today', tomorrow:'Tomorrow', weekend:'This weekend'},
     cats:{music:'Music',food:'Food & drink',markets:'Markets',parties:'Parties',culture:'Arts & culture',family:'Family',outdoors:'Outdoors',sports:'Sports & fitness',community:'Communities'},
@@ -513,7 +523,7 @@ var I18N = {
     localTime:function(c){ return 'שעה ב'+c; },
     diff:function(h){ return h===0 ? 'אותה שעה כמו בישראל' : (Math.abs(h)===1?'שעה ':Math.abs(h)+' שעות ')+(h>0?'לפני ישראל':'אחרי ישראל'); },
     empty:'עדיין אין אירועים בעיר הזו.',
-    noMatch:'אין אירועים שמתאימים לסינון.',
+    noMatch:'אין אירועים שמתאימים לסינון.', nearMe:'לידי', kmAway:function(k){return k<1?'פחות מ-1 ק"מ ממך':'‏'+(k<10?k.toFixed(1):Math.round(k))+' ק"מ ממך';}, geoDenied:'המיקום כבוי. צריך לאשר גישה למיקום בדפדפן כדי לראות מה קרוב אליך.', geoFar:'נראה שאת/ה מחוץ למלבורן וסידני, לכן מוצגים אירועים לפי עיר.', geoWait:'מאתר מיקום...',
     clear:'נקה סינון',
     when:{all:'הכל', today:'היום', tomorrow:'מחר', weekend:'סוף השבוע'},
     cats:CAT_HE,
@@ -531,7 +541,8 @@ var admin = location.hash === '#admin';
 var events = [], city = 'melbourne', dirty = false, editingId = null;
 var markers = {};
 var lang = 'en';
-var filters = {when:'all', cats:{}, group:false};
+var filters = {when:'all', cats:{}, group:false, near:false};
+var userPos = null, userMarker = null, geoWatch = null;
 
 function $(s){return document.querySelector(s);}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
@@ -691,17 +702,52 @@ function popupHtml(e){
   return h + '</div>';
 }
 
+function distKm(e){
+  if(!userPos) return Infinity;
+  var R=6371, r=Math.PI/180, dLa=(e.lat-userPos.lat)*r, dLo=(e.lng-userPos.lng)*r;
+  var h=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(userPos.lat*r)*Math.cos(e.lat*r)*Math.sin(dLo/2)*Math.sin(dLo/2);
+  return 2*R*Math.asin(Math.sqrt(h));
+}
+function geoToast(msg){
+  var n = $('#geotoast'); if(!n){ n = document.createElement('div'); n.id='geotoast'; n.setAttribute('role','status'); document.body.appendChild(n); }
+  n.textContent = msg; n.classList.add('on'); clearTimeout(n._t); n._t = setTimeout(function(){ n.classList.remove('on'); }, 4500);
+}
+function showUserDot(){
+  if(!userPos) return;
+  if(!userMarker){ var d = document.createElement('div'); d.className='youdot'; userMarker = new mapboxgl.Marker({element:d}).setLngLat([userPos.lng,userPos.lat]).addTo(map); }
+  else userMarker.setLngLat([userPos.lng,userPos.lat]);
+}
+function nearestCity(){
+  var best=null, bd=1e9;
+  Object.keys(CITIES).forEach(function(k){ var c=CITIES[k].center, d=distKm({lat:c[0],lng:c[1]}); if(d<bd){ bd=d; best=k; } });
+  return {key:best, km:bd};
+}
+function toggleNear(){
+  if(filters.near){ filters.near=false; syncChips(); render(); fitCity(); return; }
+  if(!navigator.geolocation){ geoToast(t().geoDenied); return; }
+  geoToast(t().geoWait);
+  navigator.geolocation.getCurrentPosition(function(p){
+    userPos = {lat:p.coords.latitude, lng:p.coords.longitude};
+    var n = nearestCity();
+    if(n.km>120){ geoToast(t().geoFar); userPos = null; return; }
+    filters.near = true;
+    if(n.key!==city){ setCity(n.key); }
+    showUserDot(); syncChips(); render(); fitCity();
+    var n2=$('#geotoast'); if(n2) n2.classList.remove('on');
+  }, function(){ geoToast(t().geoDenied); }, {enableHighAccuracy:true, timeout:12000, maximumAge:60000});
+}
 function cityEvents(){
   return events.filter(function(e){ return e.city===city && dateMatches(e) && catMatches(e) && groupMatches(e); })
     .sort(function(a,b){
+      if(filters.near && userPos) return distKm(a)-distKm(b);
       var pa = a.promo ? 0 : 1, pb = b.promo ? 0 : 1; if(pa!==pb) return pa-pb;
       return (nextDay(a)+(a.time||'')).localeCompare(nextDay(b)+(b.time||''));
     });
 }
 function filtersActive(){
-  return filters.when!=='all' || filters.group || Object.keys(filters.cats).some(function(k){return filters.cats[k];});
+  return filters.when!=='all' || filters.group || filters.near || Object.keys(filters.cats).some(function(k){return filters.cats[k];});
 }
-function clearFilters(){ filters = {when:'all', cats:{}, group:false}; syncChips(); render(); fitCity(); }
+function clearFilters(){ filters = {when:'all', cats:{}, group:false, near:false}; syncChips(); render(); fitCity(); }
 
 var cityGroups = {};
 function syncCityGroup(){
@@ -835,6 +881,7 @@ function render(){
     var ct = catsText(e);
     b.innerHTML = '<span class="em">'+esc(e.emoji||'📍')+'</span><span class="tx">'+(e.promo ? promoTag(e) : '')+'<b>'+esc(tx(e,'title'))+'</b><small>'+whenHtml(e)+'</small><small dir="ltr" style="text-align:start">'+esc(e.address)+'</small>'+
       (ct ? '<small class="cats">'+esc(ct)+'</small>' : '')+
+      (userPos ? '<small class="dist">\uD83D\uDCCD '+esc(t().kmAway(distKm(e)))+'</small>' : '')+
       (safeWa(e.whatsapp) ? '<small class="wab">\uD83D\uDC65 '+esc(t().groupTag)+' · WhatsApp</small>' : '')+'</span>';
     b.addEventListener('click',function(){
       if(window.matchMedia('(max-width:720px)').matches) setView('map');
@@ -881,9 +928,10 @@ function buildChips(){
     b.addEventListener('click',function(){ filters.when = k; syncChips(); render(); fitCity(); });
     wr.appendChild(b);
   });
+  var nb = document.createElement('button'); nb.type='button'; nb.className='chip nearchip'; nb.id='nearChip'; nb.textContent='\uD83D\uDCCD '+t().nearMe;
+  nb.addEventListener('click',toggleNear); wr.insertBefore(nb, wr.firstChild);
   var gb = document.createElement('button'); gb.type='button'; gb.className='chip groupchip'; gb.id='groupChip'; gb.textContent='\uD83D\uDC65 '+t().hasGroup;
   gb.addEventListener('click',function(){ filters.group = !filters.group; syncChips(); render(); fitCity(); });
-  cr.appendChild(gb);
   CATS.forEach(function(c){
     var b = document.createElement('button'); b.type='button'; b.className='chip'; b.dataset.cat=c[0]; b.textContent=c[1]+' '+t().cats[c[0]];
     b.addEventListener('click',function(){ filters.cats[c[0]] = !filters.cats[c[0]]; syncChips(); render(); fitCity(); });
@@ -896,7 +944,7 @@ function buildChips(){
 function syncChips(){
   document.querySelectorAll('#whenRow .chip').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.when===filters.when ? 'true':'false'); });
   document.querySelectorAll('#catRow .chip[data-cat]').forEach(function(b){ b.setAttribute('aria-pressed', filters.cats[b.dataset.cat] ? 'true':'false'); });
-  var gc = $('#groupChip'); if(gc) gc.setAttribute('aria-pressed', filters.group ? 'true':'false');
+  var nc = $('#nearChip'); if(nc) nc.setAttribute('aria-pressed', filters.near ? 'true':'false');
   var c = $('#clearBtn'); if(c) c.hidden = !filtersActive();
 }
 
