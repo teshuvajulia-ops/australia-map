@@ -493,6 +493,7 @@ html[dir="rtl"] .gwhat>b{letter-spacing:0;text-transform:none;font-size:.9rem}
 /* Fade at the end of scrollable chip rows so people see there is more */
 .chiprow{padding-inline-end:28px;-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent)}
 html[dir="rtl"] .chiprow{-webkit-mask-image:linear-gradient(to left,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to left,#000 calc(100% - 28px),transparent)}
+.cgav{width:46px;height:46px;border-radius:50%;flex:none;object-fit:cover;border:2px solid rgba(255,255,255,.9);box-shadow:0 2px 8px rgba(0,0,0,.25)}.gmain .cgav{width:56px;height:56px}.citygroup,.gmain{position:relative}.citygroup:after,.gmain:after{content:'\203A';margin-inline-start:auto;font-size:1.6rem;opacity:.85;line-height:1}[dir=rtl] .citygroup:after,[dir=rtl] .gmain:after{transform:scaleX(-1)}
 </style>
 </head>
 <body data-view="map">
@@ -950,7 +951,7 @@ function syncCityGroup(){
   var u = safeWa(cityGroups[city]);
   if(!u){ a.hidden = true; return; }
   a.href = u; a.hidden = false;
-  a.innerHTML = '<span class="cgi">\uD83D\uDC65</span><span><b>'+esc(t().cityGroup(t()[city]))+'</b><small>'+esc(t().groupLead)+'</small></span>';
+  a.innerHTML = '<img class="cgav" src="avatar-'+city+'.png" alt=""><span><b>'+esc(t().cityGroup(t()[city]))+'</b><small>'+esc(t().groupLead)+'</small></span>';
 }
 var tips = [], moreGroups = [], config = {};
 function loc(o,f){ var en=o[f+'_en'], he=o[f]; return (lang==='en' ? (en||he) : (he||en)) || ''; }
@@ -1096,7 +1097,7 @@ function renderPanel(){
     h += '<div class="gwhat"><b>'+esc(t().gwhatTitle)+'</b>'+t().gwhat.map(function(x){ return '<div class="gw"><span>'+x[0]+'</span><div><strong>'+esc(x[1])+'</strong><small>'+esc(x[2])+'</small></div></div>'; }).join('')+'<p>'+esc(t().gwhatRules)+'</p></div>';
     var n = 0, i = 0;
     var main = safeWa(cityGroups[city]);
-    if(main){ n++; h += '<a class="gmain" href="'+esc(main)+'" target="_blank" rel="noopener noreferrer"><span class="cgi">\uD83D\uDC65</span><span><b>'+esc(t().cityGroup(t()[city]))+'</b><small>'+esc(t().groupLead)+'</small></span></a>'; }
+    if(main){ n++; h += '<a class="gmain" href="'+esc(main)+'" target="_blank" rel="noopener noreferrer"><img class="cgav" src="avatar-'+city+'.png" alt=""><span><b>'+esc(t().cityGroup(t()[city]))+'</b><small>'+esc(t().groupLead)+'</small></span></a>'; }
     var more = moreGroups.filter(function(g){ return (g.city===city || g.city==='all') && safeWa(g.url); });
     if(more.length){
       h += '<h3 class="psec">'+esc(t().moreGroups)+'</h3>';
@@ -1127,7 +1128,7 @@ function renderPanel(){
     });
     if(!seen) h += '<p class="pempty">'+esc(t().noTips)+'</p>';
   }
-  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 21</p></div>';
+  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 22</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
