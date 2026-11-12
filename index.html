@@ -401,6 +401,25 @@ small.dist{color:#2f7cf6;font-weight:700}
 .wordmark{letter-spacing:.04em}
 .wordmark b{font-weight:900}
 html[dir="rtl"] .pinner h2,html[dir="rtl"] .wcard h2,html[dir="rtl"] .calhead b,html[dir="rtl"] .asidehead #cityname,html[dir="rtl"] .pinner h3.caldayh{font-family:"Heebo",sans-serif;font-weight:800}
+
+/* Button motion */
+.chip,.wgo,.wlist,.deskcta,.calday,.calev,.calnav,.installbtn,.tabbar button,.todaybar,.toggle button,.item,.gcard,.citygroup,.submitcta{-webkit-tap-highlight-color:transparent;transition:transform .22s cubic-bezier(.3,1.4,.5,1),box-shadow .22s ease,background-color .25s ease,color .25s ease,border-color .25s ease}
+.chip,.wgo,.deskcta,.calday,.calev,.calnav,.installbtn,.todaybar,.tabbar button{position:relative;overflow:hidden}
+@media (hover:hover){
+  .chip:hover,.calday:hover,.calnav:hover,.todaybar:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(221,95,75,.2)}
+  .deskcta:hover,.wgo:hover,.installbtn:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 12px 26px rgba(221,95,75,.45)}
+  .calev:hover,.item:hover,.gcard:hover,.citygroup:hover,.submitcta:hover,.wlist:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(221,95,75,.18)}
+}
+.chip:active,.wgo:active,.deskcta:active,.calday:active,.calev:active,.calnav:active,.installbtn:active,.todaybar:active,.wlist:active,.item:active,.gcard:active{transform:scale(.95);transition-duration:.08s}
+.tabbar button:active{transform:scale(.92)}
+.chip[aria-pressed="true"],.calday.is-sel,.nearchip[aria-pressed="true"]{animation:chippop .4s cubic-bezier(.3,1.6,.5,1)}
+@keyframes chippop{0%{transform:scale(.88)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
+.wgo::after,.deskcta::after{content:"";position:absolute;inset-block:0;width:40%;inset-inline-start:-60%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg);animation:sheen 4.5s ease-in-out infinite 1.5s;pointer-events:none}
+@keyframes sheen{0%,60%{inset-inline-start:-60%}100%{inset-inline-start:130%}}
+.ripple{position:absolute;border-radius:50%;pointer-events:none;background:rgba(221,95,75,.28);transform:scale(0);animation:rip .6s ease-out forwards}
+.wgo .ripple,.deskcta .ripple,.chip[aria-pressed="true"] .ripple,.calday.is-sel .ripple{background:rgba(255,255,255,.45)}
+@keyframes rip{to{transform:scale(1);opacity:0}}
+@media (prefers-reduced-motion:reduce){.chip,.wgo,.deskcta,.calday,.calev,.calnav,.installbtn,.todaybar,.tabbar button,.item,.gcard{transition:none !important;animation:none !important;transform:none !important}.wgo::after,.deskcta::after,.ripple{display:none}}
 </style>
 </head>
 <body data-view="map">
@@ -1440,6 +1459,16 @@ load().then(function(){
   applyLang();
   fitCity();
 });
+
+/* Tap ripple on buttons */
+document.addEventListener('pointerdown',function(ev){
+  var b = ev.target.closest && ev.target.closest('.chip,.wgo,.deskcta,.calday,.calev,.calnav,.installbtn,.todaybar,.tabbar button');
+  if(!b || window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  var r = b.getBoundingClientRect(), d = Math.max(r.width,r.height)*2, sp = document.createElement('span');
+  sp.className='ripple'; sp.style.width=sp.style.height=d+'px';
+  sp.style.left=(ev.clientX-r.left-d/2)+'px'; sp.style.top=(ev.clientY-r.top-d/2)+'px';
+  b.appendChild(sp); setTimeout(function(){ sp.remove(); }, 650);
+},{passive:true});
 })();
 </script>
 </body>
