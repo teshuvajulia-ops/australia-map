@@ -5,12 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>To Do Australia</title>
 <meta name="description" content="Events, markets, festivals and parties in Melbourne and Sydney, on one map.">
+<meta name="theme-color" content="#0b7a75">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='38' cy='10' r='6' fill='%23f2b134'/%3E%3Cpath d='M24 4C15.2 4 8 11 8 19.6c0 11.2 13.2 22.6 15.1 24.2a1.4 1.4 0 0 0 1.8 0C26.8 42.2 40 30.8 40 19.6 40 11 32.8 4 24 4z' fill='%230b7a75'/%3E%3Cpath d='M16 20l6 6 10-11' fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-/* Layout: header (logo, city and language switches), full-height map, event list beside it (below the map on phones) */
+/* Layout: header banner, filter bar, map with event list beside it.
+   On phones the map and the list are two views, switched from a bar at the bottom. */
 :root{
   --ink:#10262e;
   --muted:#5b6f77;
@@ -20,6 +22,7 @@
   --accent:#0b7a75;
   --accent-ink:#ffffff;
   --sun:#f2b134;
+  --wa:#128c4a;
   --danger:#b3261e;
   --font:'Heebo',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
 }
@@ -47,6 +50,21 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px 16
 .toggle button[aria-pressed="true"]{background:#fff;color:var(--accent);text-shadow:none}
 .toggle.lang button{padding:7px 12px;font-size:.9rem}
 
+/* Filter bar */
+.filters{display:flex;flex-direction:column;gap:6px;padding:8px max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px));background:var(--card);border-bottom:1px solid var(--line)}
+.chiprow{display:flex;gap:8px;overflow-x:auto;padding:2px 0;scrollbar-width:none;min-width:0}
+.chiprow::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 13px;font-weight:600;font-size:.86rem;white-space:nowrap}
+.chip:hover{border-color:var(--accent)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip.clear{border-style:dashed;color:var(--muted)}
+.chip.clear[hidden]{display:none}
+.divider{flex:none;width:1px;background:var(--line);margin:2px 2px}
+@media (min-width:721px){
+  .filters{flex-direction:row;align-items:center;gap:12px}
+  #catRow{flex:1;flex-wrap:wrap;overflow:visible}
+}
+
 .main{flex:1;min-height:0;display:flex}
 aside{width:360px;max-width:42vw;display:flex;flex-direction:column;background:var(--card);border-inline-end:1px solid var(--line);min-height:0}
 .asidehead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px 12px;padding:12px 16px;border-bottom:1px solid var(--line);font-weight:700}
@@ -61,7 +79,10 @@ aside{width:360px;max-width:42vw;display:flex;flex-direction:column;background:v
 .item .tx{display:flex;flex-direction:column;gap:2px;min-width:0}
 .item .tx b{font-weight:700}
 .item .tx small{color:var(--muted);font-size:.85rem;overflow-wrap:anywhere}
-.empty{padding:24px 16px;color:var(--muted)}
+.item .tx small.cats{font-size:.78rem}
+.item .tx small.wab{color:var(--wa);font-weight:700}
+.empty{padding:24px 16px;color:var(--muted);display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.empty button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 14px;font-weight:600}
 .rowtools{display:flex;flex-direction:column;justify-content:center;gap:4px;padding:4px 8px}
 .rowtools button{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:4px 10px;font-size:.8rem}
 .rowtools .del{color:var(--danger)}
@@ -78,11 +99,25 @@ aside{width:360px;max-width:42vw;display:flex;flex-direction:column;background:v
 .pop .links{display:flex;gap:8px;flex-wrap:wrap}
 .pop a{display:inline-block;padding:6px 12px;border-radius:8px;background:var(--accent);color:#fff !important;text-decoration:none;font-weight:700;font-size:.85rem}
 .pop a.alt{background:var(--bg);color:var(--ink) !important;border:1px solid var(--line)}
+.pop a.wa{background:var(--wa);display:block;width:100%;text-align:center;margin-top:2px;padding:9px 12px;font-size:.92rem}
+.pop .links.top{margin-bottom:8px}
+
+/* Bottom bar (phones only) */
+.tabbar{display:none;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabbar button{flex:1;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0 7px;color:var(--muted);font-weight:700;font-size:.78rem}
+.tabbar button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tabbar button[aria-pressed="true"]{color:var(--accent)}
 
 /* Admin mode (open the site with #admin). Admin screens stay in Hebrew. */
 .fab{position:fixed;inset-block-end:max(16px,env(safe-area-inset-bottom,0px));inset-inline-start:16px;z-index:1000;background:var(--sun);color:var(--ink);border:0;border-radius:999px;padding:12px 20px;font-weight:800;box-shadow:0 4px 12px rgba(0,0,0,.25);direction:rtl}
 .publishbar{position:fixed;inset-inline:0;inset-block-end:0;z-index:999;background:var(--ink);color:#fff;padding:10px 16px max(10px,env(safe-area-inset-bottom,0px));display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;font-size:.9rem;direction:rtl}
 .publishbar button{background:var(--sun);color:var(--ink);border:0;border-radius:8px;padding:8px 14px;font-weight:800}
+.publishbar button.sec{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.5);font-weight:600}
+.publishbar button:disabled{opacity:.6;cursor:default}
+.setbtn{position:fixed;inset-block-end:max(16px,env(safe-area-inset-bottom,0px));inset-inline-end:16px;z-index:1000;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:10px 16px;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.2);direction:rtl}
+.setbtn[hidden]{display:none}
+.steps{margin:0 0 12px;padding-inline-start:20px;font-size:.92rem;line-height:1.5}
+.steps li{margin-bottom:4px}
 .overlay{position:fixed;inset:0;z-index:2000;background:rgba(16,38,46,.55);display:flex;align-items:center;justify-content:center;padding:16px}
 .publishbar[hidden],.fab[hidden],.overlay[hidden]{display:none}
 .sheet{background:var(--card);border-radius:16px;width:100%;max-width:520px;max-height:100%;overflow-y:auto;padding:20px;direction:rtl;text-align:start}
@@ -91,11 +126,15 @@ aside{width:360px;max-width:42vw;display:flex;flex-direction:column;background:v
 .field label{font-weight:700;font-size:.9rem}
 .field input,.field select,.field textarea{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;width:100%}
 .field textarea{min-height:70px;resize:vertical}
+.field .hint{font-size:.8rem;color:var(--muted);font-weight:500}
 .ltr{direction:ltr;text-align:left}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .emojis{display:flex;flex-wrap:wrap;gap:6px}
 .emojis button{font-size:1.4rem;border:2px solid var(--line);background:#fff;border-radius:10px;padding:4px 8px}
 .emojis button[aria-pressed="true"]{border-color:var(--accent);background:#e4f3f2}
+.catbox{display:flex;flex-wrap:wrap;gap:8px}
+.catbox label{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-weight:600;font-size:.88rem;background:#fff}
+.catbox input{width:auto}
 .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 .btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 18px;font-weight:700}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
@@ -103,15 +142,22 @@ aside{width:360px;max-width:42vw;display:flex;flex-direction:column;background:v
 .msg.err{color:var(--danger)}
 
 @media (max-width:720px){
-  .main{flex-direction:column-reverse}
-  aside{width:100%;max-width:none;height:40%;border-inline-end:0;border-top:1px solid var(--line)}
-  .two{grid-template-columns:1fr}
+  .main{flex-direction:column}
+  aside{width:100%;max-width:none;flex:1;border-inline-end:0}
+  body[data-view="map"] aside{display:none}
+  body[data-view="list"] #map{display:none}
+  .tabbar{display:flex}
+  header{min-height:0;padding-top:10px;padding-bottom:10px}
+  .logo{width:42px;height:42px}
   .wordmark{font-size:1.1rem}
+  .two{grid-template-columns:1fr}
+  .fab,.setbtn{inset-block-end:calc(72px + env(safe-area-inset-bottom,0px))}
+  .publishbar{inset-block-end:calc(60px + env(safe-area-inset-bottom,0px));padding-bottom:10px}
 }
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto !important}}
 </style>
 </head>
-<body>
+<body data-view="map">
 <header>
   <a class="brand" href="./" aria-label="To Do Australia">
     <svg class="logo" viewBox="0 0 48 48" role="img" aria-hidden="true">
@@ -133,6 +179,11 @@ aside{width:360px;max-width:42vw;display:flex;flex-direction:column;background:v
   </div>
 </header>
 
+<div class="filters" id="filters">
+  <div class="chiprow" id="whenRow" role="group"></div>
+  <div class="chiprow" id="catRow" role="group"></div>
+</div>
+
 <div class="main">
   <aside>
     <div class="asidehead"><div id="cityname"></div><span id="count"></span><div class="clock" id="clock" aria-live="off"></div></div>
@@ -141,11 +192,43 @@ aside{width:360px;max-width:42vw;display:flex;flex-direction:column;background:v
   <div id="map" role="application"></div>
 </div>
 
+<nav class="tabbar" id="tabbar">
+  <button type="button" data-view="map" aria-pressed="true">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+    <span id="tabMap"></span>
+  </button>
+  <button type="button" data-view="list" aria-pressed="false">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>
+    <span id="tabList"></span>
+  </button>
+</nav>
+
 <!-- Admin: only visible when the address ends with #admin -->
 <button type="button" class="fab" id="addBtn" hidden>＋ אירוע חדש</button>
+<button type="button" class="setbtn" id="setBtn" hidden>⚙︎ הגדרות פרסום</button>
 <div class="publishbar" id="pubbar" hidden>
-  <span>יש שינויים שעוד לא פורסמו באתר.</span>
-  <button type="button" id="dlBtn">הורדת events.json</button>
+  <span id="pubmsg">יש שינויים שעוד לא פורסמו באתר.</span>
+  <button type="button" id="pubBtn">פרסום באתר</button>
+  <button type="button" class="sec" id="dlBtn">הורדת events.json</button>
+</div>
+<div class="overlay" id="setOverlay" hidden>
+  <form class="sheet" id="setForm" autocomplete="off">
+    <h2>הגדרות פרסום</h2>
+    <p style="margin:0 0 10px;font-size:.92rem">כדי שהכפתור "פרסום באתר" יעדכן את האתר ישירות, צריך מפתח גישה אישי מ-GitHub. עושים את זה פעם אחת:</p>
+    <ol class="steps">
+      <li>ב-GitHub: תמונת הפרופיל, Settings, Developer settings, Personal access tokens, Fine-grained tokens, Generate new token.</li>
+      <li>שם: to-do-australia. תחת Repository access בחרי Only select repositories ואז australia-map.</li>
+      <li>תחת Permissions, Repository permissions, בחרי Contents: Read and write.</li>
+      <li>לחצי Generate token, העתיקי את המפתח (מתחיל ב-github_pat_) והדביקי כאן.</li>
+    </ol>
+    <div class="field"><label for="f-token">מפתח GitHub</label><input class="ltr" id="f-token" type="password" autocomplete="off" placeholder="github_pat_..."><span class="hint">המפתח נשמר רק בדפדפן הזה, ואף אחד אחר לא רואה אותו. אל תשלחי אותו לאף אחד.</span></div>
+    <div class="msg" id="setMsg" role="status"></div>
+    <div class="actions">
+      <button type="button" class="btn" id="setCancel">סגירה</button>
+      <button type="button" class="btn" id="setRemove">הסרת המפתח</button>
+      <button type="submit" class="btn primary" id="setSave">שמירה ובדיקה</button>
+    </div>
+  </form>
 </div>
 <div class="overlay" id="overlay" hidden>
   <form class="sheet" id="form" autocomplete="off">
@@ -153,19 +236,22 @@ aside{width:360px;max-width:42vw;display:flex;flex-direction:column;background:v
     <div class="two">
       <div class="field"><label for="f-city">עיר</label>
         <select id="f-city"><option value="melbourne">מלבורן</option><option value="sydney">סידני</option></select></div>
-      <div class="field"><label for="f-date">תאריך</label><input id="f-date" type="date"></div>
+      <div class="field"><label for="f-date">תאריך (התחלה)</label><input id="f-date" type="date"></div>
+    </div>
+    <div class="two">
+      <div class="field"><label for="f-end">עד תאריך (לאירוע של כמה ימים)</label><input id="f-end" type="date"></div>
+      <div class="field"><label for="f-time">שעה (לא חובה)</label><input class="ltr" id="f-time" type="text" placeholder="19:30"></div>
     </div>
     <div class="field"><label for="f-title-en">שם האירוע באנגלית (מוצג בממשק האנגלי)</label><input class="ltr" id="f-title-en" type="text"></div>
     <div class="field"><label for="f-title">שם האירוע בעברית</label><input id="f-title" type="text"></div>
-    <div class="two">
-      <div class="field"><label for="f-time">שעה (לא חובה)</label><input class="ltr" id="f-time" type="text" placeholder="19:30"></div>
-      <div class="field"><label for="f-emoji">אימוג'י לסמן</label><input id="f-emoji" type="text" maxlength="12" value="🎭"></div>
-    </div>
+    <div class="field"><label>קטגוריות (אפשר כמה)</label><div class="catbox" id="f-cats"></div></div>
+    <div class="field"><label for="f-emoji">אימוג'י לסמן במפה</label><input id="f-emoji" type="text" maxlength="12" value="🎭"></div>
     <div class="field"><div class="emojis" id="emojis" role="group" aria-label="אימוג'י מוצעים"></div></div>
     <div class="field"><label for="f-address">כתובת (באנגלית)</label><input class="ltr" id="f-address" type="text" placeholder="Federation Square, Flinders St, Melbourne" required></div>
     <div class="field"><label for="f-desc-en">תיאור באנגלית</label><textarea class="ltr" id="f-desc-en"></textarea></div>
     <div class="field"><label for="f-desc">תיאור בעברית</label><textarea id="f-desc"></textarea></div>
-    <div class="field"><label for="f-url">קישור (לא חובה)</label><input class="ltr" id="f-url" type="url" placeholder="https://"></div>
+    <div class="field"><label for="f-wa">קישור לקבוצת WhatsApp של האירוע</label><input class="ltr" id="f-wa" type="url" placeholder="https://chat.whatsapp.com/..."><span class="hint">מדביקים את קישור ההזמנה של הקבוצה. אם אין קבוצה, משאירים ריק והכפתור לא יופיע.</span></div>
+    <div class="field"><label for="f-url">קישור לפרטים (לא חובה)</label><input class="ltr" id="f-url" type="url" placeholder="https://"></div>
     <div class="msg" id="formMsg" role="status"></div>
     <div class="actions">
       <button type="button" class="btn" id="cancelBtn">ביטול</button>
@@ -183,6 +269,11 @@ var CITIES = {
   melbourne: {center:[-37.8136,144.9631], zoom:12, q:'Melbourne, Victoria, Australia'},
   sydney:    {center:[-33.8688,151.2093], zoom:12, q:'Sydney, New South Wales, Australia'}
 };
+var TZ = {melbourne:'Australia/Melbourne', sydney:'Australia/Sydney'};
+
+/* Event categories: id and the emoji shown on its chip */
+var CATS = [['music','🎵'],['food','🍴'],['markets','🛍️'],['parties','🪩'],['culture','🎨'],['family','👨‍👩‍👧'],['outdoors','🌿']];
+var CAT_HE = {music:'מוזיקה',food:'אוכל ושתייה',markets:'שווקים',parties:'מסיבות',culture:'תרבות ואמנות',family:'משפחה',outdoors:'חוץ וטבע'};
 
 var I18N = {
   en: {dir:'ltr', locale:'en-AU',
@@ -192,7 +283,13 @@ var I18N = {
     localTime:function(c){ return 'Local time in '+c; },
     diff:function(h){ return h===0 ? 'same time as Israel' : Math.abs(h)+(Math.abs(h)===1?' hour ':' hours ')+(h>0?'ahead of Israel':'behind Israel'); },
     empty:'No events in this city yet.',
-    details:'Details', directions:'Directions',
+    noMatch:'No events match these filters.',
+    clear:'Clear filters',
+    when:{all:'Upcoming', today:'Today', tomorrow:'Tomorrow', weekend:'This weekend'},
+    cats:{music:'Music',food:'Food & drink',markets:'Markets',parties:'Parties',culture:'Arts & culture',family:'Family',outdoors:'Outdoors'},
+    details:'Details', directions:'Directions', wa:'Join the WhatsApp group',
+    tabMap:'Map', tabList:'List',
+    filterLabel:'Filter events', dateLabel:'Date', catLabel:'Event type',
     mapLabel:'Events map',
     noToken:'Mapbox token missing. Open index.html and paste your public token in place of PASTE_YOUR_PUBLIC_TOKEN_HERE.'},
   he: {dir:'rtl', locale:'he-IL',
@@ -202,7 +299,13 @@ var I18N = {
     localTime:function(c){ return 'שעה ב'+c; },
     diff:function(h){ return h===0 ? 'אותה שעה כמו בישראל' : (Math.abs(h)===1?'שעה ':Math.abs(h)+' שעות ')+(h>0?'לפני ישראל':'אחרי ישראל'); },
     empty:'עדיין אין אירועים בעיר הזו.',
-    details:'לפרטים', directions:'ניווט',
+    noMatch:'אין אירועים שמתאימים לסינון.',
+    clear:'נקה סינון',
+    when:{all:'הכל', today:'היום', tomorrow:'מחר', weekend:'סוף השבוע'},
+    cats:CAT_HE,
+    details:'לפרטים', directions:'ניווט', wa:'הצטרפות לקבוצה',
+    tabMap:'מפה', tabList:'רשימה',
+    filterLabel:'סינון אירועים', dateLabel:'תאריך', catLabel:'סוג אירוע',
     mapLabel:'מפת אירועים',
     noToken:'חסר מפתח Mapbox. פתחי את index.html והדביקי את המפתח במקום PASTE_YOUR_PUBLIC_TOKEN_HERE.'}
 };
@@ -212,10 +315,12 @@ var admin = location.hash === '#admin';
 var events = [], city = 'melbourne', dirty = false, editingId = null;
 var markers = {};
 var lang = 'en';
+var filters = {when:'all', cats:{}};
 
 function $(s){return document.querySelector(s);}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
 function safeUrl(u){return /^https?:\/\//i.test(u||'') ? u : '';}
+function safeWa(u){return /^https:\/\/(chat\.whatsapp\.com\/|wa\.me\/|wa\.link\/|whatsapp\.com\/channel\/)/i.test(u||'') ? u : '';}
 function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
 function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
 function lsDel(k){try{localStorage.removeItem(k);}catch(e){}}
@@ -225,16 +330,45 @@ function tx(e,f){
   var en = e[f+'_en'], he = e[f];
   return lang==='en' ? (en||he||'') : (he||en||'');
 }
-function fmtDate(d){
+function fmtDate(d,short){
   if(!d) return '';
   var dt = new Date(d+'T12:00:00');
   if(isNaN(dt)) return d;
-  return dt.toLocaleDateString(t().locale,{weekday:'long',day:'numeric',month:'long'});
+  return dt.toLocaleDateString(t().locale, short ? {day:'numeric',month:'short'} : {weekday:'long',day:'numeric',month:'long'});
 }
 
-/* Live clock for the selected city. Melbourne and Sydney share the same time zone rules, but each city
-   uses its own IANA zone so this stays correct if that ever changes. */
-var TZ = {melbourne:'Australia/Melbourne', sydney:'Australia/Sydney'};
+/* Dates are plain YYYY-MM-DD strings. "Today" is always today in the selected city. */
+function todayIso(tz){ return new Intl.DateTimeFormat('en-CA',{timeZone:tz,year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date()); }
+function addDays(iso,n){ var d = new Date(iso+'T12:00:00Z'); d.setUTCDate(d.getUTCDate()+n); return d.toISOString().slice(0,10); }
+function dow(iso){ return new Date(iso+'T12:00:00Z').getUTCDay(); }
+/* "dates" lists exact days for events that skip days; otherwise date..endDate */
+function endOf(e){ if(e.dates && e.dates.length) return e.dates.slice().sort().pop(); return e.endDate || e.date || ''; }
+function occursOn(e,iso){
+  if(e.dates && e.dates.length) return e.dates.indexOf(iso) >= 0;
+  if(!e.date) return false;
+  return e.date <= iso && iso <= (e.endDate || e.date);
+}
+function occursBetween(e,a,b){ for(var d=a; d<=b; d=addDays(d,1)){ if(occursOn(e,d)) return true; } return false; }
+function dateMatches(e){
+  var today = todayIso(TZ[city]), w = filters.when, a, b;
+  if(w==='all') return admin || !e.date || endOf(e) >= today;
+  if(w==='today'){ a = b = today; }
+  else if(w==='tomorrow'){ a = b = addDays(today,1); }
+  else {
+    var wd = dow(today);
+    if(wd===6){ a = today; b = addDays(today,1); }
+    else if(wd===0){ a = b = today; }
+    else { a = addDays(today,6-wd); b = addDays(a,1); }
+  }
+  return occursBetween(e,a,b);
+}
+function catMatches(e){
+  var sel = Object.keys(filters.cats).filter(function(k){return filters.cats[k];});
+  if(!sel.length) return true;
+  return (e.cats||[]).some(function(c){ return sel.indexOf(c) >= 0; });
+}
+
+/* Live clock for the selected city, with the hour difference from Israel. */
 function tzOffsetMin(tz, now){
   var p = new Intl.DateTimeFormat('en-US',{timeZone:tz,hourCycle:'h23',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric',second:'numeric'}).formatToParts(now);
   var o = {}; p.forEach(function(x){ o[x.type]=parseInt(x.value,10); });
@@ -255,13 +389,22 @@ setInterval(tickClock, 15000);
 /* Date and time line. The time stays left-to-right so ranges like 22:00–05:00 read correctly in Hebrew. */
 function whenHtml(e){
   var parts = [];
-  if(e.date) parts.push(esc(fmtDate(e.date)));
+  if(e.date){
+    if(e.endDate && e.endDate !== e.date) parts.push(esc(fmtDate(e.date,true)+' – '+fmtDate(e.endDate,true)));
+    else parts.push(esc(fmtDate(e.date)));
+  }
   if(e.time) parts.push('<bdi dir="ltr">'+esc(e.time)+'</bdi>');
   return parts.join(' · ');
 }
+function catsText(e){
+  return (e.cats||[]).map(function(id){
+    var c = CATS.filter(function(x){return x[0]===id;})[0];
+    return c ? c[1]+' '+t().cats[id] : '';
+  }).filter(Boolean).join(' · ');
+}
 
 /* Map */
-/* Your public Mapbox token (starts with pk.). Paste it here in place of the placeholder text. */
+/* Your public Mapbox token (starts with pk.). */
 var MAPBOX_TOKEN = 'pk.eyJ1IjoidGVzaHV2YWp1bGlhIiwiYSI6ImNtd2Ntb2V5YjA0ZDgyenNnbXJudHdsN2UifQ.EPYOr81h_0B7iS9rr_McgQ';
 mapboxgl.accessToken = MAPBOX_TOKEN;
 var map = new mapboxgl.Map({
@@ -285,16 +428,23 @@ function popupHtml(e){
   h += '<p class="meta" dir="ltr" style="text-align:start">'+esc(e.address)+'</p>';
   var d = tx(e,'desc');
   if(d) h += '<p>'+esc(d)+'</p>';
-  h += '<div class="links">';
+  h += '<div class="links top">';
   var u = safeUrl(e.url);
   if(u) h += '<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">'+t().details+'</a>';
-  h += '<a class="alt" href="https://www.google.com/maps/search/?api=1&query='+e.lat+','+e.lng+'" target="_blank" rel="noopener noreferrer">'+t().directions+'</a>';
-  return h + '</div></div>';
+  h += '<a class="alt" href="https://www.google.com/maps/search/?api=1&query='+e.lat+','+e.lng+'" target="_blank" rel="noopener noreferrer">'+t().directions+'</a></div>';
+  var w = safeWa(e.whatsapp);
+  if(w) h += '<a class="wa" href="'+esc(w)+'" target="_blank" rel="noopener noreferrer">'+t().wa+'</a>';
+  return h + '</div>';
 }
 
 function cityEvents(){
-  return events.filter(function(e){return e.city===city;}).sort(function(a,b){return (a.date||'').localeCompare(b.date||'');});
+  return events.filter(function(e){ return e.city===city && dateMatches(e) && catMatches(e); })
+    .sort(function(a,b){ return ((a.date||'')+(a.time||'')).localeCompare((b.date||'')+(b.time||'')); });
 }
+function filtersActive(){
+  return filters.when!=='all' || Object.keys(filters.cats).some(function(k){return filters.cats[k];});
+}
+function clearFilters(){ filters = {when:'all', cats:{}}; syncChips(); render(); fitCity(); }
 
 function render(){
   Object.keys(markers).forEach(function(k){ markers[k].remove(); });
@@ -305,7 +455,13 @@ function render(){
   $('#count').textContent = t().count(list.length);
   tickClock();
   if(!list.length){
-    var li0 = document.createElement('li'); li0.className='empty'; li0.textContent=t().empty;
+    var li0 = document.createElement('li'); li0.className='empty';
+    var p = document.createElement('div'); p.textContent = filtersActive() ? t().noMatch : t().empty;
+    li0.appendChild(p);
+    if(filtersActive()){
+      var cb = document.createElement('button'); cb.type='button'; cb.textContent = t().clear;
+      cb.addEventListener('click',clearFilters); li0.appendChild(cb);
+    }
     ul.appendChild(li0);
   }
   list.forEach(function(e){
@@ -317,10 +473,16 @@ function render(){
     markers[e.id] = m;
     var li = document.createElement('li');
     var b = document.createElement('button'); b.type='button'; b.className='item';
-    b.innerHTML = '<span class="em">'+esc(e.emoji||'📍')+'</span><span class="tx"><b>'+esc(tx(e,'title'))+'</b><small>'+whenHtml(e)+'</small><small dir="ltr" style="text-align:start">'+esc(e.address)+'</small></span>';
+    var ct = catsText(e);
+    b.innerHTML = '<span class="em">'+esc(e.emoji||'📍')+'</span><span class="tx"><b>'+esc(tx(e,'title'))+'</b><small>'+whenHtml(e)+'</small><small dir="ltr" style="text-align:start">'+esc(e.address)+'</small>'+
+      (ct ? '<small class="cats">'+esc(ct)+'</small>' : '')+
+      (safeWa(e.whatsapp) ? '<small class="wab">WhatsApp</small>' : '')+'</span>';
     b.addEventListener('click',function(){
-      map.flyTo({center:[e.lng,e.lat],zoom:Math.max(map.getZoom(),14),duration:700});
-      if(!m.getPopup().isOpen()) m.togglePopup();
+      if(window.matchMedia('(max-width:720px)').matches) setView('map');
+      setTimeout(function(){
+        map.flyTo({center:[e.lng,e.lat],zoom:Math.max(map.getZoom(),14),duration:700});
+        if(!m.getPopup().isOpen()) m.togglePopup();
+      }, 60);
     });
     li.appendChild(b);
     if(admin){
@@ -350,12 +512,49 @@ function fitCity(){
   }
 }
 
+/* Filter chips */
+function buildChips(){
+  var wr = $('#whenRow'), cr = $('#catRow');
+  wr.setAttribute('aria-label', t().dateLabel); cr.setAttribute('aria-label', t().catLabel);
+  wr.innerHTML = ''; cr.innerHTML = '';
+  ['all','today','tomorrow','weekend'].forEach(function(k){
+    var b = document.createElement('button'); b.type='button'; b.className='chip'; b.dataset.when=k; b.textContent=t().when[k];
+    b.addEventListener('click',function(){ filters.when = k; syncChips(); render(); fitCity(); });
+    wr.appendChild(b);
+  });
+  CATS.forEach(function(c){
+    var b = document.createElement('button'); b.type='button'; b.className='chip'; b.dataset.cat=c[0]; b.textContent=c[1]+' '+t().cats[c[0]];
+    b.addEventListener('click',function(){ filters.cats[c[0]] = !filters.cats[c[0]]; syncChips(); render(); fitCity(); });
+    cr.appendChild(b);
+  });
+  var x = document.createElement('button'); x.type='button'; x.className='chip clear'; x.id='clearBtn'; x.textContent=t().clear;
+  x.addEventListener('click',clearFilters); cr.appendChild(x);
+  syncChips();
+}
+function syncChips(){
+  document.querySelectorAll('#whenRow .chip').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.when===filters.when ? 'true':'false'); });
+  document.querySelectorAll('#catRow .chip[data-cat]').forEach(function(b){ b.setAttribute('aria-pressed', filters.cats[b.dataset.cat] ? 'true':'false'); });
+  var c = $('#clearBtn'); if(c) c.hidden = !filtersActive();
+}
+
+/* Phone views: map or list */
+function setView(v){
+  document.body.setAttribute('data-view',v);
+  document.querySelectorAll('.tabbar button').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.view===v ? 'true':'false'); });
+  if(v==='map') setTimeout(function(){ map.resize(); }, 30);
+}
+document.querySelectorAll('.tabbar button').forEach(function(b){
+  b.addEventListener('click',function(){ setView(b.dataset.view); });
+});
+
 /* Language and city switches */
 function applyLang(){
   var d = document.documentElement;
   d.lang = lang; d.dir = t().dir;
   $('#sub').textContent = t().sub;
   $('#map').setAttribute('aria-label', t().mapLabel);
+  $('#filters').setAttribute('aria-label', t().filterLabel);
+  $('#tabMap').textContent = t().tabMap; $('#tabList').textContent = t().tabList;
   document.querySelectorAll('#cityToggle button').forEach(function(b){
     b.textContent = t()[b.dataset.city];
     b.setAttribute('aria-pressed', b.dataset.city===city ? 'true':'false');
@@ -364,6 +563,7 @@ function applyLang(){
     b.setAttribute('aria-pressed', b.dataset.lang===lang ? 'true':'false');
   });
   if(tokenNote) tokenNote.textContent = t().noToken;
+  buildChips();
   render();
 }
 function setLang(l){
@@ -386,8 +586,12 @@ window.addEventListener('resize',function(){ map.resize(); });
 
 /* Loading events */
 function load(){
-  return fetch('events.json',{cache:'no-store'})
-    .then(function(r){ if(!r.ok) throw new Error('no file'); return r.json(); })
+  /* In admin mode with a GitHub key, read the file straight from GitHub so the list is never stale. */
+  var first = (admin && ghToken())
+    ? ghApi('GET').then(function(cur){ return JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\s/g,''))))); })
+    : Promise.reject(new Error('skip'));
+  return first
+    .catch(function(){ return fetch('events.json',{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('no file'); return r.json(); }); })
     .catch(function(){ return []; })
     .then(function(data){
       events = Array.isArray(data) ? data : [];
@@ -399,7 +603,48 @@ function load(){
 }
 
 /* Admin */
-function markDirty(){ dirty = true; lsSet('draft-events', JSON.stringify(events)); $('#pubbar').hidden = false; }
+var GH = {repo:'teshuvajulia-ops/australia-map', branch:'main', path:'events.json'};
+var PUB_DEFAULT = 'יש שינויים שעוד לא פורסמו באתר.';
+function ghToken(){ return lsGet('gh-token') || ''; }
+function b64(str){ return btoa(unescape(encodeURIComponent(str))); }
+function ghApi(method, body){
+  var url = 'https://api.github.com/repos/'+GH.repo+'/contents/'+GH.path;
+  var opt = {method:method, headers:{'Authorization':'Bearer '+ghToken(),'Accept':'application/vnd.github+json'}};
+  if(body){ opt.body = JSON.stringify(body); opt.headers['Content-Type'] = 'application/json'; }
+  return fetch(method==='GET' ? url+'?ref='+GH.branch+'&t='+Date.now() : url, opt).then(function(r){
+    return r.json().catch(function(){ return {}; }).then(function(j){
+      if(!r.ok){ var err = new Error(j.message || ('HTTP '+r.status)); err.status = r.status; throw err; }
+      return j;
+    });
+  });
+}
+function markDirty(){ dirty = true; lsSet('draft-events', JSON.stringify(events)); $('#pubmsg').textContent = PUB_DEFAULT; $('#pubbar').hidden = false; }
+function openSettings(){ $('#setMsg').textContent=''; $('#setMsg').className='msg'; $('#f-token').value=''; $('#setOverlay').hidden=false; $('#f-token').focus(); }
+function publish(){
+  var span = $('#pubmsg'), btn = $('#pubBtn');
+  if(!ghToken()){ openSettings(); return; }
+  btn.disabled = true; span.textContent = 'מפרסמת…';
+  var content = b64(JSON.stringify(events,null,2)+'\n');
+  function put(sha){ return ghApi('PUT',{message:'Update events from admin page',content:content,sha:sha,branch:GH.branch}); }
+  ghApi('GET')
+    .then(function(cur){
+      return put(cur.sha).catch(function(e){
+        if(e.status===409 || e.status===422) return ghApi('GET').then(function(c2){ return put(c2.sha); });
+        throw e;
+      });
+    })
+    .then(function(){
+      dirty = false; lsDel('draft-events');
+      span.textContent = 'פורסם! האתר מתעדכן תוך כדקה-שתיים.';
+      setTimeout(function(){ if(!dirty){ $('#pubbar').hidden = true; } span.textContent = PUB_DEFAULT; }, 7000);
+    })
+    .catch(function(e){
+      span.textContent = e.status===401 ? 'המפתח של GitHub לא תקין או שפג תוקפו. פתחי הגדרות פרסום ועדכני אותו.'
+        : (e.status===403 || e.status===404) ? 'למפתח אין הרשאה לעדכן את הקובץ. בדקי שהוא מוגדר ל-Contents: Read and write עבור australia-map.'
+        : 'הפרסום נכשל: '+e.message;
+    })
+    .then(function(){ btn.disabled = false; });
+}
 
 function geocode(address, c){
   var cc = CITIES[c];
@@ -427,13 +672,17 @@ function openForm(e){
   $('#formTitle').textContent = e ? 'עריכת אירוע' : 'אירוע חדש';
   $('#f-city').value = e ? e.city : city;
   $('#f-date').value = e ? (e.date||'') : '';
+  $('#f-end').value = e ? (e.endDate||'') : '';
   $('#f-time').value = e ? (e.time||'') : '';
   $('#f-title').value = e ? (e.title||'') : '';
   $('#f-title-en').value = e ? (e.title_en||'') : '';
   $('#f-address').value = e ? e.address : '';
   $('#f-desc').value = e ? (e.desc||'') : '';
   $('#f-desc-en').value = e ? (e.desc_en||'') : '';
+  $('#f-wa').value = e ? (e.whatsapp||'') : '';
   $('#f-url').value = e ? (e.url||'') : '';
+  var have = e ? (e.cats||[]) : [];
+  document.querySelectorAll('#f-cats input').forEach(function(i){ i.checked = have.indexOf(i.value) >= 0; });
   setEmoji(e ? e.emoji : '🎭');
   $('#formMsg').textContent=''; $('#formMsg').className='msg';
   $('#overlay').hidden = false;
@@ -443,12 +692,39 @@ function closeForm(){ $('#overlay').hidden = true; editingId = null; }
 
 function initAdmin(){
   $('#addBtn').hidden = false;
+  $('#setBtn').hidden = false;
   if(dirty) $('#pubbar').hidden = false;
+  $('#setBtn').addEventListener('click',openSettings);
+  $('#pubBtn').addEventListener('click',publish);
+  $('#setCancel').addEventListener('click',function(){ $('#setOverlay').hidden = true; });
+  $('#setOverlay').addEventListener('click',function(ev){ if(ev.target===$('#setOverlay')) $('#setOverlay').hidden = true; });
+  $('#setRemove').addEventListener('click',function(){ lsDel('gh-token'); $('#setMsg').className='msg'; $('#setMsg').textContent='המפתח הוסר מהדפדפן הזה.'; });
+  $('#setForm').addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var v = $('#f-token').value.trim(), msg = $('#setMsg');
+    if(v.length < 20){ msg.className='msg err'; msg.textContent='המפתח נראה קצר מדי. העתיקי אותו שוב מ-GitHub.'; return; }
+    lsSet('gh-token', v); msg.className='msg'; msg.textContent='בודקת את המפתח…';
+    ghApi('GET').then(function(){
+      msg.textContent = 'המפתח תקין ומחובר. אפשר לסגור ולפרסם.';
+    }).catch(function(e){
+      lsDel('gh-token'); msg.className='msg err';
+      msg.textContent = e.status===401 ? 'GitHub לא מזהה את המפתח. ודאי שהעתקת אותו במלואו.'
+        : (e.status===403 || e.status===404) ? 'המפתח תקין אבל אין לו גישה ל-australia-map. ודאי שבחרת את המאגר ואת ההרשאה Contents: Read and write.'
+        : 'הבדיקה נכשלה: '+e.message;
+    });
+  });
   var box = $('#emojis');
   QUICK.forEach(function(em){
     var b = document.createElement('button'); b.type='button'; b.textContent=em; b.setAttribute('aria-pressed','false');
     b.addEventListener('click',function(){ setEmoji(em); });
     box.appendChild(b);
+  });
+  var cb = $('#f-cats');
+  CATS.forEach(function(c){
+    var l = document.createElement('label');
+    var i = document.createElement('input'); i.type='checkbox'; i.value=c[0];
+    l.appendChild(i); l.appendChild(document.createTextNode(c[1]+' '+CAT_HE[c[0]]));
+    cb.appendChild(l);
   });
   $('#f-emoji').addEventListener('input',function(){
     var v = $('#f-emoji').value;
@@ -472,22 +748,29 @@ function initAdmin(){
     var msg = $('#formMsg'), btn = $('#saveBtn');
     var c = $('#f-city').value, address = $('#f-address').value.trim();
     var titleHe = $('#f-title').value.trim(), titleEn = $('#f-title-en').value.trim();
+    var wa = $('#f-wa').value.trim();
     if((!titleHe && !titleEn) || !address){ msg.className='msg err'; msg.textContent='חסרים שם אירוע (באנגלית או בעברית) וכתובת.'; return; }
+    if(wa && !safeWa(wa)){ msg.className='msg err'; msg.textContent='קישור ה-WhatsApp צריך להתחיל ב-https://chat.whatsapp.com/ (או wa.me).'; return; }
     var ex = editingId ? events.filter(function(x){return x.id===editingId;})[0] : null;
     btn.disabled = true; msg.className='msg'; msg.textContent='מחפשת את הכתובת על המפה…';
     var coordsP = (ex && ex.address===address && ex.city===c) ? Promise.resolve({lat:ex.lat,lng:ex.lng}) : geocode(address,c);
     coordsP.then(function(g){
       if(!g){ msg.className='msg err'; msg.textContent='לא מצאתי את הכתובת. נסי להוסיף מספר בית ושם פרבר, באנגלית.'; return; }
+      var date = $('#f-date').value, end = $('#f-end').value;
+      var cats = []; document.querySelectorAll('#f-cats input:checked').forEach(function(i){ cats.push(i.value); });
       var obj = {
         id: ex ? ex.id : 'e'+Date.now(), city:c,
         title:titleHe, title_en:titleEn,
-        date:$('#f-date').value, time:$('#f-time').value.trim(), address:address,
+        date:date, endDate:(end && end>date) ? end : '', time:$('#f-time').value.trim(), address:address,
         desc:$('#f-desc').value.trim(), desc_en:$('#f-desc-en').value.trim(),
+        cats:cats, whatsapp:wa,
         url:safeUrl($('#f-url').value.trim()),
         emoji:firstGrapheme($('#f-emoji').value), lat:g.lat, lng:g.lng
       };
-      if(ex) Object.assign(ex,obj); else events.push(obj);
-      markDirty(); closeForm(); setCity(c);
+      /* keep an explicit day list only if the dates were not changed */
+      if(ex && ex.dates && ex.date===date && (ex.endDate||'')===obj.endDate) obj.dates = ex.dates;
+      if(ex){ delete ex.dates; Object.assign(ex,obj); } else events.push(obj);
+      markDirty(); closeForm(); filters = {when:'all', cats:{}}; syncChips(); setCity(c);
       if(markers[obj.id]){ map.flyTo({center:[obj.lng,obj.lat],zoom:15,duration:700}); markers[obj.id].togglePopup(); }
     }).catch(function(){
       msg.className='msg err'; msg.textContent='החיפוש נכשל. בדקי חיבור לאינטרנט ונסי שוב.';
