@@ -191,7 +191,7 @@ header[data-city="melbourne"] .hero-layers::after{background:linear-gradient(180
 @keyframes cdrift{to{background-position-x:1200px}}
 @keyframes roocross{from{transform:translateX(-72vw)}to{transform:none}}
 @keyframes roohop{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-22px) rotate(-8deg)}}
-.pin-wrap{position:relative}
+.mapboxgl-marker.pin-wrap{position:absolute}
 .pinbounce{width:40px;height:48px;transform-origin:50% 100%;transition:transform .18s ease;animation:pindrop .65s cubic-bezier(.3,1.4,.5,1) backwards;animation-delay:var(--d,0ms)}
 .pin-wrap:hover .pinbounce{transform:translateY(-5px) scale(1.1)}
 .pin-wrap::after{content:"";position:absolute;left:50%;bottom:-2px;width:16px;height:6px;margin-left:-8px;border-radius:50%;background:rgba(16,38,46,.35);animation:pinshadow .65s ease-out backwards;animation-delay:var(--d,0ms);pointer-events:none}
@@ -1128,7 +1128,7 @@ function renderPanel(){
     });
     if(!seen) h += '<p class="pempty">'+esc(t().noTips)+'</p>';
   }
-  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 24</p></div>';
+  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 25</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
