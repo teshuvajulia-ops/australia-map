@@ -420,18 +420,19 @@ html[dir="rtl"] .pinner h2,html[dir="rtl"] .wcard h2,html[dir="rtl"] .calhead b,
 .wgo .ripple,.deskcta .ripple,.chip[aria-pressed="true"] .ripple,.calday.is-sel .ripple{background:rgba(255,255,255,.45)}
 @keyframes rip{to{transform:scale(1);opacity:0}}
 @media (prefers-reduced-motion:reduce){.chip,.wgo,.deskcta,.calday,.calev,.calnav,.installbtn,.todaybar,.tabbar button,.item,.gcard{transition:none !important;animation:none !important;transform:none !important}.wgo::after,.deskcta::after,.ripple{display:none}}
+
+/* Wordmark logo */
+.wordimg{display:block;height:34px;width:auto;max-width:62vw}
+.wlogoimg{display:block;height:auto;width:min(240px,70%);margin:4px auto 14px}
+@media (min-width:721px){.wordimg{height:44px}}
+.brand{gap:0}
 </style>
 </head>
 <body data-view="map">
 <header data-city="melbourne">
   <div class="hero-layers" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="tint syd"></div><div class="glow"></div><div class="hl clouds"><i></i></div><div class="hl hills"><i></i></div><div class="hl roo" id="roo"><i></i></div><div class="hl grass"><i></i></div></div>
   <a class="brand" href="./" aria-label="CITYSIDE">
-    <svg class="logo" viewBox="0 0 48 48" role="img" aria-hidden="true">
-      <circle class="sun" cx="38" cy="10" r="6"/>
-      <path class="pin" d="M24 4C15.2 4 8 11 8 19.6c0 11.2 13.2 22.6 15.1 24.2a1.4 1.4 0 0 0 1.8 0C26.8 42.2 40 30.8 40 19.6 40 11 32.8 4 24 4z"/>
-      <path class="tick" d="M16 20l6 6 10-11"/>
-    </svg>
-    <span class="brandtext"><span class="wordmark">CITY<b>SIDE</b></span><small id="sub"></small></span>
+    <span class="brandtext"><img class="wordimg" src="logo-cityside.png" alt="CITYSIDE" width="900" height="171"><small id="sub"></small></span>
   </a>
   <button type="button" class="installbtn" id="installBtn" hidden></button>
   <nav class="desknav" id="deskNav" aria-label="Sections"><button type="button" data-view="map" aria-pressed="true"></button><button type="button" data-view="calendar" aria-pressed="false"></button><button type="button" data-view="groups" aria-pressed="false"></button><button type="button" data-view="tips" aria-pressed="false"></button><a class="deskcta" id="deskCta" href="#" target="_blank" rel="noopener noreferrer" data-t="submit" data-e="site" hidden></a></nav>
@@ -911,7 +912,7 @@ function showWelcome(){
   var u = safeUrl(config.submitUrl);
   var w = document.createElement('div'); w.id='welcome'; w.className='welcome'; w.setAttribute('role','dialog'); w.setAttribute('aria-modal','true'); w.setAttribute('aria-labelledby','welcomeH');
   w.dir = t().dir;
-  w.innerHTML = '<div class="wcard"><div class="wlogo">\uD83D\uDCCD</div><h2 id="welcomeH">'+esc(t().welcomeTitle)+'</h2><p>'+esc(t().welcomeText)+'</p>'+
+  w.innerHTML = '<div class="wcard"><img class="wlogoimg" src="logo-cityside.png" alt="CITYSIDE" width="900" height="171"><h2 id="welcomeH">'+esc(t().welcomeTitle)+'</h2><p>'+esc(t().welcomeText)+'</p>'+
     '<button type="button" class="wgo">'+esc(t().explore)+'</button>'+
     (u ? '<a class="wlist" href="'+esc(u)+'" target="_blank" rel="noopener noreferrer" data-t="submit" data-e="welcome">'+esc(t().submit)+' \u2197</a>' : '')+'</div>';
   function close(){ lsSet('cs-welcome','1'); w.classList.add('out'); setTimeout(function(){ w.remove(); }, 350); document.removeEventListener('keydown',onKey); }
