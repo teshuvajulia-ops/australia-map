@@ -733,7 +733,8 @@ document.addEventListener('click',function(ev){
 });
 /* Welcome screen: shown once per browser, easy to close. */
 function showWelcome(){
-  if(admin || lsGet('cs-welcome')==='1' || document.getElementById('welcome')) return;
+  var force = /[?&]welcome\b/.test(location.search);
+  if(admin || (!force && lsGet('cs-welcome')==='1') || document.getElementById('welcome')) return;
   var u = safeUrl(config.submitUrl);
   var w = document.createElement('div'); w.id='welcome'; w.className='welcome'; w.setAttribute('role','dialog'); w.setAttribute('aria-modal','true'); w.setAttribute('aria-labelledby','welcomeH');
   w.dir = t().dir;
