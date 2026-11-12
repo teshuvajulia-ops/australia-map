@@ -1128,7 +1128,7 @@ function renderPanel(){
     });
     if(!seen) h += '<p class="pempty">'+esc(t().noTips)+'</p>';
   }
-  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 23</p></div>';
+  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 24</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
@@ -1193,15 +1193,25 @@ function render(){
 }
 
 function fitCity(){
-  var list = cityEvents();
+  var list = cityEvents(), c = CITIES[city].center;
+  var near = list.filter(function(e){
+    var dx=(e.lng-c[1])*Math.cos(c[0]*Math.PI/180)*111, dy=(e.lat-c[0])*111;
+    return Math.sqrt(dx*dx+dy*dy) < 30;
+  });
+  if(near.length >= 2) list = near;
   if(list.length){
     var b = new mapboxgl.LngLatBounds();
     list.forEach(function(e){ b.extend([e.lng,e.lat]); });
     map.fitBounds(b,{padding:60,maxZoom:14.5,duration:0});
   } else {
-    map.jumpTo({center:[CITIES[city].center[1],CITIES[city].center[0]], zoom:CITIES[city].zoom});
+    map.jumpTo({center:[c[1],c[0]], zoom:CITIES[city].zoom});
   }
+  repaintMap();
 }
+function repaintMap(){
+  [0,150,600,1800].forEach(function(ms){ setTimeout(function(){ try{ map.resize(); map.triggerRepaint(); }catch(e){} }, ms); });
+}
+map.once('idle', function(){ try{ fitCity(); }catch(e){} });
 
 /* Filter chips */
 function buildChips(){
