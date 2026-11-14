@@ -368,8 +368,30 @@ details.tip p{margin:0;padding:0 16px 14px;line-height:1.6}
   body[data-view="map"] #fPanel{pointer-events:auto}
   body[data-view="map"] .filters .todaybar{box-shadow:0 6px 18px rgba(60,30,30,.18)}
   body[data-view="map"] .fbtn{box-shadow:0 6px 18px rgba(60,30,30,.18)}
-  body[data-view="map"] .heatbtn{top:112px}
-  body[data-view="map"] .mapboxgl-ctrl-top-right{top:102px}
+}
+
+/* UX pass: one filter row, no zoom buttons on phones, smaller header, next-up pill, smaller pins */
+.frow{display:contents}
+.nextup{display:none}
+@media (max-width:720px){
+  .frow{display:flex;align-items:center;gap:8px}
+  .frow .heatbtn{position:static;inset:auto;height:auto;box-shadow:0 6px 18px rgba(60,30,30,.18)}
+  .mapboxgl-ctrl-top-right{display:none}
+  header{min-height:0 !important;padding-top:6px;padding-bottom:6px}
+  .wordimg{height:30px;filter:drop-shadow(0 0 6px rgba(255,255,255,.85)) drop-shadow(0 0 2px rgba(255,255,255,.9))}
+  .todaybar small::after{content:" \203A";font-weight:800;color:#c03018}
+  .pinshape{width:33px;height:33px;border-width:2.5px}
+  .pin-wrap{width:33px;height:40px}
+  .pinbounce{width:33px;height:40px}
+  .pinshape span{font-size:.92rem}
+  body[data-view="map"] .nextup{display:flex;align-items:center;gap:10px;position:absolute;left:12px;right:12px;bottom:46px;z-index:5;border:0;border-radius:16px;background:rgba(255,255,255,.96);color:var(--ink);box-shadow:0 8px 24px rgba(60,30,30,.25);padding:10px 14px;font:inherit;text-align:start;cursor:pointer}
+  .nextup[hidden]{display:none !important}
+  .nextup .nuem{font-size:1.5rem;flex:none}
+  .nextup .nut{flex:1;min-width:0;display:flex;flex-direction:column}
+  .nextup .nut small{font-size:.7rem;font-weight:800;letter-spacing:.08em;color:#c03018;text-transform:uppercase}
+  .nextup .nut b{font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .nextup .nut span{font-size:.8rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .nextup .nua{color:#c03018;font-weight:800;font-size:1.2rem}
 }
 .pinner .submitcta{margin:22px 0 0}
 
@@ -670,7 +692,7 @@ header[data-city="sydney"] .seabg b{background:linear-gradient(100deg,rgba(255,2
 
 <div class="filters" id="filters">
   <button type="button" class="todaybar" id="todaybar"></button>
-  <button type="button" class="fbtn" id="fBtn"></button>
+  <div class="frow" id="fRow"><button type="button" class="fbtn" id="fBtn"></button></div>
   <div id="fPanel">
     <div class="fhead"><b id="fTitle"></b><button type="button" id="fClose" aria-label="Close">✕</button></div>
     <div class="chiprow" id="whenRow" role="group"></div>
@@ -1679,7 +1701,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 51</p></div>';
+  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 52</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
@@ -1690,7 +1712,7 @@ function render(){
   Object.keys(markers).forEach(function(k){ markers[k].remove(); });
   markers = {};
   var list = cityEvents();
-  updateHeat(list);
+  updateHeat(list); updateNextUp(list);
   var ul = $('#list'); ul.innerHTML = '';
   $('#cityname').textContent = t()[city];
   $('#count').textContent = t().count(list.length);
@@ -1795,10 +1817,34 @@ function updateHeat(list){
   var mp = document.getElementById('map'); if(!mp) return;
   var hb = document.createElement('button'); hb.type='button'; hb.id='heatBtn'; hb.className='heatbtn';
   hb.addEventListener('click',function(){ heatOn = !heatOn; heatBtnSync(); heatApply(); });
-  mp.appendChild(hb);
+  mp.appendChild(hb); placeHeat();
   if(map.on) map.on('load',function(){ heatApply(); });
   if(map.on) map.on('styledata',function(){ if(map.isStyleLoaded && map.isStyleLoaded() && !map.getSource('heat')) heatApply(); });
 })();
+
+
+var NU = {en:['Next up','Tap a pin for details'],he:['הבא','לחצו על סמן לפרטים'],zh:['接下来','点击图钉查看详情'],es:['Siguiente','Toca un pin para ver detalles'],de:['Als Nächstes','Pin antippen für Details'],vi:['Sắp tới','Chạm vào ghim để xem'],ar:['التالي','اضغط على دبوس للتفاصيل'],hi:['अगला','विवरण के लिए पिन टैप करें']};
+var nextUpEv = null;
+function updateNextUp(list){
+  var b = document.getElementById('nextUp'); if(!b) return;
+  var e = list && list[0]; nextUpEv = e || null;
+  if(!e){ b.hidden = true; return; }
+  var n = NU[lang] || NU.en;
+  b.hidden = false;
+  b.innerHTML = '<span class="nuem" aria-hidden="true">'+esc(e.emoji||'📍')+'</span><span class="nut"><small>'+esc(n[0])+'</small><b>'+esc(tx(e,'title'))+'</b><span>'+esc(e.time||'')+(e.time?' · ':'')+esc(n[1])+'</span></span><span class="nua" aria-hidden="true">›</span>';
+}
+(function(){
+  var mp = document.getElementById('map'); if(!mp) return;
+  var b = document.createElement('button'); b.type='button'; b.id='nextUp'; b.className='nextup'; b.hidden = true;
+  b.addEventListener('click',function(){ if(nextUpEv) openEventSheet(nextUpEv); });
+  mp.appendChild(b);
+})();
+function placeHeat(){
+  var h = document.getElementById('heatBtn'), r = document.getElementById('fRow'), mp = document.getElementById('map'); if(!h||!r||!mp) return;
+  var mob = window.matchMedia('(max-width:720px)').matches;
+  if(mob && h.parentNode!==r) r.appendChild(h); else if(!mob && h.parentNode!==mp) mp.appendChild(h);
+}
+window.addEventListener('resize', placeHeat);
 
 /* Filter chips */
 function buildChips(){
@@ -1881,7 +1927,7 @@ function syncChips(){
 }
 
 /* Phone views: map or list */
-function mapPadTop(){ try{ var m = window.matchMedia('(max-width:720px)').matches && document.body.getAttribute('data-view')==='map'; map.setPadding({top:m?104:0,left:0,right:0,bottom:0}); }catch(e){} }
+function mapPadTop(){ try{ var m = window.matchMedia('(max-width:720px)').matches && document.body.getAttribute('data-view')==='map'; map.setPadding({top:m?104:0,left:0,right:0,bottom:m?84:0}); }catch(e){} }
 function setView(v){
   document.body.setAttribute('data-view',v); mapPadTop();
   document.querySelectorAll('.tabbar button,.desknav button').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.view===v ? 'true':'false'); });
