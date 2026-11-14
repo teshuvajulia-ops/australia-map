@@ -322,6 +322,14 @@ details.tip p{margin:0;padding:0 16px 14px;line-height:1.6}
 .submitcta{display:block;text-align:center;text-decoration:none;font-weight:700;color:var(--accent);border:2px dashed var(--peach);border-radius:16px;padding:14px;margin:18px 16px;background:var(--peach-pale);transition:background .25s ease,transform .18s ease}
 .submitcta:hover{background:var(--peach-soft)}
 .submitcta[hidden]{display:none}
+.nlcard{margin:22px 0 0;padding:18px;border-radius:16px;background:var(--peach-pale);border:1px solid var(--peach)}
+.nlcard b{display:block;font-size:1.05rem;margin-bottom:4px}
+.nlcard p{margin:0 0 12px;color:var(--muted);line-height:1.45;font-size:.92rem}
+.nlcard input[type=email]{width:100%;box-sizing:border-box;padding:12px 14px;border-radius:12px;border:1px solid var(--peach);font:inherit;font-size:16px;background:#fff;color:#222}
+.nlcard label{display:flex;gap:8px;align-items:flex-start;margin:10px 0;font-size:.82rem;color:var(--muted);line-height:1.35}
+.nlcard label input{margin-top:2px;flex:none}
+.nlcard button{width:100%;padding:12px;border:0;border-radius:12px;background:var(--accent);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.nlcard .nlok{font-weight:700;color:var(--accent);margin:0}
 .pinner .submitcta{margin:22px 0 0}
 
 /* Welcome screen and header CTA */
@@ -1535,6 +1543,32 @@ document.addEventListener('click',function(ev){
   }, REDUCED ? 0 : 380);
 });
 
+
+var NLT = {
+ en:['Get the week in your inbox','What’s on in Melbourne and Sydney, and how to meet people there. Weekly, free.','Your email','Subscribe','I agree to receive the weekly CITYSIDE email. Unsubscribe anytime.','Thanks! Check your inbox to confirm 💌'],
+ he:['השבוע במייל יידרש לתיבה','מה קורה במלבורן ובסידני, ואיך מכירים אנשים. שבועי, חינם.','האימייל שלך','הרשמה','אני מסכימ/ה לקבל את המייל השבועי של CITYSIDE. אפשר להירשם בכל עת.','תודה! בדקו את המייל כדי לאשר 💌'],
+ zh:['每周活动直达邮箱','墨尔本和悉尼有什么活动，以及如何认识新朋友。每周一封，免费。','你的邮箱','订阅','我同意接收 CITYSIDE 每周邮件，可随时退订。','谢谢！请查收邮件完成确认 💌'],
+ es:['La semana en tu bandeja de entrada','Qué hacer en Melbourne y Sydney y cómo conocer gente. Semanal y gratis.','Tu correo','Suscribirme','Acepto recibir el correo semanal de CITYSIDE. Puedes darte de baja cuando quieras.','¡Gracias! Revisa tu correo para confirmar 💌'],
+ de:['Die Woche in deinem Postfach','Was in Melbourne und Sydney los ist und wie man dort Leute kennenlernt. Wöchentlich, kostenlos.','Deine E-Mail','Abonnieren','Ich möchte die wöchentliche CITYSIDE-Mail erhalten. Jederzeit abbestellbar.','Danke! Bitte bestätige deine E-Mail 💌'],
+ vi:['Tuần mới trong hộp thư','Melbourne và Sydney có gì, và cách làm quen bạn mới. Hàng tuần, miễn phí.','Email của bạn','Đăng ký','Tôi đồng ý nhận email hàng tuần của CITYSIDE. Hủy đăng ký bất cứ lúc nào.','Cảm ơn! Hãy kiểm tra email để xác nhận 💌'],
+ ar:['أسبوعك في بريدك','ماذا يجري في ملبورن وسيدني وكيف تتعرّف على أشخاص جدد. أسبوعي ومجاني.','بريدك الإلكتروني','اشتراك','أوافق على استلام رسالة CITYSIDE الأسبوعية. يمكنك إلغاء الاشتراك في أي وقت.','شكرًا! تحقق من بريدك للتأكيد 💌'],
+ hi:['हफ़्ता आपके इनबॉक्स में','मेलबर्न और सिडनी में क्या चल रहा है और लोगों से कैसे मिलें। साप्ताहिक, मुफ़्त।','आपका ईमेल','सब्सक्राइब करें','मैं CITYSIDE का साप्ताहिक ईमेल पाने के लिए सहमत हूँ। कभी भी अनसब्सक्राइब कर सकते हैं।','धन्यवाद! पुष्टि के लिए इनबॉक्स देखें 💌']
+};
+function nlHtml(){
+  var n = NLT[lang] || NLT.en;
+  return '<form class="nlcard" id="nlForm" dir="'+t().dir+'"><b>'+esc(n[0])+'</b><p>'+esc(n[1])+'</p>'
+    +'<input type="email" name="email" required autocomplete="email" placeholder="'+esc(n[2])+'" aria-label="'+esc(n[2])+'">'
+    +'<label><input type="checkbox" required><span>'+esc(n[4])+'</span></label>'
+    +'<button type="submit">'+esc(n[3])+'</button></form>';
+}
+document.addEventListener('submit', function(ev){
+  var f = ev.target; if(!f || f.id!=='nlForm') return;
+  ev.preventDefault();
+  var n = NLT[lang] || NLT.en, fd = new FormData(); fd.append('email', f.email.value); fd.append('embed','1');
+  var btn = f.querySelector('button'); btn.disabled = true;
+  var done = function(){ f.innerHTML = '<p class="nlok">'+esc(n[5])+'</p>'; };
+  try{ fetch('https://buttondown.com/api/emails/embed-subscribe/cityside',{method:'POST',mode:'no-cors',body:fd}).then(done,function(){ btn.disabled=false; }); }catch(e){ btn.disabled=false; }
+});
 function renderPanel(){
   var v = document.body.getAttribute('data-view'), p = $('#panel');
   if(!p || (v!=='groups' && v!=='tips' && v!=='calendar')) return;
@@ -1575,7 +1609,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 43</p></div>';
+  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 44</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
