@@ -1,26 +1,5 @@
 [
   {
-    "id": "e1",
-    "city": "melbourne",
-    "title": "קונצרט חינם: 50 שנה לרדיו Triple R",
-    "title_en": "Free concert: 50 years of Triple R",
-    "date": "2026-11-12",
-    "time": "18:15",
-    "endDate": "",
-    "cats": [
-      "music",
-      "family"
-    ],
-    "address": "Federation Square, cnr Swanston & Flinders St, Melbourne VIC 3000",
-    "desc": "הופעה חינם בכיכר Fed Square עם Courtney Barnett, Party Dozen ו-KAIIT. כניסה חינם לכל הגילאים.",
-    "desc_en": "Free outdoor show at Fed Square with Courtney Barnett, Party Dozen and KAIIT. Free entry, all ages.",
-    "url": "https://www.melbourning.com.au/2026/11/05/courtney-barnett-to-lead-a-free-concert-at-fed-square-to-celebrate-triple-rs-50th-anniversary/",
-    "emoji": "🎵",
-    "lat": -37.818,
-    "lng": 144.9691,
-    "whatsapp": ""
-  },
-  {
     "id": "e2",
     "city": "melbourne",
     "title": "Colours of Asia: Garden of Wonders",
@@ -840,5 +819,29 @@
     "organizer": "URBNSURF",
     "organizerUrl": "https://urbnsurf.com/melbourne/?p=10496",
     "newbie": true
+  },
+  {
+    "id": "e37",
+    "city": "melbourne",
+    "title": "פסטיבל פולין בפד סקוור",
+    "title_en": "Polish Festival at Fed Square",
+    "date": "2026-11-15",
+    "time": "10:00–17:00",
+    "endDate": "",
+    "cats": [
+      "food",
+      "music",
+      "culture",
+      "family"
+    ],
+    "address": "Federation Square, cnr Swanston & Flinders St, Melbourne VIC 3000",
+    "desc": "יום שלם של תרבות פולנית בכיכר: אוכל (פירוגי, נקניקיות, פונצ'קים), ריקודי פולקלור, מוזיקה חיה ודוכנים. כניסה חינם לכל הגילאים, בלי הרשמה.",
+    "desc_en": "A full day of Polish culture at Fed Square: pierogi, kielbasa and paczki, folk dancers, live music and market stalls. Free entry, all ages, no booking.",
+    "url": "https://whatson.melbourne.vic.gov.au/things-to-do/polish-festival-2026",
+    "emoji": "🥟",
+    "lat": -37.818,
+    "lng": 144.9691,
+    "whatsapp": "",
+    "free": true
   }
 ]
