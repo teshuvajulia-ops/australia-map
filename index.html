@@ -330,6 +330,13 @@ details.tip p{margin:0;padding:0 16px 14px;line-height:1.6}
 .nlcard label input{margin-top:2px;flex:none}
 .nlcard button{width:100%;padding:12px;border:0;border-radius:12px;background:var(--accent);color:#fff;font:inherit;font-weight:700;cursor:pointer}
 .nlcard .nlok{font-weight:700;color:var(--accent);margin:0}
+.nlbar{display:flex;align-items:center;gap:8px;width:calc(100% - 32px);margin:8px 16px 0;padding:9px 14px;border:0;border-radius:999px;background:linear-gradient(90deg,var(--peach-soft),var(--peach-pale));color:var(--accent);font:inherit;font-weight:700;font-size:.9rem;cursor:pointer;text-align:start;box-shadow:0 4px 12px rgba(221,95,75,.15);flex:0 0 auto}
+.nlbar span{flex:none}
+.nlbar span.t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nlbar:active{transform:scale(.98)}
+.wcard .nlcard{margin:0;padding:0;border:0;background:none;text-align:start}
+.wcard .nlcard p{margin:0 0 12px}
+.wcard .nlx{display:block;margin:12px auto 0;background:none;border:0;color:var(--muted);font:inherit;cursor:pointer}
 .pinner .submitcta{margin:22px 0 0}
 
 /* Welcome screen and header CTA */
@@ -630,6 +637,7 @@ header[data-city="sydney"] .seabg b{background:linear-gradient(100deg,rgba(255,2
   <aside>
     <div class="asidehead"><div id="cityname"></div><span id="count"></span><div class="clock" id="clock" aria-live="off"></div>
       <a class="citygroup" id="cityGroup" href="#" target="_blank" rel="noopener noreferrer" hidden></a></div>
+    <button type="button" class="nlbar" id="nlBar"></button>
     <div class="vibes" id="vibes" role="group"></div>
     <ul id="list"></ul>
     <a class="submitcta" id="submitAside" href="#" target="_blank" rel="noopener noreferrer" data-t="submit" data-e="site" hidden></a>
@@ -1569,6 +1577,21 @@ document.addEventListener('submit', function(ev){
   var done = function(){ f.innerHTML = '<p class="nlok">'+esc(n[5])+'</p>'; };
   try{ fetch('https://buttondown.com/api/emails/embed-subscribe/cityside',{method:'POST',mode:'no-cors',body:fd}).then(done,function(){ btn.disabled=false; }); }catch(e){ btn.disabled=false; }
 });
+
+function buildNlBar(){
+  var b = $('#nlBar'); if(!b) return; var n = NLT[lang] || NLT.en;
+  b.innerHTML = '<span aria-hidden="true">💌</span><span class="t">'+esc(n[0])+'</span><span aria-hidden="true">→</span>';
+}
+function openNlModal(){
+  if(document.getElementById('nlModal')) return;
+  var w = document.createElement('div'); w.id='nlModal'; w.className='welcome'; w.setAttribute('role','dialog'); w.setAttribute('aria-modal','true');
+  w.innerHTML = '<div class="wcard">'+nlHtml()+'<button type="button" class="nlx">✕</button></div>';
+  function close(){ w.remove(); document.removeEventListener('keydown',onKey); }
+  function onKey(e){ if(e.key==='Escape') close(); }
+  w.addEventListener('click',function(e){ if(e.target===w || (e.target.classList && e.target.classList.contains('nlx'))) close(); });
+  document.addEventListener('keydown',onKey); document.body.appendChild(w);
+}
+document.addEventListener('click',function(e){ if(e.target.closest && e.target.closest('#nlBar')) openNlModal(); });
 function renderPanel(){
   var v = document.body.getAttribute('data-view'), p = $('#panel');
   if(!p || (v!=='groups' && v!=='tips' && v!=='calendar')) return;
@@ -1609,7 +1632,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 44</p></div>';
+  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 45</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
@@ -1826,7 +1849,7 @@ function applyLang(){
   if(tokenNote) tokenNote.textContent = t().noToken;
   if(typeof syncInstall==='function') syncInstall();
   buildChips();
-  buildVibes();
+  buildVibes(); buildNlBar();
   render();
 }
 function setLang(l){
