@@ -585,6 +585,14 @@ header[data-city="sydney"] .seabg b{background:linear-gradient(100deg,rgba(255,2
   .controls .toggle.lang button[aria-pressed="true"]{display:none}
   .controls .toggle.lang button{background:rgba(255,255,255,.55) !important;color:var(--ink) !important;text-shadow:none !important;border-radius:999px;padding:6px 12px !important;font-size:.78rem !important;font-weight:700;box-shadow:0 1px 6px rgba(0,0,0,.1)}
 }
+
+.langwrap{position:relative;z-index:4;margin-inline-start:auto;display:flex}
+.langbtn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:999px;padding:7px 12px;background:rgba(255,255,255,.62);color:var(--ink);font-weight:700;font-size:.82rem;box-shadow:0 1px 6px rgba(0,0,0,.1);cursor:pointer;font-family:inherit}
+.langbtn svg{flex:none}
+.langmenu{position:fixed;z-index:3000;margin:0;padding:6px;list-style:none;min-width:170px;background:#fff;border-radius:16px;box-shadow:0 14px 40px rgba(60,30,30,.28);animation:wfade .15s ease}
+.langmenu button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;border:0;background:transparent;padding:11px 14px;border-radius:11px;font-family:inherit;font-size:.98rem;font-weight:600;color:var(--ink);cursor:pointer;text-align:start}
+.langmenu button:hover,.langmenu button[aria-selected="true"]{background:var(--peach-pale,#fff0e8)}
+.langmenu i{font-style:normal;color:var(--accent);font-weight:800}
 </style>
 </head>
 <body data-view="map">
@@ -600,10 +608,7 @@ header[data-city="sydney"] .seabg b{background:linear-gradient(100deg,rgba(255,2
       <button type="button" data-city="melbourne" aria-pressed="true"></button>
       <button type="button" data-city="sydney" aria-pressed="false"></button>
     </div>
-    <div class="toggle lang" role="group" aria-label="Language">
-      <button type="button" data-lang="en" aria-pressed="true" lang="en">EN</button>
-      <button type="button" data-lang="he" aria-pressed="false" lang="he">עברית</button>
-    </div>
+    <div class="langwrap"><button type="button" class="langbtn" id="langBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Language"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.9 5.6 3.9 9s-1.3 6.4-3.9 9c-2.6-2.6-3.9-5.6-3.9-9S9.400 5.600 12 3z"/></svg><span id="langCur">EN</span></button></div>
   </div>
 </header>
 
@@ -767,6 +772,128 @@ var I18N = {
     mapLabel:'מפת אירועים',
     noToken:'חסר מפתח Mapbox. פתחי את index.html והדביקי את המפתח במקום PASTE_YOUR_PUBLIC_TOKEN_HERE.'}
 };
+/* More languages: anything not translated here falls back to English. */
+I18N.zh = Object.assign({}, I18N.en, {dir:'ltr', locale:'zh-CN',
+  sub:'别错过这座城市 · 别错过这里的人',
+  melbourne:'墨尔本', sydney:'悉尼',
+  count:function(n){ return n+' 场活动'; },
+  localTime:function(c){ return c+'当地时间'; },
+  empty:'这座城市暂时还没有活动。', noMatch:'没有符合筛选条件的活动。', nearMe:'离我最近',
+  kmAway:function(k){return '距离 '+(k<1?'<1':(k<10?k.toFixed(1):Math.round(k)))+' 公里';},
+  geoDenied:'定位已被禁用。iPhone：设置 > 隐私与安全性 > 定位服务 > 为 Safari（或你的浏览器）开启，然后刷新页面。安卓/电脑：点击地址栏旁的锁形图标并允许定位。',
+  pickArea:'无法定位？选择你所在的区域', searchPh:'搜索区域或地址', noResults:'没有找到地点',
+  geoUnavail:'无法获取你的位置。请确认已开启定位服务，然后重试。', geoSecure:'定位需要安全（https）页面。',
+  geoFar:'你似乎不在墨尔本或悉尼，因此按城市显示活动。', geoWait:'正在定位…',
+  clear:'清除筛选',
+  when:{all:'即将开始', soon:'2小时内', tonight:'今晚', today:'今天', tomorrow:'明天', weekend:'本周末'},
+  cats:{running:'跑步俱乐部',surf:'冲浪',volleyball:'排球',music:'音乐',food:'美食饮品',markets:'市集',parties:'派对',culture:'艺术文化',family:'亲子',outdoors:'户外',sports:'运动健身',community:'社群'},
+  details:'详情', fFree:'免费', fNewbie:'新人友好', sayHi:'在群里打个招呼', hiCopied:'消息已复制，粘贴到群里吧 👋',
+  hiMsg:function(ti,c){return '大家好！我刚到'+c+' 👋 有人去“'+ti+'”吗？';},
+  walk:function(m){return '🚶 步行 '+m+' 分钟';},
+  picksTitle:'刚到这座城市？轻松认识新朋友', picksLead:'本周适合新手的社交活动。',
+  fPrice:'价格', fLevel:'难度', fBring:'需携带', addCal:'添加到日历', noDate:'日期待定', evPage:'活动页面', comeWithMe:'一起来吧！',
+  directions:'谷歌地图', waze:'Waze', share:'分享到 WhatsApp', wa:'加入 WhatsApp 群', groupTag:'群组', hasGroup:'有群组',
+  cityGroup:function(c){return 'CITYSIDE 社群 · '+c;}, groupLead:'认识和你去同一场活动的人',
+  every:function(d){return '每'+d;}, and:' 和 ', by:'主办：', promoFeatured:'★ 精选', promoSponsored:'赞助',
+  submit:'有活动要发布？在 CITYSIDE 上刊登', listShort:'+ 发布活动',
+  welcomeTitle:'别错过这座城市。\n别错过这里的人。',
+  welcomeText:'墨尔本和悉尼的活动、跑步俱乐部和社群。选择城市，找到想参加的活动，加入群组认识同行的人。', explore:'浏览活动',
+  install:'下载为应用', installTitle:'安装 CITYSIDE', installIos:'在 Safari 中点击分享按钮，然后选择“添加到主屏幕”。', installOther:'打开浏览器菜单，选择“安装应用”或“添加到主屏幕”。', close:'关闭', shareHead:'来自',
+  tabMap:'地图', tabList:'列表', tabCal:'日历', tabGroups:'群组', tabTips:'问答',
+  askTitle:'你在想什么？', askLead:'点一点最像你的气泡。', popped:function(a,b){return '已戳破 '+a+'/'+b+' 个气泡';}, goodToKnow:'小贴士', tryThis:'试试这个',
+  calTitle:function(c){return '日历 · '+c;}, calLead:'点击日期查看当天活动。', calNone:'这天暂时没有活动。', calToday:'今天',
+  calEvents:function(n){return n+' 场活动';},
+  todayBar:function(d,n){return n? d+' · 今天有 '+n+' 场活动' : d+' · 今天暂无活动 ›';},
+  todayQ:'别错过这座城市 – 别错过这里的人', calPrev:'上个月', calNext:'下个月', calGo:'详情', evMap:'在地图上查看', evClose:'关闭',
+  groupsTitle:function(c){return 'WhatsApp 群组 · '+c;}, tipsTitle:function(c){return '小贴士 · '+c;},
+  groupsLead:'加入群组，认识去同一场活动的人，和朋友一起到场。', gwhatTitle:'这些群组是做什么的？',
+  gwhat:[['👋','找人同行','没人一起去？打个招呼，找到去同一场活动的人。'],['📣','第一时间获知活动','主办方和本地人分享本周的活动。'],['💬','问问本地人','小贴士、推荐和计划，在轻松的聊天中交流。']],
+  gwhatRules:'免费加入。友善相处，禁止广告。随时可退出。', tipsLead:'出发前值得了解。', mainGroup:'城市群', moreGroups:'更多群组', eventGroups:'活动群组',
+  noGroups:'群组即将上线，敬请期待。', noTips:'暂无小贴士。', joinShort:'加入', sourceLink:'来源',
+  tipCats:{emergency:'紧急情况',safety:'安全',transport:'出行',money:'金钱',nature:'阳光与海滩',practical:'实用信息',food:'美食',culture:'本地文化',other:'其他'},
+  filterLabel:'筛选活动', heat:'热门区域', whenLbl:'时间', whatLbl:'类型', dateLabel:'日期', catLabel:'活动类型', mapLabel:'活动地图'
+});
+I18N.es = Object.assign({}, I18N.en, {dir:'ltr', locale:'es-ES',
+  sub:'No te pierdas la ciudad · No te pierdas a la gente',
+  melbourne:'Melbourne', sydney:'Sídney',
+  count:function(n){ return n===1 ? '1 evento' : n+' eventos'; },
+  localTime:function(c){ return 'Hora local en '+c; },
+  empty:'Todavía no hay eventos en esta ciudad.', noMatch:'Ningún evento coincide con estos filtros.', nearMe:'Cerca de mí',
+  kmAway:function(k){return 'a '+(k<1?'<1':(k<10?k.toFixed(1):Math.round(k)))+' km';},
+  geoDenied:'La ubicación está bloqueada. En iPhone: Ajustes > Privacidad y seguridad > Localización > actívala para Safari (o tu navegador) y recarga. En Android/ordenador: toca el candado junto a la dirección y permite la ubicación.',
+  pickArea:'¿Sin ubicación? Elige tu zona', searchPh:'Busca un barrio o dirección', noResults:'No se encontraron lugares',
+  geoUnavail:'No pudimos encontrarte. Comprueba que la localización esté activada e inténtalo de nuevo.', geoSecure:'La ubicación necesita una página segura (https).',
+  geoFar:'Parece que estás fuera de Melbourne y Sídney, así que mostramos eventos por ciudad.', geoWait:'Buscando tu ubicación...',
+  clear:'Borrar filtros',
+  when:{all:'Próximos', soon:'Próximas 2 h', tonight:'Esta noche', today:'Hoy', tomorrow:'Mañana', weekend:'Este fin de semana'},
+  cats:{running:'Clubes de running',surf:'Surf',volleyball:'Vóley',music:'Música',food:'Comida y bebida',markets:'Mercados',parties:'Fiestas',culture:'Arte y cultura',family:'Familia',outdoors:'Aire libre',sports:'Deporte y fitness',community:'Comunidades'},
+  details:'Detalles', fFree:'Gratis', fNewbie:'Ideal para novatos', sayHi:'Saluda en el grupo', hiCopied:'Mensaje copiado. Pégalo en el grupo 👋',
+  hiMsg:function(ti,c){return '¡Hola! Soy nuevo/a en '+c+' 👋 ¿Alguien va a “'+ti+'”?';},
+  walk:function(m){return '🚶 '+m+' min andando';},
+  picksTitle:'¿Nuevo en la ciudad? Formas fáciles de conocer gente', picksLead:'Eventos sociales y para principiantes de esta semana.',
+  fPrice:'Precio', fLevel:'Nivel', fBring:'Lleva', addCal:'Añadir al calendario', noDate:'Fecha por confirmar', evPage:'Página del evento', comeWithMe:'¡Ven conmigo!',
+  directions:'Google Maps', waze:'Waze', share:'Compartir por WhatsApp', wa:'Unirse al grupo de WhatsApp', groupTag:'Grupo', hasGroup:'Tiene grupo',
+  cityGroup:function(c){return 'Comunidad CITYSIDE · '+c;}, groupLead:'Conoce a gente que va a los mismos eventos',
+  every:function(d){return 'Cada '+d;}, and:' y ', by:'por', promoFeatured:'★ Destacado', promoSponsored:'Patrocinado',
+  submit:'¿Organizas algo? Publica tu evento en CITYSIDE', listShort:'+ Publica tu evento',
+  welcomeTitle:'No te pierdas la ciudad.\nNo te pierdas a la gente.',
+  welcomeText:'Eventos, clubes de running y comunidades en Melbourne y Sídney. Elige una ciudad, encuentra un plan y únete al grupo para conocer a quien va.', explore:'Explorar eventos',
+  install:'Descargar como app', installTitle:'Instalar CITYSIDE', installIos:'En Safari, toca el botón Compartir y elige “Añadir a pantalla de inicio”.', installOther:'Abre el menú del navegador y elige “Instalar app” o “Añadir a pantalla de inicio”.', close:'Cerrar', shareHead:'Encontrado en',
+  tabMap:'Mapa', tabList:'Lista', tabCal:'Calendario', tabGroups:'Grupos', tabTips:'Preguntas',
+  askTitle:'¿Qué tienes en mente?', askLead:'Toca la burbuja que más te represente.', popped:function(a,b){return a+' de '+b+' burbujas reventadas';}, goodToKnow:'Bueno saber', tryThis:'Prueba esto',
+  calTitle:function(c){return 'Calendario · '+c;}, calLead:'Toca un día para ver qué hay.', calNone:'Nada programado para este día.', calToday:'Hoy',
+  calEvents:function(n){return n===1?'1 evento':n+' eventos';},
+  todayBar:function(d,n){return n? d+' · '+(n===1?'1 evento hoy':n+' eventos hoy') : d+' · nada hoy ›';},
+  todayQ:'No te pierdas la ciudad – No te pierdas a la gente', calPrev:'Mes anterior', calNext:'Mes siguiente', calGo:'Detalles', evMap:'Ver en el mapa', evClose:'Cerrar',
+  groupsTitle:function(c){return 'Grupos de WhatsApp · '+c;}, tipsTitle:function(c){return 'Consejos · '+c;},
+  groupsLead:'Únete a un grupo, conoce a gente que va a los mismos eventos y llega acompañado/a.', gwhatTitle:'¿Qué son estos grupos?',
+  gwhat:[['👋','Encuentra con quién ir','¿Nadie con quien ir? Saluda y encuentra a alguien que vaya al mismo evento.'],['📣','Enterate primero','Organizadores y locales comparten lo que hay esta semana.'],['💬','Pregunta a los locales','Consejos, recomendaciones y planes, en un chat amable.']],
+  gwhatRules:'Gratis. Sé amable, sin spam. Sal cuando quieras.', tipsLead:'Bueno saber antes de ir.', mainGroup:'Grupo de la ciudad', moreGroups:'Más grupos', eventGroups:'Grupos de eventos',
+  noGroups:'Los grupos están en camino. Vuelve pronto.', noTips:'Aún no hay consejos.', joinShort:'Unirse', sourceLink:'Fuente',
+  tipCats:{emergency:'Emergencias',safety:'Seguridad',transport:'Transporte',money:'Dinero',nature:'Sol y playa',practical:'Práctico',food:'Comida',culture:'Cultura local',other:'Otros'},
+  filterLabel:'Filtrar eventos', heat:'Zonas calientes', whenLbl:'Cuándo', whatLbl:'Qué', dateLabel:'Fecha', catLabel:'Tipo de evento', mapLabel:'Mapa de eventos'
+});
+I18N.de = Object.assign({}, I18N.en, {dir:'ltr', locale:'de-DE',
+  sub:'Verpass nicht die Stadt · Verpass nicht die Leute',
+  melbourne:'Melbourne', sydney:'Sydney',
+  count:function(n){ return n===1 ? '1 Event' : n+' Events'; },
+  localTime:function(c){ return 'Ortszeit in '+c; },
+  empty:'In dieser Stadt gibt es noch keine Events.', noMatch:'Keine Events passen zu diesen Filtern.', nearMe:'In meiner Nähe',
+  kmAway:function(k){return (k<1?'<1':(k<10?k.toFixed(1):Math.round(k)))+' km entfernt';},
+  geoDenied:'Der Standort ist blockiert. iPhone: Einstellungen > Datenschutz & Sicherheit > Ortungsdienste > für Safari (oder deinen Browser) aktivieren und neu laden. Android/Desktop: Auf das Schloss neben der Adresse tippen und Standort erlauben.',
+  pickArea:'Kein Standort? Wähle dein Viertel', searchPh:'Stadtteil oder Adresse suchen', noResults:'Keine Orte gefunden',
+  geoUnavail:'Dein Standort konnte nicht ermittelt werden. Prüfe, ob die Ortungsdienste aktiv sind, und versuche es erneut.', geoSecure:'Für den Standort ist eine sichere Seite (https) nötig.',
+  geoFar:'Du scheinst nicht in Melbourne oder Sydney zu sein, daher zeigen wir Events nach Stadt.', geoWait:'Standort wird gesucht...',
+  clear:'Filter zurücksetzen',
+  when:{all:'Demnächst', soon:'Nächste 2 Std.', tonight:'Heute Abend', today:'Heute', tomorrow:'Morgen', weekend:'Dieses Wochenende'},
+  cats:{running:'Laufclubs',surf:'Surfen',volleyball:'Volleyball',music:'Musik',food:'Essen & Trinken',markets:'Märkte',parties:'Partys',culture:'Kunst & Kultur',family:'Familie',outdoors:'Outdoor',sports:'Sport & Fitness',community:'Communitys'},
+  details:'Details', fFree:'Gratis', fNewbie:'Neulingsfreundlich', sayHi:'Sag Hallo in der Gruppe', hiCopied:'Nachricht kopiert. Füge sie in der Gruppe ein 👋',
+  hiMsg:function(ti,c){return 'Hi! Ich bin neu in '+c+' 👋 Geht jemand zu „'+ti+'“?';},
+  walk:function(m){return '🚶 '+m+' Min. zu Fuß';},
+  picksTitle:'Neu in der Stadt? So lernst du leicht Leute kennen', picksLead:'Einsteigerfreundliche und gesellige Events diese Woche.',
+  fPrice:'Preis', fLevel:'Niveau', fBring:'Mitbringen', addCal:'Zum Kalender hinzufügen', noDate:'Termin noch offen', evPage:'Event-Seite', comeWithMe:'Komm mit!',
+  directions:'Google Maps', waze:'Waze', share:'Per WhatsApp teilen', wa:'WhatsApp-Gruppe beitreten', groupTag:'Gruppe', hasGroup:'Hat eine Gruppe',
+  cityGroup:function(c){return 'CITYSIDE Community · '+c;}, groupLead:'Lerne Leute kennen, die zu denselben Events gehen',
+  every:function(d){return 'Jeden '+d;}, and:' & ', by:'von', promoFeatured:'★ Empfohlen', promoSponsored:'Gesponsert',
+  submit:'Du organisierst etwas? Trag dein Event bei CITYSIDE ein', listShort:'+ Event eintragen',
+  welcomeTitle:'Verpass nicht die Stadt.\nVerpass nicht die Leute.',
+  welcomeText:'Events, Laufclubs und Communitys in Melbourne und Sydney. Wähle eine Stadt, finde etwas Passendes und tritt der Gruppe bei, um Leute kennenzulernen.', explore:'Events entdecken',
+  install:'Als App herunterladen', installTitle:'CITYSIDE installieren', installIos:'Tippe in Safari auf Teilen und wähle „Zum Home-Bildschirm“.', installOther:'Öffne das Browsermenü und wähle „App installieren“ oder „Zum Startbildschirm hinzufügen“.', close:'Schließen', shareHead:'Gefunden auf',
+  tabMap:'Karte', tabList:'Liste', tabCal:'Kalender', tabGroups:'Gruppen', tabTips:'Fragen',
+  askTitle:'Was beschäftigt dich?', askLead:'Tippe auf die Blase, die zu dir passt.', popped:function(a,b){return a+' von '+b+' Blasen geplatzt';}, goodToKnow:'Gut zu wissen', tryThis:'Probier das',
+  calTitle:function(c){return 'Kalender · '+c;}, calLead:'Tippe auf einen Tag, um zu sehen, was los ist.', calNone:'Für diesen Tag ist noch nichts eingetragen.', calToday:'Heute',
+  calEvents:function(n){return n===1?'1 Event':n+' Events';},
+  todayBar:function(d,n){return n? d+' · '+(n===1?'1 Event heute':n+' Events heute') : d+' · heute nichts ›';},
+  todayQ:'Verpass nicht die Stadt – Verpass nicht die Leute', calPrev:'Vorheriger Monat', calNext:'Nächster Monat', calGo:'Details', evMap:'Auf der Karte zeigen', evClose:'Schließen',
+  groupsTitle:function(c){return 'WhatsApp-Gruppen · '+c;}, tipsTitle:function(c){return 'Tipps · '+c;},
+  groupsLead:'Tritt einer Gruppe bei, lerne Leute kennen, die zu denselben Events gehen, und komm mit Freunden an.', gwhatTitle:'Was sind diese Gruppen?',
+  gwhat:[['👋','Begleitung finden','Niemand zum Hingehen? Sag Hallo und finde jemanden fürs gleiche Event.'],['📣','Als Erste/r Bescheid wissen','Veranstalter und Locals teilen, was diese Woche läuft.'],['💬','Frag die Locals','Tipps, Empfehlungen und Pläne in einem netten Chat.']],
+  gwhatRules:'Kostenlos beitreten. Sei nett, kein Spam. Jederzeit austreten.', tipsLead:'Gut zu wissen vor dem Losgehen.', mainGroup:'Stadtgruppe', moreGroups:'Weitere Gruppen', eventGroups:'Event-Gruppen',
+  noGroups:'Gruppen sind unterwegs. Schau bald wieder vorbei.', noTips:'Noch keine Tipps.', joinShort:'Beitreten', sourceLink:'Quelle',
+  tipCats:{emergency:'Notfall',safety:'Sicherheit',transport:'Unterwegs',money:'Geld',nature:'Sonne & Strand',practical:'Praktisches',food:'Essen',culture:'Lokale Kultur',other:'Sonstiges'},
+  filterLabel:'Events filtern', heat:'Hotspots', whenLbl:'Wann', whatLbl:'Was', dateLabel:'Datum', catLabel:'Event-Art', mapLabel:'Eventkarte'
+});
+var LANGS = [['en','English','EN'],['he','עברית','עב'],['zh','中文','中文'],['es','Español','ES'],['de','Deutsch','DE']];
 var QUICK = ['🎭','🎵','🍷','🍴','☕','🎨','🎪','🎉','⚽','🏖️','🛍️','🌿','📸','🎬','🍺','🧘'];
 
 var admin = location.hash === '#admin';
@@ -787,7 +914,7 @@ function t(){ return I18N[lang]; }
 /* Text of an event in the current language. Falls back to the other language if one is missing. */
 function tx(e,f){
   var en = e[f+'_en'], he = e[f];
-  return lang==='en' ? (en||he||'') : (he||en||'');
+  return lang==='he' ? (he||en||'') : (en||he||'');
 }
 function fmtDate(d,short){
   if(!d) return '';
@@ -1084,7 +1211,7 @@ function syncCityGroup(){
   a.innerHTML = '<img class="cgav" src="avatar-'+city+'.png" alt=""><span><b>'+esc(t().cityGroup(t()[city]))+'</b><small>'+esc(t().groupLead)+'</small></span>';
 }
 var tips = [], qa = [], moreGroups = [], config = {};
-function loc(o,f){ var en=o[f+'_en'], he=o[f]; return (lang==='en' ? (en||he) : (he||en)) || ''; }
+function loc(o,f){ var en=o[f+'_en'], he=o[f]; return (lang==='he' ? (he||en) : (en||he)) || ''; }
 function submitHtml(){
   var u = safeUrl(config.submitUrl); if(!u) return '';
   return '<a class="submitcta" href="'+esc(u)+'" target="_blank" rel="noopener noreferrer" data-t="submit" data-e="site">'+esc(t().submit)+' \u2197</a>';
@@ -1109,11 +1236,14 @@ function greetText(){
   try{ h = +new Intl.DateTimeFormat('en-GB',{timeZone:TZ.melbourne||'Australia/Melbourne',hour:'numeric',hour12:false}).format(new Date()).slice(0,2); }catch(x){}
   if(h===24) h=0;
   var k = (h>=5 && h<12) ? 0 : (h>=12 && h<17) ? 1 : (h>=17 && h<22) ? 2 : 3;
-  var he = lang==='he';
-  return [ he?'בוקר טוב ממלבורן \u2600\uFE0F':'Good morning from Melbourne \u2600\uFE0F',
-           he?'צהריים טובים ממלבורן \uD83C\uDF24\uFE0F':'Good afternoon from Melbourne \uD83C\uDF24\uFE0F',
-           he?'ערב טוב ממלבורן \uD83C\uDF05':'Good evening from Melbourne \uD83C\uDF05',
-           he?'לילה טוב ממלבורן \uD83C\uDF19':'Night owl hours in Melbourne \uD83C\uDF19' ][k];
+  var G = {
+    en:['Good morning from Melbourne \u2600\uFE0F','Good afternoon from Melbourne \uD83C\uDF24\uFE0F','Good evening from Melbourne \uD83C\uDF05','Night owl hours in Melbourne \uD83C\uDF19'],
+    he:['בוקר טוב ממלבורן \u2600\uFE0F','צהריים טובים ממלבורן \uD83C\uDF24\uFE0F','ערב טוב ממלבורן \uD83C\uDF05','לילה טוב ממלבורן \uD83C\uDF19'],
+    zh:['墨尔本的早安 \u2600\uFE0F','墨尔本的午安 \uD83C\uDF24\uFE0F','墨尔本的晚上好 \uD83C\uDF05','墨尔本的深夜 \uD83C\uDF19'],
+    es:['\u00a1Buenos d\u00edas desde Melbourne! \u2600\uFE0F','\u00a1Buenas tardes desde Melbourne! \uD83C\uDF24\uFE0F','\u00a1Buenas noches desde Melbourne! \uD83C\uDF05','Hora de b\u00fahos en Melbourne \uD83C\uDF19'],
+    de:['Guten Morgen aus Melbourne \u2600\uFE0F','Guten Tag aus Melbourne \uD83C\uDF24\uFE0F','Guten Abend aus Melbourne \uD83C\uDF05','Nachteulen-Zeit in Melbourne \uD83C\uDF19']
+  };
+  return (G[lang]||G.en)[k];
 }
 function showWelcome(){
   var force = /[?&]welcome\b/.test(location.search);
@@ -1252,7 +1382,7 @@ function openQaSheet(x,kind){
   var old = document.getElementById('evsheet'); if(old) old.remove();
   var o = document.createElement('div'); o.id='evsheet'; o.className='evsheet'; o.setAttribute('role','dialog'); o.setAttribute('aria-modal','true');
   var q = kind==='q' ? tx(x,'q') : loc(x,'title'), a = kind==='q' ? tx(x,'a') : loc(x,'text');
-  var steps = kind==='q' ? (lang==='en' ? x.steps_en : x.steps) || [] : [];
+  var steps = kind==='q' ? (lang!=='he' ? x.steps_en : x.steps) || [] : [];
   var acts = kind==='q' ? (x.actions||[]) : [];
   var u = safeUrl(x.url);
   o.innerHTML = '<div class="evcard qacard" dir="'+t().dir+'"><button type="button" class="evx" aria-label="'+esc(t().evClose)+'">\u00d7</button>'+
@@ -1322,7 +1452,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 40</p></div>';
+  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 41</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
@@ -1533,9 +1663,9 @@ function applyLang(){
     b.textContent = t()[b.dataset.city];
     b.setAttribute('aria-pressed', b.dataset.city===city ? 'true':'false');
   });
-  document.querySelectorAll('.toggle.lang button').forEach(function(b){
-    b.setAttribute('aria-pressed', b.dataset.lang===lang ? 'true':'false');
-  });
+  var lc = document.getElementById('langCur'); if(lc){ lc.textContent = (LANGS.filter(function(x){return x[0]===lang;})[0]||LANGS[0])[2]; }
+  var lm = document.getElementById('langMenu'); if(lm) lm.remove();
+  var lb = document.getElementById('langBtn'); if(lb) lb.setAttribute('aria-expanded','false');
   if(tokenNote) tokenNote.textContent = t().noToken;
   if(typeof syncInstall==='function') syncInstall();
   buildChips();
@@ -1543,7 +1673,7 @@ function applyLang(){
   render();
 }
 function setLang(l){
-  lang = (l==='he') ? 'he' : 'en';
+  lang = I18N[l] ? l : 'en';
   lsSet('lang', lang);
   applyLang();
 }
@@ -1567,9 +1697,26 @@ function setCity(c){
 document.querySelectorAll('#cityToggle button').forEach(function(b){
   b.addEventListener('click',function(){ setCity(b.dataset.city); });
 });
-document.querySelectorAll('.toggle.lang button').forEach(function(b){
-  b.addEventListener('click',function(){ setLang(b.dataset.lang); });
-});
+(function(){
+  var btn = document.getElementById('langBtn'); if(!btn) return;
+  function closeMenu(){ var m = document.getElementById('langMenu'); if(m) m.remove(); btn.setAttribute('aria-expanded','false'); document.removeEventListener('click',outside,true); document.removeEventListener('keydown',onEsc); }
+  function outside(ev){ var m = document.getElementById('langMenu'); if(m && !m.contains(ev.target) && !btn.contains(ev.target)) closeMenu(); }
+  function onEsc(ev){ if(ev.key==='Escape') closeMenu(); }
+  btn.addEventListener('click',function(){
+    if(document.getElementById('langMenu')){ closeMenu(); return; }
+    var m = document.createElement('ul'); m.id='langMenu'; m.className='langmenu'; m.setAttribute('role','listbox');
+    m.innerHTML = LANGS.map(function(l){ return '<li><button type="button" role="option" data-lang="'+l[0]+'" lang="'+l[0]+'" aria-selected="'+(l[0]===lang)+'"><span>'+l[1]+'</span>'+(l[0]===lang?'<i>\u2713</i>':'')+'</button></li>'; }).join('');
+    document.body.appendChild(m);
+    var r = btn.getBoundingClientRect();
+    m.style.top = (r.bottom + 8) + 'px';
+    m.style.insetInlineEnd = 'auto';
+    m.style.right = Math.max(8, window.innerWidth - r.right) + 'px';
+    btn.setAttribute('aria-expanded','true');
+    m.addEventListener('click',function(ev){ var b = ev.target.closest('button[data-lang]'); if(!b) return; closeMenu(); setLang(b.dataset.lang); });
+    setTimeout(function(){ document.addEventListener('click',outside,true); document.addEventListener('keydown',onEsc); },0);
+  });
+  window.addEventListener('scroll',closeMenu,{passive:true});
+})();
 window.addEventListener('resize',function(){ map.resize(); });
 (function(){if(!map.getContainer)return;var el=map.getContainer(),t;function rs(){clearTimeout(t);t=setTimeout(function(){try{map.resize()}catch(e){}},60)}
 if(window.ResizeObserver){new ResizeObserver(rs).observe(el)}
