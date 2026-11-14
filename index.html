@@ -589,7 +589,7 @@ header[data-city="sydney"] .seabg b{background:linear-gradient(100deg,rgba(255,2
 .langwrap{position:relative;z-index:4;margin-inline-start:auto;display:flex}
 .langbtn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:999px;padding:7px 12px;background:rgba(255,255,255,.62);color:var(--ink);font-weight:700;font-size:.82rem;box-shadow:0 1px 6px rgba(0,0,0,.1);cursor:pointer;font-family:inherit}
 .langbtn svg{flex:none}
-.langmenu{position:fixed;z-index:3000;margin:0;padding:6px;list-style:none;min-width:170px;background:#fff;border-radius:16px;box-shadow:0 14px 40px rgba(60,30,30,.28);animation:wfade .15s ease}
+.langmenu{max-height:calc(100vh - 140px);overflow-y:auto;position:fixed;z-index:3000;margin:0;padding:6px;list-style:none;min-width:170px;background:#fff;border-radius:16px;box-shadow:0 14px 40px rgba(60,30,30,.28);animation:wfade .15s ease}
 .langmenu button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;border:0;background:transparent;padding:11px 14px;border-radius:11px;font-family:inherit;font-size:.98rem;font-weight:600;color:var(--ink);cursor:pointer;text-align:start}
 .langmenu button:hover,.langmenu button[aria-selected="true"]{background:var(--peach-pale,#fff0e8)}
 .langmenu i{font-style:normal;color:var(--accent);font-weight:800}
@@ -893,7 +893,127 @@ I18N.de = Object.assign({}, I18N.en, {dir:'ltr', locale:'de-DE',
   tipCats:{emergency:'Notfall',safety:'Sicherheit',transport:'Unterwegs',money:'Geld',nature:'Sonne & Strand',practical:'Praktisches',food:'Essen',culture:'Lokale Kultur',other:'Sonstiges'},
   filterLabel:'Events filtern', heat:'Hotspots', whenLbl:'Wann', whatLbl:'Was', dateLabel:'Datum', catLabel:'Event-Art', mapLabel:'Eventkarte'
 });
-var LANGS = [['en','English','EN'],['he','עברית','עב'],['zh','中文','中文'],['es','Español','ES'],['de','Deutsch','DE']];
+I18N.vi = Object.assign({}, I18N.en, {dir:'ltr', locale:'vi-VN',
+  sub:'Đừng bỏ lỡ thành phố · Đừng bỏ lỡ con người',
+  melbourne:'Melbourne', sydney:'Sydney',
+  count:function(n){ return n+' sự kiện'; },
+  localTime:function(c){ return 'Giờ địa phương ở '+c; },
+  empty:'Thành phố này chưa có sự kiện nào.', noMatch:'Không có sự kiện nào khớp bộ lọc.', nearMe:'Gần tôi',
+  kmAway:function(k){return 'cách '+(k<1?'<1':(k<10?k.toFixed(1):Math.round(k)))+' km';},
+  geoDenied:'Vị trí đang bị chặn. iPhone: Cài đặt > Quyền riêng tư & Bảo mật > Dịch vụ định vị > bật cho Safari (hoặc trình duyệt của bạn) rồi tải lại. Android/máy tính: nhấn biểu tượng ổ khóa cạnh địa chỉ và cho phép vị trí.',
+  pickArea:'Không có vị trí? Chọn khu vực của bạn', searchPh:'Tìm khu phố hoặc địa chỉ', noResults:'Không tìm thấy địa điểm',
+  geoUnavail:'Không xác định được vị trí của bạn. Hãy kiểm tra dịch vụ định vị đã bật rồi thử lại.', geoSecure:'Định vị cần trang bảo mật (https).',
+  geoFar:'Có vẻ bạn không ở Melbourne hay Sydney nên chúng tôi hiển thị sự kiện theo thành phố.', geoWait:'Đang tìm vị trí của bạn...',
+  clear:'Xóa bộ lọc',
+  when:{all:'Sắp tới', soon:'2 giờ tới', tonight:'Tối nay', today:'Hôm nay', tomorrow:'Ngày mai', weekend:'Cuối tuần này'},
+  cats:{running:'CLB chạy bộ',surf:'Lướt sóng',volleyball:'Bóng chuyền',music:'Âm nhạc',food:'Ăn uống',markets:'Chợ',parties:'Tiệc',culture:'Nghệ thuật & văn hóa',family:'Gia đình',outdoors:'Ngoài trời',sports:'Thể thao & thể hình',community:'Cộng đồng'},
+  details:'Chi tiết', fFree:'Miễn phí', fNewbie:'Thân thiện người mới', sayHi:'Chào trong nhóm', hiCopied:'Đã sao chép tin nhắn. Hãy dán vào nhóm 👋',
+  hiMsg:function(ti,c){return 'Chào mọi người! Mình mới đến '+c+' 👋 Có ai đi “'+ti+'” không?';},
+  walk:function(m){return '🚶 đi bộ '+m+' phút';},
+  picksTitle:'Mới đến? Cách dễ để làm quen bạn mới', picksLead:'Sự kiện thân thiện với người mới và mang tính giao lưu trong tuần này.',
+  fPrice:'Giá', fLevel:'Trình độ', fBring:'Mang theo', addCal:'Thêm vào lịch', noDate:'Chưa có ngày', evPage:'Trang sự kiện', comeWithMe:'Đi cùng mình nhé!',
+  directions:'Google Maps', waze:'Waze', share:'Chia sẻ qua WhatsApp', wa:'Tham gia nhóm WhatsApp', groupTag:'Nhóm', hasGroup:'Có nhóm',
+  cityGroup:function(c){return 'Cộng đồng CITYSIDE · '+c;}, groupLead:'Làm quen với người đi cùng sự kiện',
+  every:function(d){return 'Mỗi '+d;}, and:' & ', by:'bởi', promoFeatured:'★ Nổi bật', promoSponsored:'Được tài trợ',
+  submit:'Bạn tổ chức sự kiện? Đăng trên CITYSIDE', listShort:'+ Đăng sự kiện',
+  welcomeTitle:'Đừng bỏ lỡ thành phố.\nĐừng bỏ lỡ con người.',
+  welcomeText:'Sự kiện, câu lạc bộ chạy bộ và cộng đồng ở Melbourne và Sydney. Chọn thành phố, tìm hoạt động và tham gia nhóm để gặp những người cùng đi.', explore:'Khám phá sự kiện',
+  install:'Tải về dưới dạng ứng dụng', installTitle:'Cài đặt CITYSIDE', installIos:'Trong Safari, nhấn nút Chia sẻ rồi chọn “Thêm vào Màn hình chính”.', installOther:'Mở menu trình duyệt và chọn “Cài đặt ứng dụng” hoặc “Thêm vào màn hình chính”.', close:'Đóng', shareHead:'Tìm thấy trên',
+  tabMap:'Bản đồ', tabList:'Danh sách', tabCal:'Lịch', tabGroups:'Nhóm', tabTips:'Hỏi đáp',
+  askTitle:'Bạn đang nghĩ gì?', askLead:'Chạm vào bong bóng giống bạn nhất.', popped:function(a,b){return 'Đã vỡ '+a+'/'+b+' bong bóng';}, goodToKnow:'Nên biết', tryThis:'Hãy thử',
+  calTitle:function(c){return 'Lịch · '+c;}, calLead:'Chạm vào một ngày để xem có gì.', calNone:'Ngày này chưa có sự kiện.', calToday:'Hôm nay',
+  calEvents:function(n){return n+' sự kiện';},
+  todayBar:function(d,n){return n? d+' · '+n+' sự kiện hôm nay' : d+' · hôm nay chưa có gì ›';},
+  todayQ:'Đừng bỏ lỡ thành phố – Đừng bỏ lỡ con người', calPrev:'Tháng trước', calNext:'Tháng sau', calGo:'Chi tiết', evMap:'Xem trên bản đồ', evClose:'Đóng',
+  groupsTitle:function(c){return 'Nhóm WhatsApp · '+c;}, tipsTitle:function(c){return 'Mẹo · '+c;},
+  groupsLead:'Tham gia nhóm, gặp người đi cùng sự kiện và đến cùng bạn bè.', gwhatTitle:'Các nhóm này là gì?',
+  gwhat:[['👋','Tìm người đi cùng','Không có ai đi cùng? Chào hỏi và tìm người đi cùng sự kiện.'],['📣','Biết sự kiện đầu tiên','Ban tổ chức và người địa phương chia sẻ lịch tuần này.'],['💬','Hỏi người địa phương','Mẹo, gợi ý và kế hoạch trong cuộc trò chuyện thân thiện.']],
+  gwhatRules:'Tham gia miễn phí. Lịch sự, không spam. Rời nhóm bất cứ lúc nào.', tipsLead:'Nên biết trước khi đi.', mainGroup:'Nhóm thành phố', moreGroups:'Thêm nhóm', eventGroups:'Nhóm sự kiện',
+  noGroups:'Các nhóm sắp ra mắt. Hãy quay lại sớm.', noTips:'Chưa có mẹo.', joinShort:'Tham gia', sourceLink:'Nguồn',
+  tipCats:{emergency:'Khẩn cấp',safety:'An toàn',transport:'Di chuyển',money:'Tiền bạc',nature:'Nắng & biển',practical:'Thực tế',food:'Ăn uống',culture:'Văn hóa địa phương',other:'Khác'},
+  filterLabel:'Lọc sự kiện', heat:'Điểm nóng', whenLbl:'Khi nào', whatLbl:'Loại gì', dateLabel:'Ngày', catLabel:'Loại sự kiện', mapLabel:'Bản đồ sự kiện'
+});
+I18N.ar = Object.assign({}, I18N.en, {dir:'rtl', locale:'ar',
+  sub:'لا تفوّت المدينة · لا تفوّت الناس',
+  melbourne:'ملبورن', sydney:'سيدني',
+  count:function(n){ return n===1 ? 'فعالية واحدة' : n+' فعاليات'; },
+  localTime:function(c){ return 'الوقت المحلي في '+c; },
+  empty:'لا توجد فعاليات في هذه المدينة بعد.', noMatch:'لا توجد فعاليات تطابق هذه الفلاتر.', nearMe:'بالقرب مني',
+  kmAway:function(k){return 'على بُعد '+(k<1?'<1':(k<10?k.toFixed(1):Math.round(k)))+' كم';},
+  geoDenied:'تم حظر الموقع. على آيفون: الإعدادات > الخصوصية والأمان > خدمات الموقع > فعّلها لمتصفح Safari ثم أعد التحميل. على أندرويد/الكمبيوتر: اضغط على القفل بجوار العنوان واسمح بالموقع.',
+  pickArea:'لا يوجد موقع؟ اختر منطقتك', searchPh:'ابحث عن حيّ أو عنوان', noResults:'لم يتم العثور على أماكن',
+  geoUnavail:'تعذّر تحديد موقعك. تأكد من تفعيل خدمات الموقع ثم حاول مجدداً.', geoSecure:'يتطلب الموقع صفحة آمنة (https).',
+  geoFar:'يبدو أنك خارج ملبورن وسيدني، لذا نعرض الفعاليات حسب المدينة.', geoWait:'جارٍ تحديد موقعك...',
+  clear:'مسح الفلاتر',
+  when:{all:'القادمة', soon:'خلال ساعتين', tonight:'الليلة', today:'اليوم', tomorrow:'غداً', weekend:'هذا الأسبوع'},
+  cats:{running:'نوادي الجري',surf:'ركوب الأمواج',volleyball:'كرة الطائرة',music:'موسيقى',food:'طعام ومشروبات',markets:'أسواق',parties:'حفلات',culture:'فنون وثقافة',family:'عائلة',outdoors:'في الهواء الطلق',sports:'رياضة ولياقة',community:'مجتمعات'},
+  details:'التفاصيل', fFree:'مجاني', fNewbie:'مناسب للمبتدئين', sayHi:'قل مرحباً في المجموعة', hiCopied:'تم نسخ الرسالة. الصقها في المجموعة 👋',
+  hiMsg:function(ti,c){return 'مرحباً! أنا جديد في '+c+' 👋 هل سيحضر أحد «'+ti+'»؟';},
+  walk:function(m){return '🚶 '+m+' دقيقة مشياً';},
+  picksTitle:'جديد في المدينة؟ طرق سهلة للتعرف على الناس', picksLead:'فعاليات مناسبة للمبتدئين واجتماعية هذا الأسبوع.',
+  fPrice:'السعر', fLevel:'المستوى', fBring:'أحضر', addCal:'أضف إلى التقويم', noDate:'لم يُحدد الموعد بعد', evPage:'صفحة الفعالية', comeWithMe:'تعال معي!',
+  directions:'خرائط جوجل', waze:'Waze', share:'مشاركة عبر واتساب', wa:'انضم إلى مجموعة واتساب', groupTag:'مجموعة', hasGroup:'لديها مجموعة',
+  cityGroup:function(c){return 'مجتمع CITYSIDE · '+c;}, groupLead:'تعرّف على من يحضرون الفعاليات نفسها',
+  every:function(d){return 'كل '+d;}, and:' و ', by:'بواسطة', promoFeatured:'★ مميّز', promoSponsored:'برعاية',
+  submit:'تنظّم شيئاً؟ أضف فعاليتك إلى CITYSIDE', listShort:'+ أضف فعاليتك',
+  welcomeTitle:'لا تفوّت المدينة.\nلا تفوّت الناس.',
+  welcomeText:'فعاليات ونوادي جري ومجتمعات في ملبورن وسيدني. اختر مدينة، واعثر على ما يناسبك، وانضم إلى المجموعة لتتعرف على الحاضرين.', explore:'استكشف الفعاليات',
+  install:'تنزيل كتطبيق', installTitle:'تثبيت CITYSIDE', installIos:'في Safari اضغط على زر المشاركة ثم اختر «إضافة إلى الشاشة الرئيسية».', installOther:'افتح قائمة المتصفح واختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».', close:'إغلاق', shareHead:'وُجد على',
+  tabMap:'الخريطة', tabList:'القائمة', tabCal:'التقويم', tabGroups:'المجموعات', tabTips:'أسئلة',
+  askTitle:'بماذا تفكر؟', askLead:'اضغط على الفقاعة التي تشبهك.', popped:function(a,b){return 'تم فرقعة '+a+' من '+b+' فقاعات';}, goodToKnow:'جيد أن تعرف', tryThis:'جرّب هذا',
+  calTitle:function(c){return 'التقويم · '+c;}, calLead:'اضغط على يوم لترى ما يحدث.', calNone:'لا شيء مدرج لهذا اليوم بعد.', calToday:'اليوم',
+  calEvents:function(n){return n===1?'فعالية واحدة':n+' فعاليات';},
+  todayBar:function(d,n){return n? d+' · '+(n===1?'فعالية واحدة اليوم':n+' فعاليات اليوم') : d+' · لا شيء اليوم ›';},
+  todayQ:'لا تفوّت المدينة – لا تفوّت الناس', calPrev:'الشهر السابق', calNext:'الشهر التالي', calGo:'التفاصيل', evMap:'عرض على الخريطة', evClose:'إغلاق',
+  groupsTitle:function(c){return 'مجموعات واتساب · '+c;}, tipsTitle:function(c){return 'نصائح · '+c;},
+  groupsLead:'انضم إلى مجموعة، وتعرّف على من يحضرون الفعاليات نفسها، وتعالَ مع أصدقاء.', gwhatTitle:'ما هذه المجموعات؟',
+  gwhat:[['👋','ابحث عن رفقة','لا أحد يرافقك؟ قل مرحباً وابحث عن شخص متجه إلى الفعالية نفسها.'],['📣','اعرف الفعاليات أولاً','المنظّمون والسكان المحليون يشاركون ما يحدث هذا الأسبوع.'],['💬','اسأل أهل المدينة','نصائح وتوصيات وخطط في دردشة ودّية.']],
+  gwhatRules:'الانضمام مجاني. كن لطيفاً، بدون رسائل مزعجة. غادر في أي وقت.', tipsLead:'أمور جيد معرفتها قبل الذهاب.', mainGroup:'مجموعة المدينة', moreGroups:'المزيد من المجموعات', eventGroups:'مجموعات الفعاليات',
+  noGroups:'المجموعات في الطريق. عُد قريباً.', noTips:'لا توجد نصائح بعد.', joinShort:'انضم', sourceLink:'المصدر',
+  tipCats:{emergency:'طوارئ',safety:'سلامة',transport:'التنقّل',money:'المال',nature:'الشمس والشاطئ',practical:'عملي',food:'طعام',culture:'الثقافة المحلية',other:'أخرى'},
+  filterLabel:'تصفية الفعاليات', heat:'المناطق النشطة', whenLbl:'متى', whatLbl:'ماذا', dateLabel:'التاريخ', catLabel:'نوع الفعالية', mapLabel:'خريطة الفعاليات'
+});
+I18N.hi = Object.assign({}, I18N.en, {dir:'ltr', locale:'hi-IN',
+  sub:'शहर को मत चूको · लोगों को मत चूको',
+  melbourne:'मेलबर्न', sydney:'सिडनी',
+  count:function(n){ return n+' इवेंट'; },
+  localTime:function(c){ return c+' में स्थानीय समय'; },
+  empty:'इस शहर में अभी कोई इवेंट नहीं है।', noMatch:'इन फ़िल्टर से कोई इवेंट मेल नहीं खाता।', nearMe:'मेरे पास',
+  kmAway:function(k){return (k<1?'<1':(k<10?k.toFixed(1):Math.round(k)))+' किमी दूर';},
+  geoDenied:'लोकेशन ब्लॉक है। iPhone: सेटिंग्स > प्राइवेसी और सिक्योरिटी > लोकेशन सर्विसेज़ > Safari (या अपने ब्राउज़र) के लिए चालू करें और पेज रीलोड करें। Android/कंप्यूटर: एड्रेस के पास ताले के आइकन पर टैप करके लोकेशन की अनुमति दें।',
+  pickArea:'लोकेशन नहीं मिली? अपना इलाका चुनें', searchPh:'इलाका या पता खोजें', noResults:'कोई जगह नहीं मिली',
+  geoUnavail:'आपकी लोकेशन नहीं मिल पाई। जाँचें कि लोकेशन सर्विसेज़ चालू हैं, फिर दोबारा कोशिश करें।', geoSecure:'लोकेशन के लिए सुरक्षित (https) पेज चाहिए।',
+  geoFar:'लगता है आप मेलबर्न और सिडनी के बाहर हैं, इसलिए इवेंट शहर के अनुसार दिखा रहे हैं।', geoWait:'आपकी लोकेशन खोज रहे हैं...',
+  clear:'फ़िल्टर हटाएँ',
+  when:{all:'आने वाले', soon:'अगले 2 घंटे', tonight:'आज रात', today:'आज', tomorrow:'कल', weekend:'इस वीकेंड'},
+  cats:{running:'रनिंग क्लब',surf:'सर्फ़िंग',volleyball:'वॉलीबॉल',music:'संगीत',food:'खान-पान',markets:'बाज़ार',parties:'पार्टियाँ',culture:'कला और संस्कृति',family:'परिवार',outdoors:'आउटडोर',sports:'खेल और फ़िटनेस',community:'कम्युनिटी'},
+  details:'विवरण', fFree:'मुफ़्त', fNewbie:'नए लोगों के लिए', sayHi:'ग्रुप में हैलो कहें', hiCopied:'संदेश कॉपी हो गया। ग्रुप में पेस्ट करें 👋',
+  hiMsg:function(ti,c){return 'नमस्ते! मैं '+c+' में नया हूँ 👋 क्या कोई “'+ti+'” में जा रहा है?';},
+  walk:function(m){return '🚶 '+m+' मिनट पैदल';},
+  picksTitle:'शहर में नए हैं? लोगों से मिलने के आसान तरीके', picksLead:'इस हफ़्ते के शुरुआती-अनुकूल और मिलनसार इवेंट।',
+  fPrice:'कीमत', fLevel:'स्तर', fBring:'साथ लाएँ', addCal:'कैलेंडर में जोड़ें', noDate:'तारीख़ अभी तय नहीं', evPage:'इवेंट पेज', comeWithMe:'मेरे साथ चलो!',
+  directions:'गूगल मैप्स', waze:'Waze', share:'WhatsApp पर शेयर करें', wa:'WhatsApp ग्रुप से जुड़ें', groupTag:'ग्रुप', hasGroup:'ग्रुप है',
+  cityGroup:function(c){return 'CITYSIDE कम्युनिटी · '+c;}, groupLead:'उन लोगों से मिलें जो उन्हीं इवेंट में जा रहे हैं',
+  every:function(d){return 'हर '+d;}, and:' और ', by:'आयोजक', promoFeatured:'★ फ़ीचर्ड', promoSponsored:'प्रायोजित',
+  submit:'कुछ आयोजित कर रहे हैं? अपना इवेंट CITYSIDE पर जोड़ें', listShort:'+ अपना इवेंट जोड़ें',
+  welcomeTitle:'शहर को मत चूको।\nलोगों को मत चूको।',
+  welcomeText:'मेलबर्न और सिडनी में इवेंट, रन क्लब और कम्युनिटी। शहर चुनें, कुछ मज़ेदार खोजें और ग्रुप से जुड़कर साथ जाने वालों से मिलें।', explore:'इवेंट देखें',
+  install:'ऐप के रूप में डाउनलोड करें', installTitle:'CITYSIDE इंस्टॉल करें', installIos:'Safari में शेयर बटन दबाएँ और “होम स्क्रीन में जोड़ें” चुनें।', installOther:'ब्राउज़र मेनू खोलें और “ऐप इंस्टॉल करें” या “होम स्क्रीन में जोड़ें” चुनें।', close:'बंद करें', shareHead:'यहाँ मिला',
+  tabMap:'नक्शा', tabList:'सूची', tabCal:'कैलेंडर', tabGroups:'ग्रुप', tabTips:'सवाल',
+  askTitle:'आप क्या सोच रहे हैं?', askLead:'जो बबल आप जैसा लगे उस पर टैप करें।', popped:function(a,b){return b+' में से '+a+' बबल फूटे';}, goodToKnow:'जानने लायक', tryThis:'यह आज़माएँ',
+  calTitle:function(c){return 'कैलेंडर · '+c;}, calLead:'किसी दिन पर टैप करके देखें क्या हो रहा है।', calNone:'इस दिन के लिए अभी कुछ नहीं है।', calToday:'आज',
+  calEvents:function(n){return n+' इवेंट';},
+  todayBar:function(d,n){return n? d+' · आज '+n+' इवेंट' : d+' · आज कुछ नहीं ›';},
+  todayQ:'शहर को मत चूको – लोगों को मत चूको', calPrev:'पिछला महीना', calNext:'अगला महीना', calGo:'विवरण', evMap:'नक्शे पर देखें', evClose:'बंद करें',
+  groupsTitle:function(c){return 'WhatsApp ग्रुप · '+c;}, tipsTitle:function(c){return 'टिप्स · '+c;},
+  groupsLead:'ग्रुप से जुड़ें, उन्हीं इवेंट में जाने वालों से मिलें और दोस्तों के साथ पहुँचें।', gwhatTitle:'ये ग्रुप क्या हैं?',
+  gwhat:[['👋','साथ जाने वाले खोजें','कोई साथ नहीं? हैलो कहें और उसी इवेंट में जाने वाले से मिलें।'],['📣','इवेंट सबसे पहले जानें','आयोजक और स्थानीय लोग इस हफ़्ते की जानकारी साझा करते हैं।'],['💬','स्थानीय लोगों से पूछें','दोस्ताना चैट में टिप्स, सुझाव और प्लान।']],
+  gwhatRules:'जुड़ना मुफ़्त है। विनम्र रहें, स्पैम नहीं। कभी भी छोड़ सकते हैं।', tipsLead:'जाने से पहले जानने लायक बातें।', mainGroup:'शहर का ग्रुप', moreGroups:'और ग्रुप', eventGroups:'इवेंट ग्रुप',
+  noGroups:'ग्रुप जल्द आ रहे हैं। जल्दी वापस आएँ।', noTips:'अभी कोई टिप नहीं।', joinShort:'जुड़ें', sourceLink:'स्रोत',
+  tipCats:{emergency:'आपातकाल',safety:'सुरक्षा',transport:'आना-जाना',money:'पैसे',nature:'धूप और समुद्र तट',practical:'व्यावहारिक',food:'खाना',culture:'स्थानीय संस्कृति',other:'अन्य'},
+  filterLabel:'इवेंट फ़िल्टर करें', heat:'हॉट स्पॉट', whenLbl:'कब', whatLbl:'क्या', dateLabel:'तारीख़', catLabel:'इवेंट का प्रकार', mapLabel:'इवेंट का नक्शा'
+});
+var LANGS = [['en','English','EN'],['he','\u05e2\u05d1\u05e8\u05d9\u05ea','\u05e2\u05d1'],['ar','\u0627\u0644\u0639\u0631\u0628\u064a\u0629','\u0639\u0631'],['zh','\u4e2d\u6587','\u4e2d\u6587'],['hi','\u0939\u093f\u0928\u094d\u0926\u0940','\u0939\u093f'],['es','Espa\u00f1ol','ES'],['de','Deutsch','DE'],['vi','Ti\u1ebfng Vi\u1ec7t','VI']];
 var QUICK = ['🎭','🎵','🍷','🍴','☕','🎨','🎪','🎉','⚽','🏖️','🛍️','🌿','📸','🎬','🍺','🧘'];
 
 var admin = location.hash === '#admin';
@@ -1241,6 +1361,9 @@ function greetText(){
     he:['בוקר טוב ממלבורן \u2600\uFE0F','צהריים טובים ממלבורן \uD83C\uDF24\uFE0F','ערב טוב ממלבורן \uD83C\uDF05','לילה טוב ממלבורן \uD83C\uDF19'],
     zh:['墨尔本的早安 \u2600\uFE0F','墨尔本的午安 \uD83C\uDF24\uFE0F','墨尔本的晚上好 \uD83C\uDF05','墨尔本的深夜 \uD83C\uDF19'],
     es:['\u00a1Buenos d\u00edas desde Melbourne! \u2600\uFE0F','\u00a1Buenas tardes desde Melbourne! \uD83C\uDF24\uFE0F','\u00a1Buenas noches desde Melbourne! \uD83C\uDF05','Hora de b\u00fahos en Melbourne \uD83C\uDF19'],
+    ar:['صباح الخير من ملبورن \u2600\uFE0F','مساء الخير من ملبورن \uD83C\uDF24\uFE0F','مساء الخير من ملبورن \uD83C\uDF05','ليلة سعيدة من ملبورن \uD83C\uDF19'],
+    hi:['मेलबर्न से सुप्रभात \u2600\uFE0F','मेलबर्न से नमस्कार \uD83C\uDF24\uFE0F','मेलबर्न से शुभ संध्या \uD83C\uDF05','मेलबर्न में रात का समय \uD83C\uDF19'],
+    vi:['Chào buổi sáng từ Melbourne \u2600\uFE0F','Chào buổi chiều từ Melbourne \uD83C\uDF24\uFE0F','Chào buổi tối từ Melbourne \uD83C\uDF05','Đêm khuya ở Melbourne \uD83C\uDF19'],
     de:['Guten Morgen aus Melbourne \u2600\uFE0F','Guten Tag aus Melbourne \uD83C\uDF24\uFE0F','Guten Abend aus Melbourne \uD83C\uDF05','Nachteulen-Zeit in Melbourne \uD83C\uDF19']
   };
   return (G[lang]||G.en)[k];
@@ -1452,7 +1575,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 41</p></div>';
+  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 42</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
