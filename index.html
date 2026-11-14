@@ -563,11 +563,22 @@ html[dir="rtl"] .chiprow{-webkit-mask-image:linear-gradient(to left,#000 calc(10
 .qasteps li span{flex:none;width:24px;height:24px;border-radius:50%;background:var(--ink,#C23416);color:#fff;font-weight:800;font-size:.8rem;display:grid;place-items:center}
 .qaacts{display:grid;gap:8px}.qaact{border:0;border-radius:14px;padding:13px;font-family:inherit;font-weight:800;font-size:.95rem;background:var(--ink,#C23416);color:#fff;cursor:pointer}.qaact.alt{background:#fff0e8;color:#C23416}
 @media (prefers-reduced-motion:reduce){.bub,.qaem,.qasteps li{animation:none !important}}
+
+/* sea hero */
+.seabg{position:absolute;inset:0;overflow:hidden;z-index:0;background:#8fd0cf}
+.seabg i{position:absolute;inset:-8% -6%;background:url(img/hero-sea.webp) center 55%/cover no-repeat;animation:seazoom 26s ease-in-out infinite alternate;will-change:transform}
+.seabg b{position:absolute;inset:0;background:linear-gradient(100deg,rgba(255,248,242,.74),rgba(255,236,228,.5) 60%,rgba(255,226,222,.6));transition:background .9s ease}
+header[data-city="sydney"] .seabg b{background:linear-gradient(100deg,rgba(255,244,226,.78),rgba(255,226,200,.5) 60%,rgba(255,214,200,.62))}
+.seabg::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.35) 50%,transparent 65%);background-size:250% 100%;animation:seashine 9s ease-in-out infinite;mix-blend-mode:soft-light}
+@keyframes seazoom{from{transform:scale(1.02) translate3d(0,0,0)}to{transform:scale(1.2) translate3d(-3%,-2%,0)}}
+@keyframes seashine{from{background-position:120% 0}to{background-position:-20% 0}}
+.hero-layers .blob,.hero-layers .tint,.hero-layers .glow,.hero-layers .hl,.hero-layers::after{display:none !important}
+@media (prefers-reduced-motion:reduce){.seabg i,.seabg::after{animation:none}}
 </style>
 </head>
 <body data-view="map">
 <header data-city="melbourne">
-  <div class="hero-layers" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="tint syd"></div><div class="glow"></div><div class="hl clouds"><i></i></div><div class="hl hills"><i></i></div><div class="hl roo" id="roo"><i></i></div><div class="hl grass"><i></i></div></div>
+  <div class="hero-layers" aria-hidden="true"><div class="seabg"><i></i><b></b></div><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="tint syd"></div><div class="glow"></div><div class="hl clouds"><i></i></div><div class="hl hills"><i></i></div><div class="hl roo" id="roo"><i></i></div><div class="hl grass"><i></i></div></div>
   <a class="brand" href="./" aria-label="CITYSIDE">
     <span class="brandtext"><img class="wordimg" src="logo-cityside.png" alt="CITYSIDE" width="900" height="171"><small id="sub"></small></span>
   </a>
@@ -1289,7 +1300,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 36</p></div>';
+  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 37</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
