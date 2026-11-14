@@ -680,6 +680,17 @@ header[data-city="sydney"] .seabg b{background:linear-gradient(100deg,rgba(255,2
 .langmenu button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;border:0;background:transparent;padding:11px 14px;border-radius:11px;font-family:inherit;font-size:.98rem;font-weight:600;color:var(--ink);cursor:pointer;text-align:start}
 .langmenu button:hover,.langmenu button[aria-selected="true"]{background:var(--peach-pale,#fff0e8)}
 .langmenu i{font-style:normal;color:var(--accent);font-weight:800}
+
+/* black banner style */
+.todaybar,.nlbar,.fbtn,.nextup{background:#000 !important;color:#fff !important;border:0 !important;border-radius:0 !important;box-shadow:0 6px 18px rgba(0,0,0,.25) !important}
+.todaybar .tq{color:#fff !important;font-family:'Playfair Display',Georgia,serif !important;font-weight:700 !important}
+html[dir="rtl"] .todaybar .tq{font-family:var(--font) !important}
+.todaybar small,.todaybar small::after{color:rgba(255,255,255,.78) !important}
+.nlbar,.nlbar span,.nlbar span.t{color:#fff !important;font-family:'Playfair Display',Georgia,serif;font-weight:700}
+.fbtn{font-family:'Playfair Display',Georgia,serif;font-weight:700}
+.fbtn .fbadge{background:#fff !important;color:#000 !important}
+.nextup .nut small,.nextup .nua,.nextup .nut b,.nextup .nut span{color:#fff !important}
+.todaybar:hover,.todaybar:active{background:#222 !important}
 </style>
 </head>
 <body data-view="map">
@@ -1710,7 +1721,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="seolinks"><a href="/melbourne/">Events in Melbourne</a> \u00b7 <a href="/sydney/">Events in Sydney</a></p><p class="ver">CITYSIDE \u00b7 version 60</p></div>';
+  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="seolinks"><a href="/melbourne/">Events in Melbourne</a> \u00b7 <a href="/sydney/">Events in Sydney</a></p><p class="ver">CITYSIDE \u00b7 version 61</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
