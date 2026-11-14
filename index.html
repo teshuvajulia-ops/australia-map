@@ -386,7 +386,7 @@ details.tip p{margin:0;padding:0 16px 14px;line-height:1.6}
   .frow .heatbtn{position:static;inset:auto;height:auto;box-shadow:0 6px 18px rgba(60,30,30,.18)}
   .mapboxgl-ctrl-top-right{display:none}
   header{min-height:0 !important;padding-top:6px;padding-bottom:6px}
-  .wordimg{height:30px;filter:drop-shadow(0 0 6px rgba(255,255,255,.85)) drop-shadow(0 0 2px rgba(255,255,255,.9))}
+  .wordimg{height:30px;filter:drop-shadow(.6px 0 0 #f5b1eb) drop-shadow(-.6px 0 0 #f5b1eb) drop-shadow(0 .6px 0 #f5b1eb) drop-shadow(0 -.6px 0 #f5b1eb) drop-shadow(0 2px 3px rgba(20,10,20,.7))}
   .todaybar small::after{content:" \203A";font-weight:800;color:#f5b1eb}
   .pinshape{width:33px;height:33px;border-width:2.5px}
   .pin-wrap{width:33px;height:40px}
@@ -521,7 +521,7 @@ html[dir="rtl"] .pinner h2,html[dir="rtl"] .wcard h2,html[dir="rtl"] .calhead b,
 @media (prefers-reduced-motion:reduce){.chip,.wgo,.deskcta,.calday,.calev,.calnav,.installbtn,.todaybar,.tabbar button,.item,.gcard{transition:none !important;animation:none !important;transform:none !important}.wgo::after,.deskcta::after,.ripple{display:none}}
 
 /* Wordmark logo */
-.wordimg{display:block;height:34px;width:auto;max-width:62vw;align-self:flex-start;object-fit:contain}
+.wordimg{display:block;height:34px;width:auto;max-width:62vw;align-self:flex-start;object-fit:contain;filter:drop-shadow(1px 0 0 #f5b1eb) drop-shadow(-1px 0 0 #f5b1eb) drop-shadow(0 1px 0 #f5b1eb) drop-shadow(0 -1px 0 #f5b1eb) drop-shadow(0 2px 3px rgba(20,10,20,.7))}
 .wlogoimg{display:block;height:auto;width:min(240px,70%);margin:4px auto 14px}
 @media (min-width:721px){.wordimg{height:44px}}
 .brand{gap:0}
@@ -1742,7 +1742,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="seolinks"><a href="/melbourne/">Events in Melbourne</a> \u00b7 <a href="/sydney/">Events in Sydney</a></p><p class="ver">CITYSIDE \u00b7 version 55</p></div>';
+  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="seolinks"><a href="/melbourne/">Events in Melbourne</a> \u00b7 <a href="/sydney/">Events in Sydney</a></p><p class="ver">CITYSIDE \u00b7 version 56</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
