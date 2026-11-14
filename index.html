@@ -1159,7 +1159,6 @@ function showEventOnMap(e){
   setView('map');
   setTimeout(function(){
     map.flyTo({center:[e.lng,e.lat],zoom:Math.max(map.getZoom(),14),duration:700});
-    var m2 = markers[e.id]; if(m2 && !m2.getPopup().isOpen()) m2.togglePopup();
   }, 120);
 }
 function openEventSheet(e){
@@ -1280,7 +1279,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 33</p></div>';
+  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 34</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
@@ -1311,8 +1310,9 @@ function render(){
     el.className = 'pin-wrap' + (safeWa(e.whatsapp) ? ' hasgroup' : '') + (e.promo ? ' promo' : ''); el.title = tx(e,'title');
     el.style.setProperty('--d', Math.min(idx*45,700)+'ms');
     el.innerHTML = '<div class="pinbounce"><div class="pinshape"><span>'+esc(e.emoji||'📍')+'</span></div>'+(safeWa(e.whatsapp)?'<i class="gbadge">\uD83D\uDC65</i>':'')+'</div>';
-    var popup = new mapboxgl.Popup({offset:[0,-48],maxWidth:'270px'}).setHTML(popupHtml(e));
-    var m = new mapboxgl.Marker({element:el,anchor:'bottom'}).setLngLat([e.lng,e.lat]).setPopup(popup).addTo(map);
+    var m = new mapboxgl.Marker({element:el,anchor:'bottom'}).setLngLat([e.lng,e.lat]).addTo(map);
+    el.style.cursor='pointer';
+    el.addEventListener('click',function(ev){ ev.stopPropagation(); openEventSheet(e); });
     markers[e.id] = m;
     var li = document.createElement('li'); li.style.setProperty('--i', Math.min(idx,14));
     var b = document.createElement('button'); b.type='button'; b.className='item';
@@ -1322,11 +1322,7 @@ function render(){
       (userPos ? '<small class="dist">\uD83D\uDCCD '+esc(awayText(e))+'</small>' : '')+
       (safeWa(e.whatsapp) ? '<small class="wab">\uD83D\uDC65 '+esc(t().groupTag)+' · WhatsApp</small>' : '')+'</span>';
     b.addEventListener('click',function(){
-      if(window.matchMedia('(max-width:720px)').matches){ openEventSheet(e); return; }
-      setTimeout(function(){
-        map.flyTo({center:[e.lng,e.lat],zoom:Math.max(map.getZoom(),14),duration:700});
-        if(!m.getPopup().isOpen()) m.togglePopup();
-      }, 60);
+      openEventSheet(e);
     });
     li.appendChild(b);
     if(admin){
@@ -1773,7 +1769,7 @@ function initAdmin(){
       var pr = $('#f-promo').value; if(pr) obj.promo = pr;
       if(ex){ delete ex.dates; delete ex.repeat; delete ex.weekday; delete ex.weekdays; delete ex.organizer; delete ex.organizerUrl; delete ex.promo; Object.assign(ex,obj); } else events.push(obj);
       markDirty(); closeForm(); filters = {when:'all', cats:{}, group:false}; syncChips(); setCity(c);
-      if(markers[obj.id]){ map.flyTo({center:[obj.lng,obj.lat],zoom:15,duration:700}); markers[obj.id].togglePopup(); }
+      if(markers[obj.id]){ map.flyTo({center:[obj.lng,obj.lat],zoom:15,duration:700}); openEventSheet(obj); }
     }).catch(function(){
       msg.className='msg err'; msg.textContent='החיפוש נכשל. בדקי חיבור לאינטרנט ונסי שוב.';
     }).then(function(){ btn.disabled = false; });
