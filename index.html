@@ -397,6 +397,14 @@ small.dist{color:#2f7cf6;font-weight:700}
 .calday.is-today{border-color:var(--accent);color:var(--accent)}
 .calday.is-sel{background:var(--accent);color:#fff}
 .calday.is-sel em i{background:#fff}
+body[data-view="list"] .filters{display:none}
+.calday{position:relative;overflow:hidden;isolation:isolate;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.65);background:#d9c7bd}
+.calday::before{content:"";position:absolute;inset:0;z-index:-2;background:var(--bg) center/cover}
+.calday::after{content:"";position:absolute;inset:0;z-index:-1;background:rgba(40,20,20,.38);transition:background .2s}
+.calday.is-today{border-color:#fff;box-shadow:0 0 0 2px var(--accent);color:#fff}
+.calday.is-sel::after{background:rgba(221,95,75,.62)}
+.calday.is-sel{background:#d9c7bd;box-shadow:0 0 0 2px var(--accent)}
+.calday em i,.calday.is-sel em i{background:#fff}
 .caldayh{text-transform:none;letter-spacing:0;font-size:.95rem}
 .calev{display:flex;align-items:center;gap:12px;width:100%;text-align:start;border:1px solid var(--line);background:#fff;border-radius:16px;padding:12px;margin-bottom:8px;color:var(--ink)}
 .calev .em{font-size:1.6rem}
@@ -1106,6 +1114,7 @@ function dayEvents(iso){
   return events.filter(function(e){ return e.city===city && occursOn(e,iso); })
     .sort(function(a,b){ return (a.time||'99').localeCompare(b.time||'99'); });
 }
+var CALIMGS = ['img/vibe-food.webp','img/vibe-outdoors.webp','img/vibe-surf.webp','img/vibe-music.webp','img/vibe-community.webp','img/vibe-sea.webp'];
 function calendarHtml(){
   var today = todayIso(TZ[city]);
   if(calY===null){ calY = +today.slice(0,4); calM = +today.slice(5,7)-1; calSel = today; }
@@ -1124,7 +1133,8 @@ function calendarHtml(){
     var iso = calY+'-'+('0'+(calM+1)).slice(-2)+'-'+('0'+d).slice(-2);
     var n = dayEvents(iso).length, dots = '';
     for(var k=0;k<Math.min(n,3);k++) dots += '<i></i>';
-    h += '<button type="button" class="calday'+(iso===today?' is-today':'')+(iso===calSel?' is-sel':'')+(n?' has':'')+'" data-cal-day="'+iso+'" aria-pressed="'+(iso===calSel)+'"><span>'+d+'</span><em>'+dots+'</em></button>';
+    var ph = (Math.imul((calY*12+calM)*40+d, 2654435761)>>>13) % CALIMGS.length;
+    h += '<button type="button" style="--bg:url('+CALIMGS[ph]+')" class="calday'+(iso===today?' is-today':'')+(iso===calSel?' is-sel':'')+(n?' has':'')+'" data-cal-day="'+iso+'" aria-pressed="'+(iso===calSel)+'"><span>'+d+'</span><em>'+dots+'</em></button>';
   }
   h += '</div>';
   var evs = dayEvents(calSel);
@@ -1279,7 +1289,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 34</p></div>';
+  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 35</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
