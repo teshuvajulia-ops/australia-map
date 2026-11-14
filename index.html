@@ -168,6 +168,7 @@ aside{width:360px;max-width:42vw;display:flex;flex-direction:column;background:v
 @media (max-width:720px){
   .main{flex-direction:column}
   aside{width:100%;max-width:none;flex:1;border-inline-end:0}
+  body[data-view="map"] aside{display:none}
   body[data-view="list"] #map{display:none}
   .tabbar{display:flex}
   header{min-height:0;padding-top:10px;padding-bottom:10px}
@@ -359,19 +360,6 @@ details.tip p{margin:0;padding:0 16px 14px;line-height:1.6}
   .fdone{display:block;width:100%;margin-top:8px;border:0;border-radius:999px;background:var(--accent);color:#fff;font:inherit;font-weight:800;font-size:1.02rem;padding:14px;cursor:pointer}
 }
 @keyframes fup{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
-
-/* Mobile map: events as a bottom sheet over the map */
-.shandle{display:none}
-@media (max-width:720px){
-  body[data-view="map"] aside{position:fixed;left:0;right:0;bottom:calc(var(--tabh,64px));z-index:900;width:auto;max-width:none;flex:none;border:0;border-radius:22px 22px 0 0;box-shadow:0 -10px 30px rgba(60,30,30,.22);overflow:hidden;height:210px;transition:height .3s cubic-bezier(.2,.8,.2,1)}
-  body[data-view="map"].sopen aside{height:calc(100vh - var(--tabh,64px) - 120px);overflow-y:auto}
-  body[data-view="map"] .shandle{display:block;width:100%;flex:none;border:0;background:#fff;padding:10px 0 4px;cursor:pointer;position:sticky;top:0;z-index:3}
-  body[data-view="map"] #list{overflow:visible;flex:none}
-  .shandle i{display:block;width:44px;height:5px;border-radius:3px;background:var(--peach);margin:0 auto}
-  body[data-view="map"]:not(.sopen) .clock,body[data-view="map"]:not(.sopen) .citygroup,body[data-view="map"]:not(.sopen) .nlbar,body[data-view="map"]:not(.sopen) .vibes,body[data-view="map"]:not(.sopen) #submitAside{display:none !important}
-  body[data-view="map"]:not(.sopen) .asidehead{padding-block:4px 8px}
-  body[data-view="map"]:not(.sopen) .mapboxgl-ctrl-bottom-left,body[data-view="map"]:not(.sopen) .mapboxgl-ctrl-bottom-right{bottom:210px}
-}
 .pinner .submitcta{margin:22px 0 0}
 
 /* Welcome screen and header CTA */
@@ -676,7 +664,6 @@ header[data-city="sydney"] .seabg b{background:linear-gradient(100deg,rgba(255,2
 
 <div class="main">
   <aside>
-    <button type="button" class="shandle" id="sHandle" aria-label="Events"><i></i></button>
     <div class="asidehead"><div id="cityname"></div><span id="count"></span><div class="clock" id="clock" aria-live="off"></div>
       <a class="citygroup" id="cityGroup" href="#" target="_blank" rel="noopener noreferrer" hidden></a></div>
     <button type="button" class="nlbar" id="nlBar"></button>
@@ -1674,7 +1661,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 50</p></div>';
+  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 48</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
@@ -1875,23 +1862,9 @@ function syncChips(){
   syncFilterBtn();
 }
 
-
-function mapPad(){ try{ var m = window.matchMedia('(max-width:720px)').matches && document.body.getAttribute('data-view')==='map' && !document.body.classList.contains('sopen'); map.setPadding({top:0,left:0,right:0,bottom:m?210:0}); }catch(e){} }
-function syncTabH(){ var tb = $('#tabbar'); if(tb){ var h = Math.round(tb.getBoundingClientRect().height); if(h>30) document.documentElement.style.setProperty('--tabh', h+'px'); } }
-window.addEventListener('resize', syncTabH); window.addEventListener('load', syncTabH); try{ new ResizeObserver(syncTabH).observe($('#tabbar')); }catch(e){}
-setTimeout(syncTabH,300);
-(function(){
-  var h = $('#sHandle'), a = $('aside'), y0 = null, moved = false;
-  function set(on){ document.body.classList.toggle('sopen', !!on); mapPad(); if(!on && a) a.scrollTop = 0; setTimeout(function(){ try{ map.resize(); }catch(e){} }, 320); }
-  document.addEventListener('touchstart',function(e){ var el = e.target.closest && e.target.closest('#sHandle,.asidehead'); if(el && document.body.getAttribute('data-view')==='map'){ y0 = e.touches[0].clientY; moved = false; } else y0 = null; },{passive:true});
-  document.addEventListener('touchmove',function(e){ if(y0!==null && Math.abs(e.touches[0].clientY-y0)>10) moved = true; },{passive:true});
-  document.addEventListener('touchend',function(e){ if(y0===null) return; var dy = e.changedTouches[0].clientY - y0; y0 = null; if(dy<-30) set(true); else if(dy>30) set(false); },{passive:true});
-  document.addEventListener('click',function(e){ if(e.target.closest && e.target.closest('#sHandle')){ set(!document.body.classList.contains('sopen')); } else if(!moved && e.target.closest && e.target.closest('.asidehead') && document.body.getAttribute('data-view')==='map' && !e.target.closest('a')){ set(!document.body.classList.contains('sopen')); } });
-  window.csSheet = set;
-})();
 /* Phone views: map or list */
 function setView(v){
-  document.body.setAttribute('data-view',v); document.body.classList.remove('sopen'); syncTabH(); mapPad();
+  document.body.setAttribute('data-view',v);
   document.querySelectorAll('.tabbar button,.desknav button').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.view===v ? 'true':'false'); });
   if(v==='groups' || v==='tips' || v==='calendar') renderPanel();
   if(v==='map' || v==='list') setTimeout(function(){ map.resize(); }, 30);
