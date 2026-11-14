@@ -278,7 +278,8 @@
     "emoji": "🎶",
     "lat": -33.8751,
     "lng": 151.2022,
-    "whatsapp": ""
+    "whatsapp": "",
+    "free": false
   },
   {
     "id": "e14",
@@ -386,7 +387,8 @@
     "emoji": "☀️",
     "lat": -33.8715,
     "lng": 151.2255,
-    "whatsapp": ""
+    "whatsapp": "",
+    "free": false
   },
   {
     "id": "e19",
@@ -432,7 +434,8 @@
     "repeat": "weekly",
     "weekday": 6,
     "organizer": "parkrun",
-    "organizerUrl": "https://www.parkrun.com.au"
+    "organizerUrl": "https://www.parkrun.com.au",
+    "newbie": true
   },
   {
     "id": "e21",
@@ -457,7 +460,8 @@
     "repeat": "weekly",
     "weekday": 2,
     "organizer": "Gunn Runners",
-    "organizerUrl": "https://gunnrunners.org.au"
+    "organizerUrl": "https://gunnrunners.org.au",
+    "newbie": true
   },
   {
     "id": "e22",
@@ -657,7 +661,8 @@
     "repeat": "weekly",
     "weekday": 6,
     "organizer": "Kings Cross Track Club",
-    "organizerUrl": "https://www.timeout.com/sydney/sport-and-fitness/the-best-run-clubs-in-sydney"
+    "organizerUrl": "https://www.timeout.com/sydney/sport-and-fitness/the-best-run-clubs-in-sydney",
+    "newbie": true
   },
   {
     "id": "e30",
@@ -763,7 +768,8 @@
       4
     ],
     "organizer": "Vicbeach / MBVA",
-    "organizerUrl": "https://www.vicbeach.com.au/republica/"
+    "organizerUrl": "https://www.vicbeach.com.au/republica/",
+    "newbie": true
   },
   {
     "id": "e34",
@@ -809,7 +815,8 @@
     "lat": -33.7969,
     "lng": 151.287,
     "organizer": "Sydney Beach Volleyball",
-    "organizerUrl": "https://beachvolleyball.com.au/social-events-manly"
+    "organizerUrl": "https://beachvolleyball.com.au/social-events-manly",
+    "newbie": true
   },
   {
     "id": "e36",
@@ -831,6 +838,7 @@
     "lat": -37.7004,
     "lng": 144.8797,
     "organizer": "URBNSURF",
-    "organizerUrl": "https://urbnsurf.com/melbourne/?p=10496"
+    "organizerUrl": "https://urbnsurf.com/melbourne/?p=10496",
+    "newbie": true
   }
 ]

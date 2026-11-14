@@ -511,6 +511,11 @@ html[dir="rtl"] .chiprow{-webkit-mask-image:linear-gradient(to left,#000 calc(10
 .calbtn{width:100%;margin-top:8px;border:1.5px solid rgba(194,52,22,.35);background:#fff;color:#C23416;border-radius:12px;padding:10px;font-family:inherit;font-weight:700;font-size:.85rem;cursor:pointer}
 .evlink{display:block;text-align:center;margin-top:8px;font-size:.8rem;font-weight:700;color:#C23416}
 .pop a.evlink{display:block;background:none;color:#C23416;border:0;box-shadow:none;padding:8px 4px 0;text-align:center;font-size:.8rem;font-weight:700;width:auto}
+.bdgs{display:flex;flex-wrap:wrap;gap:5px;margin:4px 0}
+.bdg{font-size:.66rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:3px 8px;line-height:1.3}
+.bdg.free{background:#e3f6e8;color:#14753a}.bdg.nb{background:#fff0d6;color:#9a5a00}
+.sayhi{width:100%;margin-top:8px;border:0;background:#fff0d6;color:#9a5a00;border-radius:12px;padding:10px;font-family:inherit;font-weight:700;font-size:.85rem;cursor:pointer}
+.flagchip{flex:none}
 </style>
 </head>
 <body data-view="map">
@@ -664,9 +669,9 @@ var I18N = {
     empty:'No events in this city yet.',
     noMatch:'No events match these filters.', nearMe:'Near me', kmAway:function(k){return k<1?'<1 km away':(k<10?k.toFixed(1):Math.round(k))+' km away';}, geoDenied:'Location is blocked. On iPhone: Settings > Privacy & Security > Location Services > turn on for Safari (or your browser), then reload. On Android/desktop: tap the lock icon next to the address and allow Location.', pickArea:'No location? Pick your area', searchPh:'Search a suburb or address', noResults:'No places found', geoUnavail:'Could not find your location. Check that Location Services is on, then try again.', geoSecure:'Location needs a secure (https) page.', geoFar:'You seem to be outside Melbourne and Sydney, so showing events by city.', geoWait:'Finding you...',
     clear:'Clear filters',
-    when:{all:'Upcoming', today:'Today', tomorrow:'Tomorrow', weekend:'This weekend'},
+    when:{all:'Upcoming', soon:'Next 2h', tonight:'Tonight', today:'Today', tomorrow:'Tomorrow', weekend:'This weekend'},
     cats:{running:'Run clubs',surf:'Surfing',volleyball:'Volleyball',music:'Music',food:'Food & drink',markets:'Markets',parties:'Parties',culture:'Arts & culture',family:'Family',outdoors:'Outdoors',sports:'Sports & fitness',community:'Communities'},
-    details:'Details', fPrice:'Price', fLevel:'Level', fBring:'Bring', addCal:'Add to calendar', noDate:'No date set yet', evPage:'Event page', comeWithMe:'Come with me!', directions:'Google Maps', waze:'Waze', share:'Share on WhatsApp', wa:'Join the group on WhatsApp', groupTag:'Group', hasGroup:'Has a group', cityGroup:function(c){return 'CITYSIDE community · '+c;}, groupLead:'Meet people going to the same events', every:function(d){return 'Every '+d;}, and:' & ', by:'by', promoFeatured:'★ Featured', promoSponsored:'Sponsored', submit:'Organising something? List your event on CITYSIDE', listShort:'+ List your event', welcomeTitle:'Don\'t miss the city.\nDon\'t miss the people.', welcomeText:'Events, run clubs and communities in Melbourne and Sydney. Pick a city, find something on, and join the group to meet people going.', explore:'Explore events',
+    details:'Details', fFree:'Free', fNewbie:'Newcomer-friendly', sayHi:'Say hi in the group', hiCopied:'Message copied. Paste it in the group \uD83D\uDC4B', hiMsg:function(ti,c){return 'Hi! I\u2019m new in '+c+' \uD83D\uDC4B Is anyone going to \u201c'+ti+'\u201d?';}, walk:function(m){return '\uD83D\uDEB6 '+m+' min walk';}, picksTitle:'New in town? Easy ways to meet people', picksLead:'Beginner-friendly and social events coming up this week.', fPrice:'Price', fLevel:'Level', fBring:'Bring', addCal:'Add to calendar', noDate:'No date set yet', evPage:'Event page', comeWithMe:'Come with me!', directions:'Google Maps', waze:'Waze', share:'Share on WhatsApp', wa:'Join the group on WhatsApp', groupTag:'Group', hasGroup:'Has a group', cityGroup:function(c){return 'CITYSIDE community · '+c;}, groupLead:'Meet people going to the same events', every:function(d){return 'Every '+d;}, and:' & ', by:'by', promoFeatured:'★ Featured', promoSponsored:'Sponsored', submit:'Organising something? List your event on CITYSIDE', listShort:'+ List your event', welcomeTitle:'Don\'t miss the city.\nDon\'t miss the people.', welcomeText:'Events, run clubs and communities in Melbourne and Sydney. Pick a city, find something on, and join the group to meet people going.', explore:'Explore events',
     install:'Install app', installTitle:'Install CITYSIDE', installIos:'Tap the Share button in Safari, then choose “Add to Home Screen”.', installOther:'Open the browser menu and choose “Install app” or “Add to Home screen”.', close:'Close', shareHead:'Found on',
     tabMap:'Map', tabList:'List', tabCal:'Calendar', tabGroups:'Groups', tabTips:'Tips', calTitle:function(c){return 'Calendar \u00b7 '+c;}, calLead:'Tap a day to see what is on.', calNone:'Nothing listed for this day yet.', calToday:'Today', calEvents:function(n){return n===1?'1 event':n+' events';}, todayBar:function(d,n){return n? d+' \u00b7 '+(n===1?'1 event today':n+' events today') : d+' \u00b7 nothing today \u203A';}, todayQ:"Don't miss the city \u2013 Don't miss the people", calPrev:'Previous month', calNext:'Next month', calGo:'Details', evMap:'Show on map', evClose:'Close',
     groupsTitle:function(c){return 'WhatsApp groups · '+c;}, tipsTitle:function(c){return 'Tips · '+c;}, groupsLead:'Join a group, meet people going to the same events and arrive with friends.', gwhatTitle:'What are these groups?', gwhat:[['\uD83D\uDC4B','Find people to go with','No one to go with? Say hi, find someone heading to the same event.'],['\uD83D\uDCE3','Hear about events first','Organisers and locals share what is on this week.'],['\uD83D\uDCAC','Ask the locals','Tips, recommendations and plans, in a friendly chat.']], gwhatRules:'Free to join. Be kind, no spam. Leave any time.', tipsLead:'Good to know before you go.', mainGroup:'City group', moreGroups:'More groups', eventGroups:'Event groups', noGroups:'Groups are on their way. Check back soon.', noTips:'No tips yet.', joinShort:'Join', sourceLink:'Source', tipCats:{emergency:'Emergency',safety:'Safety',transport:'Getting around',money:'Money',nature:'Sun & beach',practical:'Practical',food:'Food',culture:'Local culture',other:'Other'},
@@ -682,9 +687,9 @@ var I18N = {
     empty:'עדיין אין אירועים בעיר הזו.',
     noMatch:'אין אירועים שמתאימים לסינון.', nearMe:'לידי', kmAway:function(k){return k<1?'פחות מ-1 ק"מ ממך':'‏'+(k<10?k.toFixed(1):Math.round(k))+' ק"מ ממך';}, geoDenied:'המיקום חסום. באייפון: הגדרות > פרטיות ואבטחה > שירותי מיקום > להפעיל עבור Safari (או הדפדפן שלך) ולרענן את הדף. באנדרואיד/מחשב: ללחוץ על המנעול ליד הכתובת ולאשר מיקום.', pickArea:'בלי מיקום? בחרו אזור', searchPh:'חיפוש פרבר או כתובת', noResults:'לא נמצאו מקומות', geoUnavail:'לא הצלחנו לאתר את המיקום. כדאי לוודא ששירותי המיקום דלוקים ולנסות שוב.', geoSecure:'מיקום דורש דף מאובטח (https).', geoFar:'נראה שאת/ה מחוץ למלבורן וסידני, לכן מוצגים אירועים לפי עיר.', geoWait:'מאתר מיקום...',
     clear:'נקה סינון',
-    when:{all:'הכל', today:'היום', tomorrow:'מחר', weekend:'סוף השבוע'},
+    when:{all:'הכל', soon:'בשעתיים הקרובות', tonight:'הערב', today:'היום', tomorrow:'מחר', weekend:'סוף השבוע'},
     cats:CAT_HE,
-    details:'לפרטים', fPrice:'מחיר', fLevel:'רמה', fBring:'להביא', addCal:'הוספה ליומן', noDate:'עדיין אין תאריך', evPage:'דף האירוע', comeWithMe:'בואו איתי!', directions:'ניווט ב-Google Maps', waze:'ניווט ב-Waze', share:'שיתוף ב-WhatsApp', wa:'הצטרפות לקבוצה ב-WhatsApp', groupTag:'קבוצה', hasGroup:'יש קבוצה', cityGroup:function(c){return 'קהילת CITYSIDE ב'+c;}, groupLead:'להכיר אנשים שמגיעים לאותם אירועים', every:function(d){return 'כל '+d;}, and:' ו', by:'מאת', promoFeatured:'★ מומלץ', promoSponsored:'ממומן', submit:'מארגנים אירוע? פרסמו אותו ב-CITYSIDE', listShort:'+ פרסום אירוע', welcomeTitle:'אל תפספסו את העיר.\nאל תפספסו את האנשים.', welcomeText:'אירועים, קבוצות ריצה וקהילות במלבורן ובסידני. בוחרים עיר, מוצאים מה קורה, ומצטרפים לקבוצה כדי להכיר אנשים שמגיעים.', explore:'לגלות אירועים',
+    details:'לפרטים', fFree:'חינם', fNewbie:'מתאים לחדשים', sayHi:'להגיד שלום בקבוצה', hiCopied:'ההודעה הועתקה. הדביקו אותה בקבוצה \uD83D\uDC4B', hiMsg:function(ti,c){return 'היי! אני חדש/ה ב'+c+' \uD83D\uDC4B מישהו מגיע ל\u201c'+ti+'\u201d?';}, walk:function(m){return '\uD83D\uDEB6 '+m+' דק\u2019 הליכה';}, picksTitle:'חדשים בעיר? דרכים קלות להכיר אנשים', picksLead:'אירועים חברתיים ומתאימים למתחילים בשבוע הקרוב.', fPrice:'מחיר', fLevel:'רמה', fBring:'להביא', addCal:'הוספה ליומן', noDate:'עדיין אין תאריך', evPage:'דף האירוע', comeWithMe:'בואו איתי!', directions:'ניווט ב-Google Maps', waze:'ניווט ב-Waze', share:'שיתוף ב-WhatsApp', wa:'הצטרפות לקבוצה ב-WhatsApp', groupTag:'קבוצה', hasGroup:'יש קבוצה', cityGroup:function(c){return 'קהילת CITYSIDE ב'+c;}, groupLead:'להכיר אנשים שמגיעים לאותם אירועים', every:function(d){return 'כל '+d;}, and:' ו', by:'מאת', promoFeatured:'★ מומלץ', promoSponsored:'ממומן', submit:'מארגנים אירוע? פרסמו אותו ב-CITYSIDE', listShort:'+ פרסום אירוע', welcomeTitle:'אל תפספסו את העיר.\nאל תפספסו את האנשים.', welcomeText:'אירועים, קבוצות ריצה וקהילות במלבורן ובסידני. בוחרים עיר, מוצאים מה קורה, ומצטרפים לקבוצה כדי להכיר אנשים שמגיעים.', explore:'לגלות אירועים',
     install:'התקנת האפליקציה', installTitle:'התקנת CITYSIDE', installIos:'ב-Safari לוחצים על כפתור השיתוף ואז על “הוספה למסך הבית”.', installOther:'בתפריט הדפדפן בוחרים “התקנת אפליקציה” או “הוספה למסך הבית”.', close:'סגירה', shareHead:'מצאתי באתר',
     tabMap:'מפה', tabList:'רשימה', tabCal:'לוח', tabGroups:'קבוצות', tabTips:'טיפים', calTitle:function(c){return 'לוח אירועים \u00b7 '+c;}, calLead:'לוחצים על יום כדי לראות מה קורה.', calNone:'עוד לא פורסמו אירועים ליום הזה.', calToday:'היום', calEvents:function(n){return n===1?'אירוע אחד':n+' אירועים';}, todayBar:function(d,n){return n? d+' \u00b7 '+(n===1?'אירוע אחד היום':n+' אירועים היום') : d+' \u00b7 אין אירועים היום \u203A';}, todayQ:'אל תפספסו את העיר \u2013 אל תפספסו את האנשים', calPrev:'חודש קודם', calNext:'חודש הבא', calGo:'פרטים', evMap:'הצגה במפה', evClose:'סגירה',
     groupsTitle:function(c){return 'קבוצות WhatsApp · '+c;}, tipsTitle:function(c){return 'טיפים · '+c;}, groupsLead:'מצטרפים לקבוצה, מכירים אנשים שמגיעים לאותם אירועים ומגיעים עם חברים.', gwhatTitle:'מה זה הקבוצות האלה?', gwhat:[['\uD83D\uDC4B','למצוא עם מי לצאת','אין עם מי ללכת? אומרים שלום ומוצאים מישהו שמגיע לאותו אירוע.'],['\uD83D\uDCE3','לשמוע על אירועים ראשונים','מארגנים ותושבים משתפים מה קורה השבוע.'],['\uD83D\uDCAC','לשאול את המקומיים','טיפים, המלצות ותוכניות, בצ׳אט ידידותי.']], gwhatRules:'ההצטרפות חינם. מתנהגים יפה, בלי ספאם. אפשר לעזוב בכל רגע.', tipsLead:'טוב לדעת לפני שיוצאים.', mainGroup:'קבוצת העיר', moreGroups:'עוד קבוצות', eventGroups:'קבוצות אירועים', noGroups:'קבוצות בדרך. חזרו לבדוק בקרוב.', noTips:'עדיין אין טיפים.', joinShort:'הצטרפות', sourceLink:'מקור', tipCats:{emergency:'חירום',safety:'בטיחות',transport:'תחבורה',money:'כסף',nature:'שמש וחוף',practical:'מעשי',food:'אוכל',culture:'תרבות מקומית',other:'אחר'},
@@ -736,8 +741,27 @@ function occursOn(e,iso){
   return e.date <= iso && iso <= (e.endDate || e.date);
 }
 function occursBetween(e,a,b){ for(var d=a; d<=b; d=addDays(d,1)){ if(occursOn(e,d)) return true; } return false; }
+function timeRange(e){
+  var m = String(e.time||'').match(/(\d{1,2}):(\d{2})(?:\s*[\u2013-]\s*(\d{1,2}):(\d{2}))?/); if(!m) return null;
+  var s0 = +m[1]*60 + +m[2], e0 = m[3] ? +m[3]*60 + +m[4] : s0 + 120; if(e0 <= s0) e0 += 1440;
+  return [s0, e0];
+}
+function nowMin(){ var p = new Intl.DateTimeFormat('en-GB',{timeZone:TZ[city],hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date()).split(':'); return +p[0]*60 + +p[1]; }
+function isFree(e){
+  if(typeof e.free==='boolean') return e.free;
+  var pr = e.price_en || e.price || '';
+  if(pr) return /\bfree\b|חינם/i.test(pr);
+  var d = (e.desc_en || '') + ' ' + (e.desc || '');
+  return /\bfree\b|חינם/i.test(d) && !/\$\s?\d/.test(d);
+}
 function dateMatches(e){
   var today = todayIso(TZ[city]), w = filters.when, a, b;
+  if(w==='soon' || w==='tonight'){
+    if(!occursOn(e,today)) return false;
+    var r = timeRange(e); if(!r) return false;
+    var n = nowMin();
+    return w==='soon' ? (r[0] <= n+120 && r[1] >= n) : (r[0] >= 16*60 || r[1] >= 18*60) && r[1] >= n;
+  }
   if(w==='all') return admin || !e.date || endOf(e) >= today;
   if(w==='today'){ a = b = today; }
   else if(w==='tomorrow'){ a = b = addDays(today,1); }
@@ -749,7 +773,7 @@ function dateMatches(e){
   }
   return occursBetween(e,a,b);
 }
-function groupMatches(e){ return !filters.group || !!safeWa(e.whatsapp); }
+function groupMatches(e){ return (!filters.group || !!safeWa(e.whatsapp)) && (!filters.free || isFree(e)) && (!filters.newbie || e.newbie===true); }
 function catMatches(e){
   var sel = Object.keys(filters.cats).filter(function(k){return filters.cats[k];});
   if(!sel.length) return true;
@@ -833,6 +857,16 @@ function shareUrl(e){
   lines.unshift('\uD83D\uDE4B '+t().comeWithMe); lines.push('', site);
   return 'https://wa.me/?text='+encodeURIComponent(lines.join('\n'));
 }
+function badgesHtml(e){
+  var h = '';
+  if(isFree(e)) h += '<span class="bdg free">'+esc(t().fFree)+'</span>';
+  if(e.newbie===true) h += '<span class="bdg nb">\uD83D\uDC4B '+esc(t().fNewbie)+'</span>';
+  return h ? '<div class="bdgs">'+h+'</div>' : '';
+}
+function awayText(e){
+  var km = distKm(e);
+  return km <= 3 ? t().walk(Math.max(1,Math.round(km*1.3/5*60))) : t().kmAway(km);
+}
 function promoTag(e){
   if(e.promo==='sponsored') return '<span class="promotag sp">'+esc(t().promoSponsored)+'</span>';
   if(e.promo==='featured') return '<span class="promotag">'+esc(t().promoFeatured)+'</span>';
@@ -846,7 +880,7 @@ function orgLine(e){
 function popupHtml(e){
   var when = whenHtml(e);
   var im = safeImg(e.image);
-  var h = '<div class="pop" dir="'+t().dir+'">'+(im?'<img class="popimg" loading="lazy" alt="" src="'+esc(im)+'">':'')+promoTag(e)+'<h3>'+esc(tx(e,'title'))+'</h3>'+orgLine(e);
+  var h = '<div class="pop" dir="'+t().dir+'">'+(im?'<img class="popimg" loading="lazy" alt="" src="'+esc(im)+'">':'')+promoTag(e)+'<h3>'+esc(tx(e,'title'))+'</h3>'+badgesHtml(e)+orgLine(e);
   var w = safeWa(e.whatsapp);
   if(w) h += '<a class="wa" href="'+esc(w)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(e.id)+'">\uD83D\uDC65 '+t().wa+'</a>';
   if(when) h += '<p class="meta">'+when+'</p>';
@@ -860,6 +894,7 @@ function popupHtml(e){
   if(u) h += '<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer" data-t="details" data-e="'+esc(e.id)+'">'+t().details+'</a>';
   h += '<a class="alt" href="'+esc(gmapsUrl(e))+'" target="_blank" rel="noopener noreferrer" data-t="gmaps" data-e="'+esc(e.id)+'">'+t().directions+'</a>';
   h += '<a class="alt" href="'+esc(wazeUrl(e))+'" target="_blank" rel="noopener noreferrer" data-t="waze" data-e="'+esc(e.id)+'">'+t().waze+'</a></div>';
+  if(e.newbie===true && safeWa(cityGroups[e.city])) h += '<button type="button" class="sayhi" data-hi="'+esc(e.id)+'">\uD83D\uDC4B '+esc(t().sayHi)+'</button>';
   h += '<button type="button" class="calbtn" data-cal="'+esc(e.id)+'">\uD83D\uDCC5 '+esc(t().addCal)+'</button>';
   h += '<a class="evlink" href="'+esc(evPageUrl(e))+'" target="_blank" rel="noopener">'+esc(t().evPage)+' \u2197</a>';
   h += '<a class="share" href="'+esc(shareUrl(e))+'" target="_blank" rel="noopener noreferrer" data-t="share" data-e="'+esc(e.id)+'">'+t().share+'</a>';
@@ -966,9 +1001,9 @@ function cityEvents(){
     });
 }
 function filtersActive(){
-  return filters.when!=='all' || filters.group || filters.near || Object.keys(filters.cats).some(function(k){return filters.cats[k];});
+  return filters.when!=='all' || filters.group || filters.near || filters.free || filters.newbie || Object.keys(filters.cats).some(function(k){return filters.cats[k];});
 }
-function clearFilters(){ filters = {when:'all', cats:{}, group:false, near:false}; syncChips(); render(); fitCity(); }
+function clearFilters(){ filters = {when:'all', cats:{}, group:false, near:false, free:false, newbie:false}; syncChips(); render(); fitCity(); }
 
 var cityGroups = {};
 function syncCityGroup(){
@@ -1123,6 +1158,15 @@ function renderPanel(){
     var n = 0, i = 0;
     var main = safeWa(cityGroups[city]);
     if(main){ n++; h += '<a class="gmain" href="'+esc(main)+'" target="_blank" rel="noopener noreferrer"><img class="cgav" src="avatar-'+city+'.png" alt=""><span><b>'+esc(t().cityGroup(t()[city]))+'</b><small>'+esc(t().groupLead)+'</small></span></a>'; }
+    var tdy = todayIso(TZ[city]), wk = addDays(tdy,7);
+    var picks = events.filter(function(e){ return e.city===city && e.newbie===true && occursBetween(e,tdy,wk); })
+      .sort(function(a,b){ return (nextDay(a)+(a.time||'')).localeCompare(nextDay(b)+(b.time||'')); }).slice(0,4);
+    if(picks.length){
+      h += '<h3 class="psec">'+esc(t().picksTitle)+'</h3><p class="plead">'+esc(t().picksLead)+'</p>';
+      picks.forEach(function(e){
+        h += '<button type="button" class="calev" data-cal-ev="'+esc(e.id)+'"><span class="em">'+esc(e.emoji||'\uD83D\uDCCD')+'</span><span class="gtx"><b>'+esc(tx(e,'title'))+'</b><small>'+whenHtml(e)+'</small></span></button>';
+      });
+    }
     var more = moreGroups.filter(function(g){ return (g.city===city || g.city==='all') && safeWa(g.url); });
     if(more.length){
       h += '<h3 class="psec">'+esc(t().moreGroups)+'</h3>';
@@ -1153,7 +1197,7 @@ function renderPanel(){
     });
     if(!seen) h += '<p class="pempty">'+esc(t().noTips)+'</p>';
   }
-  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 29</p></div>';
+  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 30</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
@@ -1190,9 +1234,9 @@ function render(){
     var li = document.createElement('li'); li.style.setProperty('--i', Math.min(idx,14));
     var b = document.createElement('button'); b.type='button'; b.className='item';
     var ct = catsText(e);
-    b.innerHTML = '<span class="em">'+esc(e.emoji||'📍')+'</span><span class="tx">'+(e.promo ? promoTag(e) : '')+'<b>'+esc(tx(e,'title'))+'</b><small>'+whenHtml(e)+'</small><small dir="ltr" style="text-align:start">'+esc(e.address)+'</small>'+
+    b.innerHTML = '<span class="em">'+esc(e.emoji||'📍')+'</span><span class="tx">'+(e.promo ? promoTag(e) : '')+'<b>'+esc(tx(e,'title'))+'</b>'+badgesHtml(e)+'<small>'+whenHtml(e)+'</small><small dir="ltr" style="text-align:start">'+esc(e.address)+'</small>'+
       (ct ? '<small class="cats">'+esc(ct)+'</small>' : '')+
-      (userPos ? '<small class="dist">\uD83D\uDCCD '+esc(t().kmAway(distKm(e)))+'</small>' : '')+
+      (userPos ? '<small class="dist">\uD83D\uDCCD '+esc(awayText(e))+'</small>' : '')+
       (safeWa(e.whatsapp) ? '<small class="wab">\uD83D\uDC65 '+esc(t().groupTag)+' · WhatsApp</small>' : '')+'</span>';
     b.addEventListener('click',function(){
       if(window.matchMedia('(max-width:720px)').matches){ openEventSheet(e); return; }
@@ -1282,7 +1326,7 @@ function buildChips(){
   var wr = $('#whenRow'), cr = $('#catRow');
   wr.setAttribute('aria-label', t().dateLabel); cr.setAttribute('aria-label', t().catLabel);
   wr.innerHTML = ''; cr.innerHTML = '';
-  ['all','today','tomorrow','weekend'].forEach(function(k){
+  ['all','soon','tonight','today','tomorrow','weekend'].forEach(function(k){
     var b = document.createElement('button'); b.type='button'; b.className='chip'; b.dataset.when=k; b.textContent=t().when[k];
     b.addEventListener('click',function(){ filters.when = k; syncChips(); render(); fitCity(); });
     wr.appendChild(b);
@@ -1295,6 +1339,11 @@ function buildChips(){
   var gb = document.createElement('button'); gb.type='button'; gb.className='chip groupchip'; gb.id='groupChip'; gb.textContent='\uD83D\uDC65 '+t().hasGroup;
   gb.addEventListener('click',function(){ filters.group = !filters.group; syncChips(); render(); fitCity(); });
   var cl = document.createElement('span'); cl.className='rowlbl'; cl.textContent=t().whatLbl; cr.appendChild(cl);
+  [['free','\uD83C\uDD93 '+t().fFree],['newbie','\uD83D\uDC4B '+t().fNewbie]].forEach(function(f){
+    var fb = document.createElement('button'); fb.type='button'; fb.className='chip flagchip'; fb.dataset.flag=f[0]; fb.textContent=f[1];
+    fb.addEventListener('click',function(){ filters[f[0]] = !filters[f[0]]; syncChips(); render(); fitCity(); });
+    cr.appendChild(fb);
+  });
   CATS.forEach(function(c){
     var b = document.createElement('button'); b.type='button'; b.className='chip'; b.dataset.cat=c[0]; b.textContent=c[1]+' '+t().cats[c[0]];
     b.addEventListener('click',function(){ filters.cats[c[0]] = !filters.cats[c[0]]; syncChips(); render(); fitCity(); });
@@ -1307,6 +1356,7 @@ function buildChips(){
 function syncChips(){
   document.querySelectorAll('#whenRow .chip').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.when===filters.when ? 'true':'false'); });
   document.querySelectorAll('#catRow .chip[data-cat]').forEach(function(b){ b.setAttribute('aria-pressed', filters.cats[b.dataset.cat] ? 'true':'false'); });
+  document.querySelectorAll('#catRow .chip[data-flag]').forEach(function(b){ b.setAttribute('aria-pressed', filters[b.dataset.flag] ? 'true':'false'); });
   var nc = $('#nearChip'); if(nc) nc.setAttribute('aria-pressed', filters.near ? 'true':'false');
   var c = $('#clearBtn'); if(c) c.hidden = !filtersActive();
 }
@@ -1638,6 +1688,15 @@ load().then(function(){
   }catch(x){}
 });
 
+/* Say hi in the city group: copies a ready message, then opens the group */
+document.addEventListener('click',function(ev){
+  var b = ev.target.closest && ev.target.closest('[data-hi]'); if(!b) return;
+  var e = events.filter(function(x){ return x.id===b.dataset.hi; })[0]; if(!e) return;
+  var msg = t().hiMsg(tx(e,'title'), t()[e.city]);
+  try{ navigator.clipboard.writeText(msg); }catch(x){}
+  geoToast(t().hiCopied); track('e/'+e.id+'/sayhi');
+  var u = safeWa(cityGroups[e.city]); if(u) window.open(u,'_blank','noopener');
+});
 /* Add to calendar */
 document.addEventListener('click',function(ev){
   var b = ev.target.closest && ev.target.closest('[data-cal]'); if(!b) return;
