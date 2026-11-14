@@ -329,6 +329,7 @@ details.tip p{margin:0;padding:0 16px 14px;line-height:1.6}
 .welcome.out{opacity:0;transition:opacity .35s ease}
 .wcard{width:100%;max-width:420px;text-align:center;background:#fff;border-radius:28px;padding:30px 24px 24px;box-shadow:0 24px 60px rgba(221,95,75,.35);animation:wup .55s cubic-bezier(.2,.8,.2,1)}
 .wlogo{width:64px;height:64px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;font-size:30px;background:var(--peach-soft)}
+.wgreet{display:inline-block;margin:0 0 12px;padding:6px 14px;border-radius:999px;background:var(--peach-pale,#fff0e8);color:var(--accent);font-weight:800;font-size:.9rem}
 .wcard h2{margin:0 0 8px;font-size:1.5rem;letter-spacing:.01em}
 .wcard p{margin:0 0 20px;color:var(--muted);line-height:1.55}
 .wgo{display:block;width:100%;border:0;background:var(--accent);color:#fff;font-weight:800;font-size:1.05rem;padding:14px;border-radius:999px;box-shadow:0 10px 22px rgba(221,95,75,.4)}
@@ -1103,13 +1104,24 @@ document.addEventListener('click',function(ev){
   if(a) track('e/'+a.dataset.e+'/'+a.dataset.t);
 });
 /* Welcome screen: shown once per browser, easy to close. */
+function greetText(){
+  var h = 12;
+  try{ h = +new Intl.DateTimeFormat('en-GB',{timeZone:TZ.melbourne||'Australia/Melbourne',hour:'numeric',hour12:false}).format(new Date()).slice(0,2); }catch(x){}
+  if(h===24) h=0;
+  var k = (h>=5 && h<12) ? 0 : (h>=12 && h<17) ? 1 : (h>=17 && h<22) ? 2 : 3;
+  var he = lang==='he';
+  return [ he?'בוקר טוב ממלבורן \u2600\uFE0F':'Good morning from Melbourne \u2600\uFE0F',
+           he?'צהריים טובים ממלבורן \uD83C\uDF24\uFE0F':'Good afternoon from Melbourne \uD83C\uDF24\uFE0F',
+           he?'ערב טוב ממלבורן \uD83C\uDF05':'Good evening from Melbourne \uD83C\uDF05',
+           he?'לילה טוב ממלבורן \uD83C\uDF19':'Night owl hours in Melbourne \uD83C\uDF19' ][k];
+}
 function showWelcome(){
   var force = /[?&]welcome\b/.test(location.search);
   if(admin || (!force && lsGet('cs-welcome')==='1') || document.getElementById('welcome')) return;
   var u = safeUrl(config.submitUrl);
   var w = document.createElement('div'); w.id='welcome'; w.className='welcome'; w.setAttribute('role','dialog'); w.setAttribute('aria-modal','true'); w.setAttribute('aria-labelledby','welcomeH');
   w.dir = t().dir;
-  w.innerHTML = '<div class="wcard"><img class="wlogoimg" src="logo-cityside.png" alt="CITYSIDE" width="900" height="171"><h2 id="welcomeH">'+esc(t().welcomeTitle)+'</h2><p>'+esc(t().welcomeText)+'</p>'+
+  w.innerHTML = '<div class="wcard"><img class="wlogoimg" src="logo-cityside.png" alt="CITYSIDE" width="900" height="171"><div class="wgreet">'+esc(greetText())+'</div><h2 id="welcomeH">'+esc(t().welcomeTitle)+'</h2><p>'+esc(t().welcomeText)+'</p>'+
     '<button type="button" class="wgo">'+esc(t().explore)+'</button>'+
     (u ? '<a class="wlist" href="'+esc(u)+'" target="_blank" rel="noopener noreferrer" data-t="submit" data-e="welcome">'+esc(t().submit)+' \u2197</a>' : '')+'</div>';
   function close(){ lsSet('cs-welcome','1'); w.classList.add('out'); setTimeout(function(){ w.remove(); }, 350); document.removeEventListener('keydown',onKey); }
@@ -1310,7 +1322,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 39</p></div>';
+  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 40</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
@@ -1808,7 +1820,7 @@ function initAdmin(){
 }
 
 lang = 'en'; /* always start in English */
-fetch('config.json',{cache:'no-store'}).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; }).then(function(c){ config = c||{}; syncSubmit(); renderPanel(); loadAnalytics(); setTimeout(showWelcome, 7000); });
+fetch('config.json',{cache:'no-store'}).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; }).then(function(c){ config = c||{}; syncSubmit(); renderPanel(); loadAnalytics(); setTimeout(showWelcome, 4000); });
 fetch('groups.json',{cache:'no-store'}).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; }).then(function(g){ cityGroups = g||{}; moreGroups = Array.isArray(g&&g.more) ? g.more : []; syncCityGroup(); renderPanel(); });
 fetch('qa.json',{cache:'no-store'}).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; }).then(function(d){ qa = Array.isArray(d) ? d : []; renderPanel(); });
 fetch('tips.json',{cache:'no-store'}).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; }).then(function(d){ tips = Array.isArray(d) ? d : []; renderPanel(); });
