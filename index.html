@@ -574,6 +574,17 @@ header[data-city="sydney"] .seabg b{background:linear-gradient(100deg,rgba(255,2
 @keyframes seashine{from{background-position:120% 0}to{background-position:-20% 0}}
 .hero-layers .blob,.hero-layers .tint,.hero-layers .glow,.hero-layers .hl,.hero-layers::after{display:none !important}
 @media (prefers-reduced-motion:reduce){.seabg i,.seabg::after{animation:none}}
+
+/* minimal mobile header */
+@media (max-width:720px){
+  .installbtn{width:34px !important;height:34px !important;padding:0 !important;font-size:0 !important;gap:0 !important;display:grid !important;place-items:center;top:10px !important;background:rgba(255,255,255,.55) !important;border:0 !important;box-shadow:0 1px 6px rgba(0,0,0,.12)}
+  .installbtn[hidden]{display:none !important}
+  .installbtn::after{content:"\2B07";font-size:1rem;line-height:1;color:var(--ink)}
+  .controls .toggle.lang{background:transparent !important;border:0 !important;box-shadow:none !important;padding:0 !important;margin-inline-start:auto}
+  .controls .toggle.lang::before{display:none !important}
+  .controls .toggle.lang button[aria-pressed="true"]{display:none}
+  .controls .toggle.lang button{background:rgba(255,255,255,.55) !important;color:var(--ink) !important;text-shadow:none !important;border-radius:999px;padding:6px 12px !important;font-size:.78rem !important;font-weight:700;box-shadow:0 1px 6px rgba(0,0,0,.1)}
+}
 </style>
 </head>
 <body data-view="map">
@@ -1300,7 +1311,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 37</p></div>';
+  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 38</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
