@@ -338,6 +338,28 @@ details.tip p{margin:0;padding:0 16px 14px;line-height:1.6}
 .wcard .nlcard p{margin:0 0 12px}
 .wcard .nlimg{display:block;width:100%;height:auto;max-height:34vh;object-fit:cover;border-radius:18px;margin:0 0 16px}
 .wcard .nlx{display:block;margin:12px auto 0;background:none;border:0;color:var(--muted);font:inherit;cursor:pointer}
+
+/* Mobile filters: one button opens a sheet (no sideways scrolling) */
+.fbtn,.fback,.fhead,.fdone{display:none}
+#fPanel{display:contents}
+@media (max-width:720px){
+  .fbtn{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;border:1px solid var(--peach);background:#fff;color:var(--accent);border-radius:999px;padding:8px 16px;font:inherit;font-weight:800;font-size:.92rem;cursor:pointer}
+  .fbtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+  .fbtn .fbadge{min-width:20px;height:20px;border-radius:10px;background:var(--accent);color:#fff;font-size:.75rem;display:inline-grid;place-items:center;padding:0 5px}
+  .fbtn .fbadge[hidden]{display:none}
+  #fPanel{display:none;position:fixed;left:0;right:0;bottom:0;z-index:3600;max-height:82vh;overflow-y:auto;background:#fff;border-radius:24px 24px 0 0;padding:18px max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));box-shadow:0 -12px 40px rgba(60,30,30,.28);animation:fup .28s cubic-bezier(.2,.8,.2,1)}
+  body.fopen #fPanel{display:block}
+  .fback{position:fixed;inset:0;z-index:3500;background:rgba(60,30,30,.32)}
+  body.fopen .fback{display:block}
+  .fhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .fhead b{font-size:1.15rem}
+  .fhead button{border:0;background:var(--peach-pale);color:var(--accent);width:34px;height:34px;border-radius:50%;font-size:1rem;cursor:pointer}
+  #fPanel .chiprow{flex-wrap:wrap;overflow:visible;padding:4px 0 10px;gap:8px}
+  #fPanel .rowlbl{order:-1;flex:0 0 100%;margin-top:6px}
+  #fPanel .rowdiv{display:none}
+  .fdone{display:block;width:100%;margin-top:8px;border:0;border-radius:999px;background:var(--accent);color:#fff;font:inherit;font-weight:800;font-size:1.02rem;padding:14px;cursor:pointer}
+}
+@keyframes fup{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
 .pinner .submitcta{margin:22px 0 0}
 
 /* Welcome screen and header CTA */
@@ -630,9 +652,15 @@ header[data-city="sydney"] .seabg b{background:linear-gradient(100deg,rgba(255,2
 
 <div class="filters" id="filters">
   <button type="button" class="todaybar" id="todaybar"></button>
-  <div class="chiprow" id="whenRow" role="group"></div>
-  <div class="chiprow" id="catRow" role="group"></div>
+  <button type="button" class="fbtn" id="fBtn"></button>
+  <div id="fPanel">
+    <div class="fhead"><b id="fTitle"></b><button type="button" id="fClose" aria-label="Close">✕</button></div>
+    <div class="chiprow" id="whenRow" role="group"></div>
+    <div class="chiprow" id="catRow" role="group"></div>
+    <button type="button" class="fdone" id="fDone"></button>
+  </div>
 </div>
+<div class="fback" id="fBack"></div>
 
 <div class="main">
   <aside>
@@ -1633,7 +1661,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 47</p></div>';
+  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 48</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
@@ -1809,6 +1837,21 @@ function buildVibes(){
     });
   });
 }
+
+var FLT = {en:['Filters','Show events'],he:['סינון','הצג אירועים'],zh:['筛选','查看活动'],es:['Filtros','Ver eventos'],de:['Filter','Events anzeigen'],vi:['Bộ lọc','Xem sự kiện'],ar:['تصفية','عرض الفعاليات'],hi:['फ़िल्टर','इवेंट देखें']};
+function filterCount(){ var n = 0; if(filters.when!=='all') n++; ['group','near','free','newbie'].forEach(function(k){ if(filters[k]) n++; }); Object.keys(filters.cats).forEach(function(k){ if(filters.cats[k]) n++; }); return n; }
+function syncFilterBtn(){
+  var f = FLT[lang] || FLT.en, b = $('#fBtn'); if(!b) return; var n = filterCount();
+  b.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg><span>'+esc(f[0])+'</span><span class="fbadge"'+(n?'':' hidden')+'>'+n+'</span>';
+  var tt = $('#fTitle'); if(tt) tt.textContent = f[0];
+  var d = $('#fDone'); if(d) d.textContent = f[1];
+}
+function setFilterSheet(on){ document.body.classList.toggle('fopen', !!on); }
+document.addEventListener('click',function(e){
+  var el = e.target.closest && e.target.closest('#fBtn,#fClose,#fDone,#fBack'); if(!el) return;
+  setFilterSheet(el.id==='fBtn');
+});
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') setFilterSheet(false); });
 function syncChips(){
   document.querySelectorAll('#vibes .vibe').forEach(function(b){ b.setAttribute('aria-pressed', filters.cats[b.dataset.vibe] ? 'true':'false'); });
   document.querySelectorAll('#whenRow .chip').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.when===filters.when ? 'true':'false'); });
@@ -1816,6 +1859,7 @@ function syncChips(){
   document.querySelectorAll('#catRow .chip[data-flag]').forEach(function(b){ b.setAttribute('aria-pressed', filters[b.dataset.flag] ? 'true':'false'); });
   var nc = $('#nearChip'); if(nc) nc.setAttribute('aria-pressed', filters.near ? 'true':'false');
   var c = $('#clearBtn'); if(c) c.hidden = !filtersActive();
+  syncFilterBtn();
 }
 
 /* Phone views: map or list */
