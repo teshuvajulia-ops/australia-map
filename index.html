@@ -685,13 +685,29 @@ header[data-city="sydney"] .seabg b{background:linear-gradient(100deg,rgba(255,2
 :root{--font:"Playfair Display","Heebo",Georgia,serif;--font-head:"Playfair Display","Heebo",Georgia,serif}
 body,button,input,textarea,select{font-family:var(--font)}
 html[dir="rtl"]{--font:"Heebo","Playfair Display",system-ui,sans-serif}
+
+/* CITYSIDE of [Melbourne | Sydney] on one row */
+.of{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:700;font-size:1.15rem;color:var(--ink);margin-inline:10px 4px;align-self:center;line-height:1}
+@media (max-width:720px){
+  header{flex-wrap:nowrap !important;gap:6px !important;padding-top:8px !important;padding-bottom:8px !important;min-height:0 !important;align-items:center}
+  .brand{flex:none}.brandtext{flex:none}
+  .wordimg{height:22px !important}
+  .of{font-size:1rem;margin-inline:6px 0}
+  .controls{width:auto !important;flex:1 1 auto;min-width:0;justify-content:flex-end;gap:4px !important}
+  .controls .toggle{flex:0 1 auto}
+  .controls .toggle button{padding:5px 9px !important;font-size:.78rem !important;white-space:nowrap}
+  .langwrap{margin-inline-start:0 !important;flex:none}
+  .langbtn{padding:6px 8px !important}
+  .langbtn #langCur{display:none}
+  .installbtn{display:none !important}
+}
 </style>
 </head>
 <body data-view="map">
 <header data-city="melbourne">
   <div class="hero-layers" aria-hidden="true"><div class="seabg"><i></i><b></b></div><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="tint syd"></div><div class="glow"></div><div class="hl clouds"><i></i></div><div class="hl hills"><i></i></div><div class="hl roo" id="roo"><i></i></div><div class="hl grass"><i></i></div></div>
   <a class="brand" href="./" aria-label="CITYSIDE">
-    <span class="brandtext"><img class="wordimg" src="logo-cityside.png" alt="CITYSIDE" width="900" height="171"><small id="sub"></small></span>
+    <span class="brandtext"><img class="wordimg" src="logo-cityside.png" alt="CITYSIDE" width="900" height="171"><small id="sub"></small></span><span class="of" aria-hidden="true">of</span>
   </a>
   <button type="button" class="installbtn" id="installBtn" hidden></button>
   <nav class="desknav" id="deskNav" aria-label="Sections"><button type="button" data-view="map" aria-pressed="true"></button><button type="button" data-view="calendar" aria-pressed="false"></button><button type="button" data-view="groups" aria-pressed="false"></button><button type="button" data-view="tips" aria-pressed="false"></button><a class="deskcta" id="deskCta" href="#" target="_blank" rel="noopener noreferrer" data-t="submit" data-e="site" hidden></a></nav>
@@ -1715,7 +1731,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="seolinks"><a href="/melbourne/">Events in Melbourne</a> \u00b7 <a href="/sydney/">Events in Sydney</a></p><p class="ver">CITYSIDE \u00b7 version 62</p></div>';
+  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="seolinks"><a href="/melbourne/">Events in Melbourne</a> \u00b7 <a href="/sydney/">Events in Sydney</a></p><p class="ver">CITYSIDE \u00b7 version 63</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
