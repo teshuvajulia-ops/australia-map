@@ -75,6 +75,16 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px 16
 .main{flex:1;min-height:0;display:flex}
 aside{width:360px;max-width:42vw;display:flex;flex-direction:column;background:var(--card);border-inline-end:1px solid var(--line);min-height:0}
 .asidehead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px 12px;padding:12px 16px;border-bottom:1px solid var(--line);font-weight:700}
+.vibes{flex:0 0 auto;scroll-padding-inline:16px;display:flex;gap:10px;overflow-x:auto;padding:12px 16px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-bottom:1px solid var(--line)}
+.vibes::-webkit-scrollbar{display:none}
+.vibe{position:relative;flex:0 0 96px;height:120px;border:0;padding:0;border-radius:16px;overflow:hidden;cursor:pointer;scroll-snap-align:start;background:linear-gradient(160deg,var(--g1),var(--g2));box-shadow:0 2px 8px rgba(0,0,0,.12);transition:transform .2s,box-shadow .2s;font-family:inherit}
+.vibe img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.vibe:hover img{transform:scale(1.08)}
+.vibe::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(0,0,0,.62))}
+.vibe .vem{position:absolute;top:34%;left:0;right:0;text-align:center;font-size:2rem}
+.vibe .vl{position:absolute;z-index:1;left:8px;right:8px;bottom:8px;color:#fff;font-weight:700;font-size:.82rem;text-align:start;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.vibe[aria-pressed="true"]{outline:3px solid var(--accent,#1b7a5a);outline-offset:-3px;transform:translateY(-2px);box-shadow:0 6px 14px rgba(0,0,0,.2)}
+@media (prefers-reduced-motion:reduce){.vibe,.vibe img{transition:none}}
 .asidehead span{color:var(--muted);font-weight:500;font-size:.9rem}
 .clock{flex-basis:100%;font-weight:500;font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums}
 .clock strong{color:var(--accent);font-weight:700}
@@ -577,6 +587,7 @@ html[dir="rtl"] .chiprow{-webkit-mask-image:linear-gradient(to left,#000 calc(10
   <aside>
     <div class="asidehead"><div id="cityname"></div><span id="count"></span><div class="clock" id="clock" aria-live="off"></div>
       <a class="citygroup" id="cityGroup" href="#" target="_blank" rel="noopener noreferrer" hidden></a></div>
+    <div class="vibes" id="vibes" role="group"></div>
     <ul id="list"></ul>
     <a class="submitcta" id="submitAside" href="#" target="_blank" rel="noopener noreferrer" data-t="submit" data-e="site" hidden></a>
   </aside>
@@ -1269,7 +1280,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 31</p></div>';
+  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 32</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
@@ -1425,7 +1436,31 @@ function buildChips(){
   x.addEventListener('click',clearFilters); cr.appendChild(x);
   syncChips();
 }
+var VIBES = [
+  {cat:'food', img:'img/vibe-food.webp', em:'\uD83C\uDF7D\uFE0F', g:'#ffb38a,#e0653f'},
+  {cat:'outdoors', img:'img/vibe-outdoors.webp', em:'\uD83C\uDFD6\uFE0F', g:'#ffe3a8,#4aa3df'},
+  {cat:'surf', img:'img/vibe-surf.webp', em:'\uD83C\uDFC4', g:'#7fd0e6,#1b6c9a'},
+  {cat:'music', img:'', em:'\uD83C\uDFB6', g:'#ffb6d0,#8a5cf0'},
+  {cat:'community', img:'', em:'\uD83E\uDEC2', g:'#ffd37a,#e0653f'}
+];
+function buildVibes(){
+  var box = document.getElementById('vibes'); if(!box) return;
+  box.innerHTML = VIBES.map(function(v){
+    var name = (t().cats && t().cats[v.cat]) || v.cat;
+    return '<button type="button" class="vibe" data-vibe="'+v.cat+'" aria-pressed="false" style="--g1:'+v.g.split(',')[0]+';--g2:'+v.g.split(',')[1]+'">'+
+      (v.img ? '<img src="'+v.img+'" alt="" loading="lazy" decoding="async">' : '<span class="vem">'+v.em+'</span>')+
+      '<span class="vl">'+esc(name)+'</span></button>';
+  }).join('');
+  box.querySelectorAll('.vibe').forEach(function(b){
+    b.addEventListener('click',function(){
+      var c = b.dataset.vibe, on = !filters.cats[c];
+      filters.cats = {}; if(on) filters.cats[c] = true;
+      syncChips(); render(); fitCity();
+    });
+  });
+}
 function syncChips(){
+  document.querySelectorAll('#vibes .vibe').forEach(function(b){ b.setAttribute('aria-pressed', filters.cats[b.dataset.vibe] ? 'true':'false'); });
   document.querySelectorAll('#whenRow .chip').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.when===filters.when ? 'true':'false'); });
   document.querySelectorAll('#catRow .chip[data-cat]').forEach(function(b){ b.setAttribute('aria-pressed', filters.cats[b.dataset.cat] ? 'true':'false'); });
   document.querySelectorAll('#catRow .chip[data-flag]').forEach(function(b){ b.setAttribute('aria-pressed', filters[b.dataset.flag] ? 'true':'false'); });
@@ -1465,6 +1500,7 @@ function applyLang(){
   if(tokenNote) tokenNote.textContent = t().noToken;
   if(typeof syncInstall==='function') syncInstall();
   buildChips();
+  buildVibes();
   render();
 }
 function setLang(l){
