@@ -1114,7 +1114,7 @@ function dayEvents(iso){
   return events.filter(function(e){ return e.city===city && occursOn(e,iso); })
     .sort(function(a,b){ return (a.time||'99').localeCompare(b.time||'99'); });
 }
-var CALIMGS = ['img/vibe-food.webp','img/vibe-outdoors.webp','img/vibe-surf.webp','img/vibe-music.webp','img/vibe-community.webp','img/vibe-sea.webp'];
+var CALIMGS = ['img/vibe-food.webp','img/vibe-outdoors.webp','img/vibe-surf.webp','img/vibe-music.webp','img/vibe-picnic.webp','img/vibe-run.webp','img/vibe-fire.webp','img/vibe-sea.webp'];
 function calendarHtml(){
   var today = todayIso(TZ[city]);
   if(calY===null){ calY = +today.slice(0,4); calM = +today.slice(5,7)-1; calSel = today; }
@@ -1289,7 +1289,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 35</p></div>';
+  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 36</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
@@ -1447,7 +1447,7 @@ var VIBES = [
   {cat:'outdoors', img:'img/vibe-outdoors.webp', em:'\uD83C\uDFD6\uFE0F', g:'#ffe3a8,#4aa3df'},
   {cat:'surf', img:'img/vibe-surf.webp', em:'\uD83C\uDFC4', g:'#7fd0e6,#1b6c9a'},
   {cat:'music', img:'img/vibe-music.webp', em:'\uD83C\uDFB6', g:'#ffb6d0,#8a5cf0'},
-  {cat:'community', img:'img/vibe-community.webp', em:'\uD83E\uDEC2', g:'#ffd37a,#e0653f'}
+  {cat:'community', img:'img/vibe-picnic.webp', em:'\uD83E\uDEC2', g:'#ffd37a,#e0653f'}
 ];
 function buildVibes(){
   var box = document.getElementById('vibes'); if(!box) return;
