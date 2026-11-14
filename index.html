@@ -336,6 +336,7 @@ details.tip p{margin:0;padding:0 16px 14px;line-height:1.6}
 .nlbar:active{transform:scale(.98)}
 .wcard .nlcard{margin:0;padding:0;border:0;background:none;text-align:start}
 .wcard .nlcard p{margin:0 0 12px}
+.wcard .nlimg{display:block;width:100%;height:auto;max-height:34vh;object-fit:cover;border-radius:18px;margin:0 0 16px}
 .wcard .nlx{display:block;margin:12px auto 0;background:none;border:0;color:var(--muted);font:inherit;cursor:pointer}
 .pinner .submitcta{margin:22px 0 0}
 
@@ -1585,7 +1586,7 @@ function buildNlBar(){
 function openNlModal(){
   if(document.getElementById('nlModal')) return;
   var w = document.createElement('div'); w.id='nlModal'; w.className='welcome'; w.setAttribute('role','dialog'); w.setAttribute('aria-modal','true');
-  w.innerHTML = '<div class="wcard">'+nlHtml()+'<button type="button" class="nlx">✕</button></div>';
+  w.innerHTML = '<div class="wcard"><img class="nlimg" src="img/newsletter.webp" alt="" width="720" height="640">'+nlHtml()+'<button type="button" class="nlx">✕</button></div>';
   function close(){ w.remove(); document.removeEventListener('keydown',onKey); }
   function onKey(e){ if(e.key==='Escape') close(); }
   w.addEventListener('click',function(e){ if(e.target===w || (e.target.classList && e.target.classList.contains('nlx'))) close(); });
@@ -1632,7 +1633,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 45</p></div>';
+  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 46</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
