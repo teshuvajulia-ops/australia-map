@@ -3,8 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CITYSIDE</title>
+<title>CITYSIDE · Events & run clubs in Melbourne and Sydney</title>
 <meta name="description" content="Don't miss the city. Don't miss the people. Events, run clubs and communities in Melbourne and Sydney, on one map.">
+<link rel="canonical" href="https://cityside.app/">
+<meta property="og:type" content="website"><meta property="og:site_name" content="CITYSIDE">
+<meta property="og:title" content="CITYSIDE · Events & run clubs in Melbourne and Sydney">
+<meta property="og:description" content="Don't miss the city. Don't miss the people. Events, run clubs and communities on one map.">
+<meta property="og:url" content="https://cityside.app/"><meta property="og:image" content="https://cityside.app/img/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://cityside.app/img/og.jpg">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://cityside.app/#org","name":"CITYSIDE","url":"https://cityside.app/","logo":"https://cityside.app/icon-512.png","description":"Events, run clubs and communities in Melbourne and Sydney, on one map."},{"@type":"WebSite","@id":"https://cityside.app/#site","url":"https://cityside.app/","name":"CITYSIDE","publisher":{"@id":"https://cityside.app/#org"},"inLanguage":"en"}]}</script>
 <meta name="theme-color" content="#ffc9b7">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -393,6 +401,7 @@ details.tip p{margin:0;padding:0 16px 14px;line-height:1.6}
   .nextup .nut span{font-size:.8rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .nextup .nua{color:#c03018;font-weight:800;font-size:1.2rem}
 }
+.seolinks{text-align:center;font-size:.8rem;margin:14px 0 0}.seolinks a{color:var(--muted);text-decoration:none}
 .pinner .submitcta{margin:22px 0 0}
 
 /* Welcome screen and header CTA */
@@ -1701,7 +1710,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 52</p></div>';
+  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="seolinks"><a href="/melbourne/">Events in Melbourne</a> \u00b7 <a href="/sydney/">Events in Sydney</a></p><p class="ver">CITYSIDE \u00b7 version 53</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
@@ -2267,6 +2276,7 @@ load().then(function(){
   fitCity();
   /* Deep link: ?e=<event id> opens that event */
   try{
+    var qc = new URLSearchParams(location.search).get('city'); if(qc==='melbourne'||qc==='sydney'){ if(qc!==city) setCity(qc); }
     var want = new URLSearchParams(location.search).get('e');
     var ev0 = want && events.filter(function(x){ return x.id===want; })[0];
     if(ev0){ if(ev0.city!==city) setCity(ev0.city); setTimeout(function(){ showEventOnMap(ev0); openEventSheet(ev0); }, 400); }
