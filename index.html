@@ -504,6 +504,11 @@ html[dir="rtl"] .wcard h2,.welcome[dir="rtl"] h2{text-transform:none;letter-spac
 html[dir="rtl"] .todaybar .tq{text-transform:none;letter-spacing:0;font-size:.95rem}
 .todaybar .tq::before{content:none !important}
 .todaybar .tq{text-wrap:balance}
+.todaybar .tq{font-family:var(--font-head);font-weight:700;color:#c03018;letter-spacing:.07em;font-size:.86rem}
+.todaybar small{color:#8c5b52;font-weight:600}
+.todaybar{background:linear-gradient(100deg,#fff1e8,#ffdfd6)}
+html[dir="rtl"] .todaybar .tq{font-family:var(--font);letter-spacing:0}
+
 
 .gwhat{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;margin:0 0 18px;display:flex;flex-direction:column;gap:12px}
 .gwhat>b{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--wa)}
@@ -1661,7 +1666,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 48</p></div>';
+  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 49</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
