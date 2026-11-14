@@ -504,6 +504,13 @@ html[dir="rtl"] .chiprow{-webkit-mask-image:linear-gradient(to left,#000 calc(10
 .heatbtn.on{background:linear-gradient(135deg,#ff8a4c,#e0353f);color:#fff}
 .heatbtn:active{transform:scale(.95)}
 #map.heaton .pin-wrap{opacity:.88}
+.popimg{display:block;width:100%;margin:0 0 10px;height:130px;object-fit:cover;border-radius:12px}
+.facts{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.facts span{font-size:.78rem;background:rgba(194,52,22,.08);border-radius:999px;padding:5px 10px;line-height:1.2}
+.facts b{display:block;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;opacity:.65}
+.calbtn{width:100%;margin-top:8px;border:1.5px solid rgba(194,52,22,.35);background:#fff;color:#C23416;border-radius:12px;padding:10px;font-family:inherit;font-weight:700;font-size:.85rem;cursor:pointer}
+.evlink{display:block;text-align:center;margin-top:8px;font-size:.8rem;font-weight:700;color:#C23416}
+.pop a.evlink{display:block;background:none;color:#C23416;border:0;box-shadow:none;padding:8px 4px 0;text-align:center;font-size:.8rem;font-weight:700;width:auto}
 </style>
 </head>
 <body data-view="map">
@@ -631,6 +638,7 @@ html[dir="rtl"] .chiprow{-webkit-mask-image:linear-gradient(to left,#000 calc(10
   </form>
 </div>
 
+<script src="cityside-ics.js" defer></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.js"></script>
 <script>
 (function(){
@@ -658,7 +666,7 @@ var I18N = {
     clear:'Clear filters',
     when:{all:'Upcoming', today:'Today', tomorrow:'Tomorrow', weekend:'This weekend'},
     cats:{running:'Run clubs',surf:'Surfing',volleyball:'Volleyball',music:'Music',food:'Food & drink',markets:'Markets',parties:'Parties',culture:'Arts & culture',family:'Family',outdoors:'Outdoors',sports:'Sports & fitness',community:'Communities'},
-    details:'Details', directions:'Google Maps', waze:'Waze', share:'Share on WhatsApp', wa:'Join the group on WhatsApp', groupTag:'Group', hasGroup:'Has a group', cityGroup:function(c){return 'CITYSIDE community · '+c;}, groupLead:'Meet people going to the same events', every:function(d){return 'Every '+d;}, and:' & ', by:'by', promoFeatured:'★ Featured', promoSponsored:'Sponsored', submit:'Organising something? List your event on CITYSIDE', listShort:'+ List your event', welcomeTitle:'Don\'t miss the city.\nDon\'t miss the people.', welcomeText:'Events, run clubs and communities in Melbourne and Sydney. Pick a city, find something on, and join the group to meet people going.', explore:'Explore events',
+    details:'Details', fPrice:'Price', fLevel:'Level', fBring:'Bring', addCal:'Add to calendar', noDate:'No date set yet', evPage:'Event page', comeWithMe:'Come with me!', directions:'Google Maps', waze:'Waze', share:'Share on WhatsApp', wa:'Join the group on WhatsApp', groupTag:'Group', hasGroup:'Has a group', cityGroup:function(c){return 'CITYSIDE community · '+c;}, groupLead:'Meet people going to the same events', every:function(d){return 'Every '+d;}, and:' & ', by:'by', promoFeatured:'★ Featured', promoSponsored:'Sponsored', submit:'Organising something? List your event on CITYSIDE', listShort:'+ List your event', welcomeTitle:'Don\'t miss the city.\nDon\'t miss the people.', welcomeText:'Events, run clubs and communities in Melbourne and Sydney. Pick a city, find something on, and join the group to meet people going.', explore:'Explore events',
     install:'Install app', installTitle:'Install CITYSIDE', installIos:'Tap the Share button in Safari, then choose “Add to Home Screen”.', installOther:'Open the browser menu and choose “Install app” or “Add to Home screen”.', close:'Close', shareHead:'Found on',
     tabMap:'Map', tabList:'List', tabCal:'Calendar', tabGroups:'Groups', tabTips:'Tips', calTitle:function(c){return 'Calendar \u00b7 '+c;}, calLead:'Tap a day to see what is on.', calNone:'Nothing listed for this day yet.', calToday:'Today', calEvents:function(n){return n===1?'1 event':n+' events';}, todayBar:function(d,n){return n? d+' \u00b7 '+(n===1?'1 event today':n+' events today') : d+' \u00b7 nothing today \u203A';}, todayQ:"Don't miss the city \u2013 Don't miss the people", calPrev:'Previous month', calNext:'Next month', calGo:'Details', evMap:'Show on map', evClose:'Close',
     groupsTitle:function(c){return 'WhatsApp groups · '+c;}, tipsTitle:function(c){return 'Tips · '+c;}, groupsLead:'Join a group, meet people going to the same events and arrive with friends.', gwhatTitle:'What are these groups?', gwhat:[['\uD83D\uDC4B','Find people to go with','No one to go with? Say hi, find someone heading to the same event.'],['\uD83D\uDCE3','Hear about events first','Organisers and locals share what is on this week.'],['\uD83D\uDCAC','Ask the locals','Tips, recommendations and plans, in a friendly chat.']], gwhatRules:'Free to join. Be kind, no spam. Leave any time.', tipsLead:'Good to know before you go.', mainGroup:'City group', moreGroups:'More groups', eventGroups:'Event groups', noGroups:'Groups are on their way. Check back soon.', noTips:'No tips yet.', joinShort:'Join', sourceLink:'Source', tipCats:{emergency:'Emergency',safety:'Safety',transport:'Getting around',money:'Money',nature:'Sun & beach',practical:'Practical',food:'Food',culture:'Local culture',other:'Other'},
@@ -676,7 +684,7 @@ var I18N = {
     clear:'נקה סינון',
     when:{all:'הכל', today:'היום', tomorrow:'מחר', weekend:'סוף השבוע'},
     cats:CAT_HE,
-    details:'לפרטים', directions:'ניווט ב-Google Maps', waze:'ניווט ב-Waze', share:'שיתוף ב-WhatsApp', wa:'הצטרפות לקבוצה ב-WhatsApp', groupTag:'קבוצה', hasGroup:'יש קבוצה', cityGroup:function(c){return 'קהילת CITYSIDE ב'+c;}, groupLead:'להכיר אנשים שמגיעים לאותם אירועים', every:function(d){return 'כל '+d;}, and:' ו', by:'מאת', promoFeatured:'★ מומלץ', promoSponsored:'ממומן', submit:'מארגנים אירוע? פרסמו אותו ב-CITYSIDE', listShort:'+ פרסום אירוע', welcomeTitle:'אל תפספסו את העיר.\nאל תפספסו את האנשים.', welcomeText:'אירועים, קבוצות ריצה וקהילות במלבורן ובסידני. בוחרים עיר, מוצאים מה קורה, ומצטרפים לקבוצה כדי להכיר אנשים שמגיעים.', explore:'לגלות אירועים',
+    details:'לפרטים', fPrice:'מחיר', fLevel:'רמה', fBring:'להביא', addCal:'הוספה ליומן', noDate:'עדיין אין תאריך', evPage:'דף האירוע', comeWithMe:'בואו איתי!', directions:'ניווט ב-Google Maps', waze:'ניווט ב-Waze', share:'שיתוף ב-WhatsApp', wa:'הצטרפות לקבוצה ב-WhatsApp', groupTag:'קבוצה', hasGroup:'יש קבוצה', cityGroup:function(c){return 'קהילת CITYSIDE ב'+c;}, groupLead:'להכיר אנשים שמגיעים לאותם אירועים', every:function(d){return 'כל '+d;}, and:' ו', by:'מאת', promoFeatured:'★ מומלץ', promoSponsored:'ממומן', submit:'מארגנים אירוע? פרסמו אותו ב-CITYSIDE', listShort:'+ פרסום אירוע', welcomeTitle:'אל תפספסו את העיר.\nאל תפספסו את האנשים.', welcomeText:'אירועים, קבוצות ריצה וקהילות במלבורן ובסידני. בוחרים עיר, מוצאים מה קורה, ומצטרפים לקבוצה כדי להכיר אנשים שמגיעים.', explore:'לגלות אירועים',
     install:'התקנת האפליקציה', installTitle:'התקנת CITYSIDE', installIos:'ב-Safari לוחצים על כפתור השיתוף ואז על “הוספה למסך הבית”.', installOther:'בתפריט הדפדפן בוחרים “התקנת אפליקציה” או “הוספה למסך הבית”.', close:'סגירה', shareHead:'מצאתי באתר',
     tabMap:'מפה', tabList:'רשימה', tabCal:'לוח', tabGroups:'קבוצות', tabTips:'טיפים', calTitle:function(c){return 'לוח אירועים \u00b7 '+c;}, calLead:'לוחצים על יום כדי לראות מה קורה.', calNone:'עוד לא פורסמו אירועים ליום הזה.', calToday:'היום', calEvents:function(n){return n===1?'אירוע אחד':n+' אירועים';}, todayBar:function(d,n){return n? d+' \u00b7 '+(n===1?'אירוע אחד היום':n+' אירועים היום') : d+' \u00b7 אין אירועים היום \u203A';}, todayQ:'אל תפספסו את העיר \u2013 אל תפספסו את האנשים', calPrev:'חודש קודם', calNext:'חודש הבא', calGo:'פרטים', evMap:'הצגה במפה', evClose:'סגירה',
     groupsTitle:function(c){return 'קבוצות WhatsApp · '+c;}, tipsTitle:function(c){return 'טיפים · '+c;}, groupsLead:'מצטרפים לקבוצה, מכירים אנשים שמגיעים לאותם אירועים ומגיעים עם חברים.', gwhatTitle:'מה זה הקבוצות האלה?', gwhat:[['\uD83D\uDC4B','למצוא עם מי לצאת','אין עם מי ללכת? אומרים שלום ומוצאים מישהו שמגיע לאותו אירוע.'],['\uD83D\uDCE3','לשמוע על אירועים ראשונים','מארגנים ותושבים משתפים מה קורה השבוע.'],['\uD83D\uDCAC','לשאול את המקומיים','טיפים, המלצות ותוכניות, בצ׳אט ידידותי.']], gwhatRules:'ההצטרפות חינם. מתנהגים יפה, בלי ספאם. אפשר לעזוב בכל רגע.', tipsLead:'טוב לדעת לפני שיוצאים.', mainGroup:'קבוצת העיר', moreGroups:'עוד קבוצות', eventGroups:'קבוצות אירועים', noGroups:'קבוצות בדרך. חזרו לבדוק בקרוב.', noTips:'עדיין אין טיפים.', joinShort:'הצטרפות', sourceLink:'מקור', tipCats:{emergency:'חירום',safety:'בטיחות',transport:'תחבורה',money:'כסף',nature:'שמש וחוף',practical:'מעשי',food:'אוכל',culture:'תרבות מקומית',other:'אחר'},
@@ -813,14 +821,16 @@ if(MAPBOX_TOKEN.indexOf('PASTE')===0){
 /* Navigation and sharing links */
 function gmapsUrl(e){ return 'https://www.google.com/maps/dir/?api=1&destination='+e.lat+','+e.lng+'&travelmode=driving'; }
 function wazeUrl(e){ return 'https://waze.com/ul?ll='+e.lat+','+e.lng+'&navigate=yes'; }
+function evPageUrl(e){ return location.origin + location.pathname.replace(/[^\/]*$/,'') + 'e/' + e.id + '/'; }
+function safeImg(u){ return /^(https:\/\/|img\/)/i.test(u||'') ? u : ''; }
 function shareUrl(e){
-  var site = location.origin + location.pathname;
+  var site = evPageUrl(e);
   var when = whenHtml(e).replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').replace(/&#39;/g,"'");
   var lines = ['*'+tx(e,'title')+'*'];
   if(when) lines.push('\uD83D\uDCC5 '+when);
   if(e.address) lines.push('\uD83D\uDCCD '+e.address);
   lines.push('\uD83D\uDDFA '+'https://www.google.com/maps/search/?api=1&query='+e.lat+','+e.lng);
-  lines.push('', t().shareHead+' CITYSIDE: '+site);
+  lines.unshift('\uD83D\uDE4B '+t().comeWithMe); lines.push('', site);
   return 'https://wa.me/?text='+encodeURIComponent(lines.join('\n'));
 }
 function promoTag(e){
@@ -835,18 +845,23 @@ function orgLine(e){
 }
 function popupHtml(e){
   var when = whenHtml(e);
-  var h = '<div class="pop" dir="'+t().dir+'">'+promoTag(e)+'<h3>'+esc(tx(e,'title'))+'</h3>'+orgLine(e);
+  var im = safeImg(e.image);
+  var h = '<div class="pop" dir="'+t().dir+'">'+(im?'<img class="popimg" loading="lazy" alt="" src="'+esc(im)+'">':'')+promoTag(e)+'<h3>'+esc(tx(e,'title'))+'</h3>'+orgLine(e);
   var w = safeWa(e.whatsapp);
   if(w) h += '<a class="wa" href="'+esc(w)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(e.id)+'">\uD83D\uDC65 '+t().wa+'</a>';
   if(when) h += '<p class="meta">'+when+'</p>';
   h += '<p class="meta" dir="ltr" style="text-align:start">'+esc(e.address)+'</p>';
   var d = tx(e,'desc');
   if(d) h += '<p>'+esc(d)+'</p>';
+  var facts = [['fPrice','price'],['fLevel','level'],['fBring','bring']].filter(function(x){ return tx(e,x[1]); });
+  if(facts.length) h += '<div class="facts">'+facts.map(function(x){ return '<span><b>'+esc(t()[x[0]])+'</b>'+esc(tx(e,x[1]))+'</span>'; }).join('')+'</div>';
   h += '<div class="links top">';
   var u = safeUrl(e.url);
   if(u) h += '<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer" data-t="details" data-e="'+esc(e.id)+'">'+t().details+'</a>';
   h += '<a class="alt" href="'+esc(gmapsUrl(e))+'" target="_blank" rel="noopener noreferrer" data-t="gmaps" data-e="'+esc(e.id)+'">'+t().directions+'</a>';
   h += '<a class="alt" href="'+esc(wazeUrl(e))+'" target="_blank" rel="noopener noreferrer" data-t="waze" data-e="'+esc(e.id)+'">'+t().waze+'</a></div>';
+  h += '<button type="button" class="calbtn" data-cal="'+esc(e.id)+'">\uD83D\uDCC5 '+esc(t().addCal)+'</button>';
+  h += '<a class="evlink" href="'+esc(evPageUrl(e))+'" target="_blank" rel="noopener">'+esc(t().evPage)+' \u2197</a>';
   h += '<a class="share" href="'+esc(shareUrl(e))+'" target="_blank" rel="noopener noreferrer" data-t="share" data-e="'+esc(e.id)+'">'+t().share+'</a>';
   return h + '</div>';
 }
@@ -1138,7 +1153,7 @@ function renderPanel(){
     });
     if(!seen) h += '<p class="pempty">'+esc(t().noTips)+'</p>';
   }
-  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 28</p></div>';
+  p.innerHTML = h + submitHtml() + '<p class="ver">CITYSIDE \u00b7 version 29</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
@@ -1615,7 +1630,22 @@ load().then(function(){
   if(admin) initAdmin();
   applyLang();
   fitCity();
+  /* Deep link: ?e=<event id> opens that event */
+  try{
+    var want = new URLSearchParams(location.search).get('e');
+    var ev0 = want && events.filter(function(x){ return x.id===want; })[0];
+    if(ev0){ if(ev0.city!==city) setCity(ev0.city); setTimeout(function(){ showEventOnMap(ev0); openEventSheet(ev0); }, 400); }
+  }catch(x){}
 });
+
+/* Add to calendar */
+document.addEventListener('click',function(ev){
+  var b = ev.target.closest && ev.target.closest('[data-cal]'); if(!b) return;
+  var e = events.filter(function(x){ return x.id===b.dataset.cal; })[0]; if(!e) return;
+  var ok = window.CSIcs && window.CSIcs.download(e,{title:tx(e,'title'),desc:tx(e,'desc'),url:evPageUrl(e)});
+  if(!ok) geoToast(t().noDate); else track('e/'+e.id+'/calendar');
+});
+
 
 /* Tap ripple on buttons */
 document.addEventListener('pointerdown',function(ev){
