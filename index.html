@@ -538,7 +538,7 @@ html[dir="rtl"] .pinner h2,html[dir="rtl"] .wcard h2,html[dir="rtl"] .calhead b,
 .wcard h2{font-size:1.35rem;line-height:1.25;text-transform:uppercase;letter-spacing:.05em;white-space:pre-line}
 html[dir="rtl"] .wcard h2,.welcome[dir="rtl"] h2{text-transform:none;letter-spacing:0}
 .brandtext small{font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:.66rem}
-.ver{margin:18px 0 6px;text-align:center;font-size:.72rem;color:var(--muted);opacity:.7}
+.ver{margin:18px 0 6px;text-align:center;font-size:.72rem;color:var(--muted);opacity:.7}.ver a{color:inherit;text-decoration:underline}
 @media (max-width:720px){.brandtext small{display:block;font-size:.54rem;letter-spacing:.1em;margin-top:3px;white-space:nowrap}}
 
 .brandtext small{display:none !important}
@@ -1738,7 +1738,7 @@ function renderPanel(){
     var mine = tips.filter(function(x){ return x.city===city || x.city==='all' || !x.city; });
     if(mine.length) h += '<h3 class="psec">'+esc(t().goodToKnow)+'</h3><div class="bubfield small">'+mine.map(function(x,i){ return bubbleHtml(x,i+3,'tip',pop); }).join('')+'</div>';
   }
-  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="seolinks"><a href="/melbourne/">Events in Melbourne</a> \u00b7 <a href="/sydney/">Events in Sydney</a></p><p class="ver">CITYSIDE \u00b7 version 64</p></div>';
+  p.innerHTML = h + nlHtml() + submitHtml() + '<p class="seolinks"><a href="/melbourne/">Events in Melbourne</a> \u00b7 <a href="/sydney/">Events in Sydney</a></p><p class="ver">\u00a9 CITYSIDE 2026 \u00b7 <a href="/terms.html">Terms</a> \u00b7 version 64</p></div>';
 }
 function gcard(em,title,sub,url,i,subIsHtml,eid){
   return '<div class="gcard" style="--i:'+Math.min(i,14)+'"><span class="em">'+esc(em)+'</span><span class="gtx"><b>'+esc(title)+'</b>'+(sub?'<small>'+(subIsHtml?sub:esc(sub))+'</small>':'')+'</span><a class="gjoin" href="'+esc(url)+'" target="_blank" rel="noopener noreferrer" data-t="join" data-e="'+esc(eid||'group')+'">'+esc(t().joinShort)+'</a></div>';
