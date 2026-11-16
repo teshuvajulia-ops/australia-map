@@ -2402,6 +2402,7 @@ fetch('tips.json',{cache:'no-store'}).then(function(r){ return r.ok ? r.json() :
 load().then(function(){
   if(admin) initAdmin();
   applyLang();
+  try{ var qs = new URLSearchParams(location.search).get('services'); if(qs==='offer'||qs==='find'){ svState.mode = qs; setView('services'); } }catch(x){}
   fitCity();
   /* Deep link: ?e=<event id> opens that event */
   try{
