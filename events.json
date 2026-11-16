@@ -977,5 +977,516 @@
   "lng": 151.0036,
   "whatsapp": "",
   "free": true
+ },
+ {
+  "id": "e43",
+  "city": "melbourne",
+  "title": "Melbourne Queer Film Festival",
+  "title_en": "Melbourne Queer Film Festival",
+  "date": "2026-11-16",
+  "time": "",
+  "endDate": "2026-11-22",
+  "cats": [
+   "culture",
+   "community"
+  ],
+  "address": "Melbourne VIC (venues across the city)",
+  "desc": "פסטיבל הקולנוע הקווירי של מלבורן, עד 22.11. שעות ומחירים לפי הסרט, בדקו באתר.",
+  "desc_en": "Melbourne Queer Film Festival, until 22 Nov. Times and prices vary by film, check the website.",
+  "url": "https://mqff.com.au/",
+  "emoji": "🏳️‍🌈",
+  "lat": -37.8136,
+  "lng": 144.9631,
+  "whatsapp": ""
+ },
+ {
+  "id": "e44",
+  "city": "melbourne",
+  "title": "My Fair Lady",
+  "title_en": "My Fair Lady",
+  "date": "2026-11-16",
+  "time": "",
+  "endDate": "2027-01-17",
+  "cats": [
+   "culture"
+  ],
+  "address": "Ian Potter State Theatre, Arts Centre Melbourne, 100 St Kilda Rd, Melbourne VIC 3004",
+  "desc": "המחזמר My Fair Lady, רץ עד 17.1. שעות ומחירים באתר.",
+  "desc_en": "The musical My Fair Lady, running to 17 Jan. Session times and prices on the website.",
+  "url": "https://www.artscentremelbourne.com.au/whats-on/2026/classical-music/lerner-and-loewes-my-fair-lady",
+  "emoji": "🎭",
+  "lat": -37.821,
+  "lng": 144.9686,
+  "whatsapp": ""
+ },
+ {
+  "id": "e45",
+  "city": "melbourne",
+  "title": "Pitchblack Playback",
+  "title_en": "Pitchblack Playback",
+  "date": "2026-11-17",
+  "time": "",
+  "endDate": "",
+  "cats": [
+   "music",
+   "parties"
+  ],
+  "address": "Brunswick Picture House, Brunswick VIC",
+  "desc": "האזנה לאלבום חדש בחושך מוחלט (כ-60 דקות) ואחריה אפטר-פארטי. שעה ומחיר באתר.",
+  "desc_en": "Listen to a new album in total darkness (about 60 min), then an afterparty. Time and price on the website.",
+  "url": "https://pitchblackplayback.com/",
+  "emoji": "🎧",
+  "lat": -37.7673,
+  "lng": 144.9609,
+  "whatsapp": ""
+ },
+ {
+  "id": "e46",
+  "city": "melbourne",
+  "title": "La Di Darts – opening",
+  "title_en": "La Di Darts – opening",
+  "date": "2026-11-19",
+  "time": "",
+  "endDate": "",
+  "cats": [
+   "parties"
+  ],
+  "address": "Little Bourke St, Melbourne CBD (beneath Holey Moley)",
+  "desc": "בר חדש של חצים בקומה מתחת ל-Holey Moley ברחוב Little Bourke. נפתח ב-19.11. מחיר ושעות לא פורסמו.",
+  "desc_en": "New darts bar beneath Holey Moley on Little Bourke St, opens 19 Nov. Hours and prices not published.",
+  "url": "https://secretmelbourne.com/la-di-darts-melbourne-cbd/",
+  "emoji": "🎯",
+  "lat": -37.8135,
+  "lng": 144.966,
+  "whatsapp": ""
+ },
+ {
+  "id": "e47",
+  "city": "melbourne",
+  "title": "Renfair Rave",
+  "title_en": "Renfair Rave",
+  "date": "2026-11-20",
+  "time": "17:00–23:00",
+  "endDate": "",
+  "cats": [
+   "parties",
+   "music"
+  ],
+  "address": "Royal Botanic Gardens Melbourne, Birdwood Ave, South Yarra VIC 3141",
+  "desc": "ריקודים בסגנון פסטיבל ימי הביניים בגנים הבוטניים, 17:00–23:00. מחיר באתר.",
+  "desc_en": "Medieval-fair-style rave in the Botanic Gardens, 5pm-11pm. Price on the website.",
+  "url": "https://secretmelbourne.com/renfair-rave-royal-botanic-gardens/",
+  "emoji": "🏰",
+  "lat": -37.8304,
+  "lng": 144.9796,
+  "whatsapp": ""
+ },
+ {
+  "id": "e48",
+  "city": "melbourne",
+  "title": "WitchFest",
+  "title_en": "WitchFest",
+  "date": "2026-11-21",
+  "time": "",
+  "endDate": "",
+  "cats": [
+   "markets",
+   "parties"
+  ],
+  "address": "Seaworks, Nelson Pl, Williamstown VIC 3016",
+  "desc": "שוק של מכשפות ביום ולילה קרנבל למבוגרים בלבד. שעות ומחיר באתר.",
+  "desc_en": "A witchy market by day and an adults-only night carnival. Hours and price on the website.",
+  "url": "https://secretmelbourne.com/witchfest-market-carnival-seaworks-williamstown/",
+  "emoji": "🧙",
+  "lat": -37.8627,
+  "lng": 144.9024,
+  "whatsapp": ""
+ },
+ {
+  "id": "e49",
+  "city": "melbourne",
+  "title": "Alliance Française Christmas Market",
+  "title_en": "Alliance Française Christmas Market",
+  "date": "2026-11-21",
+  "time": "",
+  "endDate": "2026-11-22",
+  "cats": [
+   "markets",
+   "food",
+   "family"
+  ],
+  "address": "Abbotsford Convent, 1 St Heliers St, Abbotsford VIC 3067",
+  "desc": "שוק חג המולד הצרפתי במנזר אבוטספורד, 21-22.11. שעות ומחיר באתר.",
+  "desc_en": "French Christmas market at Abbotsford Convent, 21-22 Nov. Hours and price on the website.",
+  "url": "https://www.afmelbourne.com.au/events/afm-christmas-market-26/",
+  "emoji": "🎄",
+  "lat": -37.8029,
+  "lng": 145.0017,
+  "whatsapp": "",
+  "dates": [
+   "2026-11-21",
+   "2026-11-22"
+  ]
+ },
+ {
+  "id": "e50",
+  "city": "melbourne",
+  "title": "Queenscliff Music Festival",
+  "title_en": "Queenscliff Music Festival",
+  "date": "2026-11-27",
+  "time": "",
+  "endDate": "2026-11-29",
+  "cats": [
+   "music",
+   "outdoors"
+  ],
+  "address": "Queenscliff VIC 3225",
+  "desc": "פסטיבל מוזיקה בקווינסקליף, 27-29.11. כרטיסים ולינאפ באתר.",
+  "desc_en": "Music festival in Queenscliff, 27-29 Nov. Tickets and lineup on the website.",
+  "url": "https://qmf.net.au/",
+  "emoji": "🎸",
+  "lat": -38.2657,
+  "lng": 144.6676,
+  "whatsapp": "",
+  "dates": [
+   "2026-11-27",
+   "2026-11-28",
+   "2026-11-29"
+  ]
+ },
+ {
+  "id": "e51",
+  "city": "melbourne",
+  "title": "Ugly Cutie Market",
+  "title_en": "Ugly Cutie Market",
+  "date": "2026-11-28",
+  "time": "",
+  "endDate": "2026-11-29",
+  "cats": [
+   "markets",
+   "culture"
+  ],
+  "address": "Crown Conference Centre, Southbank VIC 3006",
+  "desc": "שוק עיצוב ואמנות, 28-29.11. שעות ומחיר באתר.",
+  "desc_en": "Design and art market, 28-29 Nov. Hours and price on the website.",
+  "url": "https://www.uglycutie.com/market",
+  "emoji": "🛍️",
+  "lat": -37.8247,
+  "lng": 144.9578,
+  "whatsapp": "",
+  "dates": [
+   "2026-11-28",
+   "2026-11-29"
+  ]
+ },
+ {
+  "id": "e52",
+  "city": "melbourne",
+  "title": "Vision Australia Santa Fun Run",
+  "title_en": "Vision Australia Santa Fun Run",
+  "date": "2026-11-28",
+  "time": "",
+  "endDate": "",
+  "cats": [
+   "running",
+   "community",
+   "family"
+  ],
+  "address": "Royal Botanic Gardens, Tan Track, Melbourne",
+  "desc": "ריצת סנטה צדקה בטן טרק, 28.11. הרשמה ומחיר באתר.",
+  "desc_en": "Charity Santa fun run at the Tan Track, 28 Nov. Registration and price on the website.",
+  "url": "https://fundraise.visionaustralia.org/santafunrun/",
+  "emoji": "🎅",
+  "lat": -37.8304,
+  "lng": 144.9796,
+  "whatsapp": ""
+ },
+ {
+  "id": "e53",
+  "city": "melbourne",
+  "title": "American Psycho – The Musical",
+  "title_en": "American Psycho – The Musical",
+  "date": "2026-11-16",
+  "time": "",
+  "endDate": "2026-11-21",
+  "cats": [
+   "culture"
+  ],
+  "address": "Chapel Off Chapel, 12 Chapel St, Prahran VIC 3181",
+  "desc": "המחזמר American Psycho, עד 21.11. שעות ומחיר באתר.",
+  "desc_en": "American Psycho the Musical, until 21 Nov. Times and prices on the website.",
+  "url": "https://www.americanpsycho.com.au/",
+  "emoji": "🎭",
+  "lat": -37.8499,
+  "lng": 144.9918,
+  "whatsapp": ""
+ },
+ {
+  "id": "e54",
+  "city": "sydney",
+  "title": "Bondi Outdoor Cinema",
+  "title_en": "Bondi Outdoor Cinema",
+  "date": "2026-11-19",
+  "time": "19:30",
+  "endDate": "2026-11-22",
+  "cats": [
+   "culture",
+   "outdoors"
+  ],
+  "address": "Dolphin Court, Bondi Pavilion, Bondi Beach NSW",
+  "desc": "קולנוע חוצות חינם בחוף בונדי, 19-22.11 ב-19:30, כולל פופקורן.",
+  "desc_en": "Free outdoor cinema at Bondi, 19-22 Nov from 7:30pm, popcorn included.",
+  "url": "https://www.waverley.nsw.gov.au/recreation/events/events/bondi_outdoor_cinema/bondi_outdoor_cinema",
+  "emoji": "🎬",
+  "lat": -33.8915,
+  "lng": 151.2743,
+  "whatsapp": "",
+  "dates": [
+   "2026-11-19",
+   "2026-11-20",
+   "2026-11-21",
+   "2026-11-22"
+  ],
+  "free": true
+ },
+ {
+  "id": "e55",
+  "city": "sydney",
+  "title": "Head On Photo Festival",
+  "title_en": "Head On Photo Festival",
+  "date": "2026-11-16",
+  "time": "",
+  "endDate": "2026-11-29",
+  "cats": [
+   "culture"
+  ],
+  "address": "Bondi Beach promenade, Bondi Pavilion and Paddington Reservoir Gardens, Sydney",
+  "desc": "פסטיבל צילום, עד 29.11. 93 תערוכות בחינם בבונדי, פדינגטון ועוד.",
+  "desc_en": "Photo festival until 29 Nov. 93 free exhibitions around Bondi, Paddington and more.",
+  "url": "https://www.timeout.com/sydney/art/head-on-photo-festival",
+  "emoji": "📷",
+  "lat": -33.8915,
+  "lng": 151.2743,
+  "whatsapp": "",
+  "free": true
+ },
+ {
+  "id": "e56",
+  "city": "sydney",
+  "title": "The Rocks Markets",
+  "title_en": "The Rocks Markets",
+  "date": "2026-11-21",
+  "time": "10:00–17:00",
+  "endDate": "",
+  "cats": [
+   "markets",
+   "food"
+  ],
+  "address": "The Rocks, Sydney NSW 2000",
+  "desc": "שוק The Rocks בכל שבת וראשון 10:00–17:00. כניסה חינם.",
+  "desc_en": "The Rocks Markets every Saturday and Sunday, 10am-5pm. Free entry.",
+  "url": "https://www.ellaslist.com.au/sydney/events/the-rocks-markets",
+  "emoji": "🛍️",
+  "lat": -33.8599,
+  "lng": 151.209,
+  "whatsapp": "",
+  "free": true,
+  "repeat": "weekly",
+  "weekday": 6
+ },
+ {
+  "id": "e57",
+  "city": "sydney",
+  "title": "EQ Markets",
+  "title_en": "EQ Markets",
+  "date": "2026-11-21",
+  "time": "08:00–14:00",
+  "endDate": "",
+  "cats": [
+   "markets",
+   "food"
+  ],
+  "address": "Entertainment Quarter, Moore Park NSW 2021",
+  "desc": "שוק EQ בימי רביעי ושבת 8:00–14:00 בפארק מור.",
+  "desc_en": "EQ Markets on Wednesdays and Saturdays, 8am-2pm at Moore Park.",
+  "url": "https://www.entertainmentquarter.com.au/visit/eq-markets/",
+  "emoji": "🥐",
+  "lat": -33.8928,
+  "lng": 151.2227,
+  "whatsapp": "",
+  "repeat": "weekly",
+  "weekday": 6
+ },
+ {
+  "id": "e58",
+  "city": "sydney",
+  "title": "Macbeth (Bell Shakespeare)",
+  "title_en": "Macbeth (Bell Shakespeare)",
+  "date": "2026-11-18",
+  "time": "",
+  "endDate": "2026-12-06",
+  "cats": [
+   "culture"
+  ],
+  "address": "Sydney Opera House, Bennelong Point, Sydney NSW 2000",
+  "desc": "מקבת בביצוע Bell Shakespeare באופרה האוס, 18.11–6.12. כרטיסים מ-$45.",
+  "desc_en": "Macbeth by Bell Shakespeare at the Opera House, 18 Nov-6 Dec. Tickets from $45.",
+  "url": "https://www.bellshakespeare.com.au/macbeth",
+  "emoji": "🎭",
+  "lat": -33.8568,
+  "lng": 151.2153,
+  "whatsapp": ""
+ },
+ {
+  "id": "e59",
+  "city": "sydney",
+  "title": "Good Food & Wine Show – Christmas Edition",
+  "title_en": "Good Food & Wine Show – Christmas Edition",
+  "date": "2026-11-20",
+  "time": "",
+  "endDate": "2026-11-22",
+  "cats": [
+   "food",
+   "markets"
+  ],
+  "address": "ICC Sydney, Darling Harbour NSW 2000",
+  "desc": "תערוכת אוכל ויין: שישי 16:00–21:00, שבת-ראשון 10:00–17:00. מחיר באתר.",
+  "desc_en": "Food and wine show: Fri 4-9pm, Sat-Sun 10am-5pm. Price on the website.",
+  "url": "https://goodfoodshow.com.au/sydney-christmas-edition/",
+  "emoji": "🍷",
+  "lat": -33.875,
+  "lng": 151.1987,
+  "whatsapp": "",
+  "dates": [
+   "2026-11-20",
+   "2026-11-21",
+   "2026-11-22"
+  ]
+ },
+ {
+  "id": "e60",
+  "city": "sydney",
+  "title": "Martin Place Christmas Markets",
+  "title_en": "Martin Place Christmas Markets",
+  "date": "2026-11-28",
+  "time": "",
+  "endDate": "2026-12-24",
+  "cats": [
+   "markets",
+   "family"
+  ],
+  "address": "Martin Place, Sydney NSW 2000",
+  "desc": "שוק חג המולד במרטין פלייס מ-28.11 (בימים נבחרים עד 24.12). שעות ומחיר לא פורסמו.",
+  "desc_en": "Christmas markets at Martin Place from 28 Nov (selected dates to 24 Dec). Hours and entry not published.",
+  "url": "https://www.sydney.com/destinations/sydney/sydney-city/city-centre/events/martin-place-christmas-markets-0",
+  "emoji": "🎄",
+  "lat": -33.8679,
+  "lng": 151.21,
+  "whatsapp": ""
+ },
+ {
+  "id": "e61",
+  "city": "sydney",
+  "title": "Club Flamingo – Christmas party",
+  "title_en": "Club Flamingo – Christmas party",
+  "date": "2026-11-28",
+  "time": "",
+  "endDate": "",
+  "cats": [
+   "parties",
+   "music"
+  ],
+  "address": "The Grand Electric, 199 Cleveland St, Surry Hills NSW 2016",
+  "desc": "מסיבת חג המולד בהופעה של שעה בגראנד אלקטריק. כרטיסים בקישור.",
+  "desc_en": "A 60-minute Christmas show-party at The Grand Electric. Tickets via the link.",
+  "url": "https://feverup.com/m/689830",
+  "emoji": "💃",
+  "lat": -33.8885,
+  "lng": 151.206,
+  "whatsapp": ""
+ },
+ {
+  "id": "e62",
+  "city": "sydney",
+  "title": "David Hockney: Bigger & Closer",
+  "title_en": "David Hockney: Bigger & Closer",
+  "date": "2026-11-16",
+  "time": "",
+  "endDate": "2027-01-24",
+  "cats": [
+   "culture"
+  ],
+  "address": "Bay 17, Carriageworks, 245 Wilson St, Eveleigh NSW 2015",
+  "desc": "תערוכת הוקני בקריאוורקס, עד 24.1. כרטיסים מ-$39.90.",
+  "desc_en": "Hockney exhibition at Carriageworks, until 24 Jan. Tickets from $39.90.",
+  "url": "https://lightroomatcarriageworks.au/",
+  "emoji": "🖼️",
+  "lat": -33.8933,
+  "lng": 151.195,
+  "whatsapp": ""
+ },
+ {
+  "id": "e63",
+  "city": "sydney",
+  "title": "The Coconut Children",
+  "title_en": "The Coconut Children",
+  "date": "2026-11-21",
+  "time": "",
+  "endDate": "2026-12-20",
+  "cats": [
+   "culture"
+  ],
+  "address": "Upstairs at Belvoir St Theatre, 25 Belvoir St, Surry Hills NSW 2010",
+  "desc": "הצגה בבלווה סטריט, 21.11–20.12. שעות ומחיר באתר.",
+  "desc_en": "Play at Belvoir St Theatre, 21 Nov-20 Dec. Times and price on the website.",
+  "url": "https://www.timeout.com/sydney/theatre/the-coconut-children",
+  "emoji": "🎭",
+  "lat": -33.8868,
+  "lng": 151.2127,
+  "whatsapp": ""
+ },
+ {
+  "id": "e64",
+  "city": "sydney",
+  "title": "Nature Photographer of the Year",
+  "title_en": "Nature Photographer of the Year",
+  "date": "2026-11-16",
+  "time": "",
+  "endDate": "2027-02-14",
+  "cats": [
+   "culture",
+   "outdoors"
+  ],
+  "address": "Australian Museum, 1 William St, Sydney NSW 2010",
+  "desc": "תערוכת צילום טבע של Australian Geographic במוזיאון האוסטרלי. כניסה חינם.",
+  "desc_en": "Australian Geographic nature photography show at the Australian Museum. Free.",
+  "url": "https://www.timeout.com/sydney/things-to-do/australian-geographic-nature-photographer-of-the-year",
+  "emoji": "🦘",
+  "lat": -33.8741,
+  "lng": 151.213,
+  "whatsapp": "",
+  "free": true
+ },
+ {
+  "id": "e65",
+  "city": "sydney",
+  "title": "Powerhouse Castle Hill",
+  "title_en": "Powerhouse Castle Hill",
+  "date": "2026-11-16",
+  "time": "10:00–16:00",
+  "endDate": "",
+  "cats": [
+   "culture",
+   "family"
+  ],
+  "address": "2 Green Rd, Castle Hill NSW 2154",
+  "desc": "מוזיאון Powerhouse קאסל היל, מדי יום 10:00–16:00, כניסה חינם, עם סיור אוספים חינם של 30 דק'.",
+  "desc_en": "Powerhouse Castle Hill, daily 10am-4pm, free entry, with a free 30-minute collection tour.",
+  "url": "https://www.ellaslist.com.au/sydney/events/powerhouse-castle-hill",
+  "emoji": "🏛️",
+  "lat": -33.7295,
+  "lng": 151.0043,
+  "whatsapp": "",
+  "free": true
  }
 ]
