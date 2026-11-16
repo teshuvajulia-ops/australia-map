@@ -711,8 +711,9 @@ html[dir="rtl"] .wipe .wcity span{letter-spacing:.05em;margin-inline-end:0;font-
 
 /* Services directory */
 .svcats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}
-.svcat{border:1px solid var(--line);background:#fff;border-radius:16px;padding:14px 10px;font:inherit;font-weight:700;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
-.svcat .em{font-size:1.8rem}.svcat[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+.svcat{border:0;background:transparent;padding:0;font:inherit;font-weight:700;color:var(--ink);display:flex;flex-direction:column;align-items:flex-start;gap:8px;cursor:pointer;text-align:start}
+.svcat img{width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:22px;display:block;border:3px solid transparent;box-shadow:0 4px 14px rgba(221,95,75,.12);transition:transform .2s ease}
+.svcat:active img{transform:scale(.97)}.svcat[aria-pressed="true"] img{border-color:var(--accent)}.svcat[aria-pressed="true"] span{color:var(--accent)}
 .svtabs{display:flex;gap:8px;margin:10px 0}.svtabs button{flex:1;border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 12px;font:inherit;font-weight:700;color:var(--ink);cursor:pointer}
 .svtabs button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
 .svcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 4px 14px rgba(221,95,75,.08)}
@@ -2010,12 +2011,12 @@ function svHtml(){
   var S=svS(), h='<h2>'+esc(S.title)+' · '+esc(t()[city])+'</h2><p class="plead">'+esc(S.lead)+'</p>';
   h+='<div class="svtabs"><button type="button" data-svmode="find" aria-pressed="'+(svState.mode==='find')+'">'+esc(S.find)+'</button><button type="button" data-svmode="offer" aria-pressed="'+(svState.mode==='offer')+'">'+esc(S.offer)+'</button></div>';
   if(svState.mode==='offer') return h+svFormHtml(S)+'<p class="svnote">'+esc(S.legal)+'</p>';
-  h+='<div class="svcats">'+SV_CATS.map(function(c){ return '<button type="button" class="svcat" data-svcat="'+c[0]+'" aria-pressed="'+(svState.cat===c[0])+'"><span class="em">'+c[1]+'</span>'+esc(S.cats[c[0]])+'</button>'; }).join('')+'</div>';
+  h+='<div class="svcats">'+SV_CATS.map(function(c){ return '<button type="button" class="svcat" data-svcat="'+c[0]+'" aria-pressed="'+(svState.cat===c[0])+'"><img src="img/services/'+c[0]+'.webp" alt="" loading="lazy" width="240" height="240"><span>'+esc(S.cats[c[0]])+'</span></button>'; }).join('')+'</div>';
   h+='<div id="svlist"></div><p class="svnote">'+esc(S.legal)+'</p>';
   return h;
 }
 function svFormHtml(S){
-  var o=SV_CATS.map(function(c){ return '<option value="'+c[0]+'">'+c[1]+' '+esc(S.cats[c[0]])+'</option>'; }).join('');
+  var o=SV_CATS.map(function(c){ return '<option value="'+c[0]+'">'+esc(S.cats[c[0]])+'</option>'; }).join('');
   return '<form class="svform" id="svform" novalidate>'+
    '<label>'+esc(S.fName)+'<input name="name" maxlength="60" required></label>'+
    '<label>'+esc(S.fCat)+'<select name="category">'+o+'</select><span class="hint">'+esc(S.visaNote)+'</span></label>'+
@@ -2041,8 +2042,8 @@ function svList(){
     var r=d.filter(function(x){ return x.city===city && (!svState.cat || x.category===svState.cat); });
     if(!r.length){ b.innerHTML='<p class="pempty">'+esc(S.none)+'</p>'; return; }
     b.innerHTML=r.map(function(x){
-      var ic=(SV_CATS.filter(function(c){return c[0]===x.category;})[0]||[0,'✨'])[1], wa=String(x.whatsapp||'').replace(/\D/g,'');
-      return '<div class="svcard"><h4>'+ic+' '+esc(x.name)+'</h4><div class="meta">'+esc(S.cats[x.category]||'')+(x.price_note?' · '+esc(x.price_note):'')+((x.languages&&x.languages.length)?' · '+esc(x.languages.join(', ')):'')+'</div><p>'+esc(x.description)+'</p>'+(wa.length>=8?'<a class="svwa" href="https://wa.me/'+wa+'" target="_blank" rel="noopener noreferrer">'+esc(S.contact)+'</a>':'')+'</div>';
+      var wa=String(x.whatsapp||'').replace(/\D/g,'');
+      return '<div class="svcard"><h4>'+esc(x.name)+'</h4><div class="meta">'+esc(S.cats[x.category]||'')+(x.price_note?' · '+esc(x.price_note):'')+((x.languages&&x.languages.length)?' · '+esc(x.languages.join(', ')):'')+'</div><p>'+esc(x.description)+'</p>'+(wa.length>=8?'<a class="svwa" href="https://wa.me/'+wa+'" target="_blank" rel="noopener noreferrer">'+esc(S.contact)+'</a>':'')+'</div>';
     }).join('');
   }).catch(function(){ var b=$('#svlist'); if(b) b.innerHTML='<p class="pempty">'+esc(S.err)+'</p>'; });
 }
