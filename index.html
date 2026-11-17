@@ -1997,12 +1997,12 @@ var SV={
  en:{tab:'Services',title:'Services',lead:'Find people who offer services in your city, or offer your own.',find:'Find',offer:'Offer a service',all:'All',loading:'Loading…',none:'No services listed here yet. Be the first to offer one!',err:'Could not load services. Please try again later.',contact:'Message on WhatsApp',
   cats:{moving:'Moving & removals',cleaning:'Cleaning',handyman:'Handyman & furniture',tutoring:'Tutoring',photo:'Photography',visa:'Visa & paperwork help',english:'English lessons',other:'Other'},
   fName:'Your name or business',fCat:'Category',fCity:'City',fDesc:'What do you offer?',fDescH:'10–600 characters',fPrice:'Price (optional)',fPriceH:'e.g. from $40/hour',fLang:'Languages you speak',fLangH:'Separate with commas, e.g. English, Hebrew',fWa:'WhatsApp number',fWaH:'With country code, digits only, e.g. 61412345678',
-  agree:'I agree to the Terms, and that these details (including my WhatsApp number) will be shown publicly once approved.',send:'Send for approval',sending:'Sending…',ok:'Thank you! Your listing was received and will appear after we approve it.',bad:'Please check the form and try again.',
+  agree:'I agree to the Terms, and that these details (including my WhatsApp number) will be shown publicly once approved.',send:'Send for approval',sending:'Sending…',ok:'Thank you! Your listing was received and will appear after we approve it.',bad:'Please check the form and try again.',eName:'Please enter your name (at least 2 letters).',eDesc:'Please describe your service (at least 10 characters).',eWa:'Please enter your WhatsApp number with country code, digits only (8-15 digits), e.g. 61412345678 or 972501234567.',eAgree:'Please tick the box to agree to the Terms.',eNet:'Could not send right now. Please check your connection and try again.',
   visaNote:'Visa and migration advice may only be given by a registered migration agent (MARA).',legal:'CITYSIDE only lists providers and is not a party to any service or payment. Check reviews and never pay in advance to someone you have not met.'},
  he:{tab:'שירותים',title:'שירותים',lead:'מוצאים אנשים שמציעים שירותים בעיר, או מפרסמים את עצמכם.',find:'לחפש',offer:'להציע שירות',all:'הכל',loading:'טוען…',none:'עוד אין שירותים כאן. תהיו הראשונים!',err:'לא הצלחנו לטעון שירותים. נסו שוב מאוחר יותר.',contact:'הודעה בוואטסאפ',
   cats:{moving:'הובלות ומעברים',cleaning:'ניקיון',handyman:'תיקונים והרכבת רהיטים',tutoring:'מורים פרטיים',photo:'צילום',visa:'עזרה בויזות ומסמכים',english:'שיעורי אנגלית',other:'אחר'},
   fName:'שם או עסק',fCat:'קטגוריה',fCity:'עיר',fDesc:'מה אתם מציעים?',fDescH:'10–600 תווים',fPrice:'מחיר (לא חובה)',fPriceH:'למשל: מ-$40 לשעה',fLang:'שפות שאתם דוברים',fLangH:'מפרידים בפסיקים, למשל: עברית, אנגלית',fWa:'מספר וואטסאפ',fWaH:'עם קידומת מדינה, ספרות בלבד, למשל 61412345678',
-  agree:'אני מסכים/ה לתנאי השימוש, ושהפרטים (כולל מספר הוואטסאפ) יוצגו לצבור לאחר אישור.',send:'שליחה לאישור',sending:'שולח…',ok:'תודה! המודעה התקבלה ותופיע אחרי שנאשר אותה.',bad:'בדקו את הטופס ונסו שוב.',
+  agree:'אני מסכים/ה לתנאי השימוש, ושהפרטים (כולל מספר הוואטסאפ) יוצגו לצבור לאחר אישור.',send:'שליחה לאישור',sending:'שולח…',ok:'תודה! המודעה התקבלה ותופיע אחרי שנאשר אותה.',bad:'בדקו את הטופס ונסו שוב.',eName:'נא לכתוב שם (לפחות 2 אותיות).',eDesc:'נא לתאר את השירות (לפחות 10 תווים).',eWa:'נא לכתוב מספר ווטסאפ עם קידומת מדינה, ספרות בלבד (8-15 ספרות), למשל 61412345678 או 972501234567.',eAgree:'נא לסמן את ההסכמה לתנאי השימוש.',eNet:'לא הצלחנו לשלוח עכשיו. בדקו חיבור ונסו שוב.',
   visaNote:'ייעוץ בנושאי ויזה והגרה מותר רק לסוכן הגרה רשום (MARA).',legal:'CITYSIDE רק מפרסמת ספקים ואינה צד לשירות או לתשלום. בדקו המלצות ואל תשלמו מראש למי שלא פגשתם.'}
 };
 function svS(){ return Object.assign({},SV.en,SV[lang]||{}); }
@@ -2057,13 +2057,15 @@ function svInit(){
     ev.preventDefault(); var m=$('#svmsg'), fd=new FormData(f);
     if(fd.get('website')){ m.textContent=S.ok; return; }
     var wa=String(fd.get('whatsapp')||'').replace(/\D/g,''), name=String(fd.get('name')||'').trim(), desc=String(fd.get('description')||'').trim();
-    if(name.length<2 || desc.length<10 || !/^[0-9]{8,15}$/.test(wa) || !fd.get('agree')){ m.textContent=S.bad; return; }
+    var bad = name.length<2 ? S.eName : desc.length<10 ? S.eDesc : !/^[0-9]{8,15}$/.test(wa) ? S.eWa : !fd.get('agree') ? S.eAgree : '';
+    if(bad){ m.textContent=bad; m.style.color='#b3261e'; try{ m.scrollIntoView({block:'center',behavior:'smooth'}); }catch(x){} return; }
+    m.style.color='';
     var langs=String(fd.get('languages')||'').split(/[,،]/).map(function(x){return x.trim();}).filter(Boolean).slice(0,8);
     var row={name:name,category:fd.get('category'),city:fd.get('city'),description:desc,price_note:String(fd.get('price_note')||'').trim()||null,languages:langs,whatsapp:wa};
     var btn=f.querySelector('button[type=submit]'); btn.disabled=true; m.textContent=S.sending;
     fetch(SB_URL+'/rest/v1/providers',{method:'POST',headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(row)})
-     .then(function(r){ if(!r.ok) throw new Error('http'); f.reset(); m.textContent=S.ok; btn.disabled=false; })
-     .catch(function(){ m.textContent=S.bad; btn.disabled=false; });
+     .then(function(r){ if(!r.ok) throw new Error('http '+r.status); f.reset(); m.style.color=''; m.textContent=S.ok; btn.disabled=false; try{ m.scrollIntoView({block:'center',behavior:'smooth'}); }catch(x){} })
+     .catch(function(e){ m.style.color='#b3261e'; m.textContent=S.eNet+' ('+String(e&&e.message||e).slice(0,40)+')'; btn.disabled=false; try{ m.scrollIntoView({block:'center',behavior:'smooth'}); }catch(x){} });
   });
 }
 function setView(v){
